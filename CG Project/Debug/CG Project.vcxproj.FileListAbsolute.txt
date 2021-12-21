@@ -1,0 +1,7 @@
+C:\Users\76365\source\repos\CG Project\Debug\CG Project.exe
+D:\课程\大三上\计算机图形学\大作业\CG Project\Debug\CG Project.exe
+D:\Codes\C++\Graph\project\CG Project\Debug\CG Project.exe
+C:\Users\76365\Desktop\CG Project\Debug\CG Project.exe
+D:\课程\大三上\计算机图形学\大作业\CG Project_bdz_1212\Debug\CG Project.exe
+D:\课程\大三上\计算机图形学\大作业\CG Project_bdz_1213\Debug\CG Project.exe
+D:\Codes\C++\Graph\project\1.2.3\Debug\CG Project.exe

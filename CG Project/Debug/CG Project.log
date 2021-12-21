@@ -1,0 +1,36 @@
+﻿  main.cpp
+D:\Codes\C++\Graph\project\1.2.3\Robot.h(89,18): warning C4305: “初始化”: 从“double”到“float”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(10,28): warning C4305: “初始化”: 从“double”到“float”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(16,29): warning C4305: “初始化”: 从“double”到“float”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(17,18): warning C4305: “初始化”: 从“double”到“float”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(24,28): warning C4305: “参数”: 从“double”到“float”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(25,28): warning C4305: “参数”: 从“double”到“float”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(43,18): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(44,18): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(48,18): warning C4244: “-=”: 从“double”转换到“float”，可能丢失数据
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(49,18): warning C4244: “-=”: 从“double”转换到“float”，可能丢失数据
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(68,16): warning C4305: “+=”: 从“double”到“float”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(73,16): warning C4305: “-=”: 从“double”到“float”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(103,27): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(139,32): warning C4305: “=”: 从“double”到“float”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(140,32): warning C4305: “=”: 从“double”到“float”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(141,32): warning C4305: “=”: 从“double”到“float”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(142,32): warning C4305: “=”: 从“double”到“float”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(143,32): warning C4305: “=”: 从“double”到“float”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(144,32): warning C4305: “=”: 从“double”到“float”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(155,44): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(163,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(171,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(179,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(187,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(194,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(201,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(208,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(238,19): warning C4244: “+=”: 从“double”转换到“int”，可能丢失数据
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(239,25): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(248,16): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(249,16): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(251,30): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(253,30): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+D:\Codes\C++\Graph\project\1.2.3\main.cpp(250,8): warning C4101: “p”: 未引用的局部变量
+  CG Project.vcxproj -> D:\Codes\C++\Graph\project\1.2.3\Debug\CG Project.exe
