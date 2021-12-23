@@ -3,7 +3,7 @@
 #include <gl/glut.h>
 #include <stdio.h>
 #include <string.h>
-
+#include"Shape.h"
 #define CollisionThreshold (0.5f)
 //#define DEBUG
 /*
@@ -32,7 +32,7 @@ public:
 		return this->GripperZ;
 	}
 	bool enable;
-	//Shape* TheShape;
+	Shape* TheShape;
 protected:
 	/* 
 	 * the methods used to draw the robot

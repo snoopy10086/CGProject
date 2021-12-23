@@ -1,5 +1,8 @@
 #include "conveyor.h"
-
+#include <stdlib.h>
+#include <gl/glut.h>
+#include <stdio.h>
+#include <string.h>
 extern unsigned int texture[50];
 void Texture_cube(int n, int i, int j, int k);
 
@@ -34,7 +37,7 @@ void conveyor::AddMotion(Shape* shape)
 		return;
 }
 
-//绘制带纹理的圆形，贴于传送带轮子上，i为为例编号
+//绘制带纹理的圆形，贴于传送带轮子上，i为纹理编号
 void conveyor::Texture_Circle(int i)
 {
 	glEnable(GL_TEXTURE_2D);

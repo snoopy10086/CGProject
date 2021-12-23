@@ -694,20 +694,20 @@ void draw() {
 	drawCloset();
 	drawGlass();
 	drawBoard();
-	drawDesk();
+	//drawDesk();/////////////////////////////////////////暂时注释掉画桌子，它会导致后面的机械臂画不出来，bug待解决
 	robot21.Draw();
 	robot22.Draw();
-	conv1.draw();
-	conv1.Move();
+	//conv1.draw();
+	//conv1.Move();
 
 	
 	robot1.Draw();
 
 	//shape
-	s1.Draw(1);
-	s2.Draw(1);
-	s3.Draw(1);
-	s4.Draw(1);
+	//s1.Draw();
+	//s2.Draw();
+	//s3.Draw();
+	//s4.Draw();
 }
 void drawoneDesk() {
 	glPushMatrix();

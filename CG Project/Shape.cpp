@@ -1,4 +1,8 @@
 #include "Shape.h"
+#include <stdlib.h>
+#include <gl/glut.h>
+#include <stdio.h>
+#include <string.h>
 #include <iostream>
 using namespace std;
 extern unsigned int texture[50];
@@ -31,16 +35,55 @@ void Shape::Scaling(float scale)
 
 void Shape::Draw()
 {
+	//this->Draw();
 	cout << "Draw() of Shape class!" << endl;
+
 }
 
+Prism::Prism(float globalX, float globalY, float globalZ)
+{
+	this->globalX = globalX;
+	this->globalY = globalY;
+	this->globalZ = globalZ;
+	this->Texture = 1;
+}
+void Prism::Draw()
+{
+	GLfloat mat_specular[] = { 1., 1., 1., 1.0 };	         // 镜面反射颜色
+	GLfloat mat_shininess[] = { 50.0 };							// 镜面反射参数
+	GLfloat lmodel_ambient[] = { 1., 1., 1., 1.0 };		// 散射颜色
+	GLfloat lmodel_emmision[] = { 0.0, 0.0, 0.0, 1.0 };
+
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
+	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
+	glPushMatrix();
+	
+	glEnable(GL_NORMALIZE); glScalef(0.2, 0.2, 0.2);
+	glTranslatef(this->globalX, this->globalY, this->globalZ);
+
+
+	
+	//Texture_cube(1, this->Texture, 0, 0);
+	glPopMatrix();
+}
+
+
+/// <summary>
+/// class Cube:立方体类
+/// </summary>
+/// <param name="globalX"></param>
+/// <param name="globalY"></param>
+/// <param name="globalZ"></param>
 Cube::Cube(float globalX, float globalY, float globalZ)
 {
 	this->globalX = globalX;
 	this->globalY = globalY;
 	this->globalZ = globalZ;
+	this->Texture = 1;
 }
-void Cube::Draw(int i)//立方体
+void Cube::Draw()//立方体
 {
 	GLfloat mat_specular[] = { 1., 1., 1., 1.0 };	         // 镜面反射颜色
 	GLfloat mat_shininess[] = { 50.0 };							// 镜面反射参数
@@ -52,19 +95,28 @@ void Cube::Draw(int i)//立方体
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
 	glPushMatrix();
-	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	
 	glEnable(GL_NORMALIZE); glScalef(0.2, 0.2, 0.2);
-	glTranslatef(30, 2, 22);
-	Texture_cube(1, i, 0, 0);
+	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	//glTranslatef(30, 2, 22);
+	Texture_cube(1, this->Texture, 0, 0);
 	glPopMatrix();
 }
+
+/// <summary>
+/// class Cone:圆锥类
+/// </summary>
+/// <param name="globalX"></param>
+/// <param name="globalY"></param>
+/// <param name="globalZ"></param>
 Cone::Cone(float globalX, float globalY, float globalZ)
 {
 	this->globalX = globalX;
 	this->globalY = globalY;
 	this->globalZ = globalZ;
+	this->Texture = 1;
 }
-void Cone::Draw(int i)//圆锥
+void Cone::Draw()//圆锥
 {
 	GLfloat mat_specular[] = { 1., 1., 1., 1.0 };	         // 镜面反射颜色
 	GLfloat mat_shininess[] = { 50.0 };							// 镜面反射参数
@@ -78,9 +130,9 @@ void Cone::Draw(int i)//圆锥
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); glScalef(0.2, 0.2, 0.2);
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
-	glTranslatef(30, 0.6, 27);
+	//glTranslatef(30, 0.6, 27);
 	glRotatef(-90, 1, 0, 0);
-	Texture_Cone(i);
+	Texture_Cone(this->Texture);
 	glPopMatrix();
 }
 
@@ -109,13 +161,21 @@ void Cone::Texture_Cone(int i)//圆锥
 
 	glDisable(GL_TEXTURE_2D);
 }
+
+/// <summary>
+/// class ConeCylinder:圆台类
+/// </summary>
+/// <param name="globalX"></param>
+/// <param name="globalY"></param>
+/// <param name="globalZ"></param>
 ConeCylinder::ConeCylinder(float globalX, float globalY, float globalZ)
 {
 	this->globalX = globalX;
 	this->globalY = globalY;
 	this->globalZ = globalZ;
+	this->Texture = 1;
 }
-void ConeCylinder::Draw(int i)//圆台
+void ConeCylinder::Draw()//圆台
 {
 	GLfloat mat_specular[] = { 1., 1., 1., 1.0 };	         // 镜面反射颜色
 	GLfloat mat_shininess[] = { 50.0 };							// 镜面反射参数
@@ -127,11 +187,12 @@ void ConeCylinder::Draw(int i)//圆台
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
 	glPushMatrix();
-	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	
 	glEnable(GL_NORMALIZE); glScalef(0.2, 0.2, 0.2);
-	glTranslatef(27, 0.5, 27);
+	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	//glTranslatef(27, 0.5, 27);////不应该在这里位移
 	glRotatef(-90, 1, 0, 0);
-	Texture_ConeCylinder(i);
+	Texture_ConeCylinder(this->Texture);
 	glPopMatrix();
 }
 
@@ -184,6 +245,11 @@ void ConeCylinder::Texture_Circle(int i, float r)
 	glDisable(GL_TEXTURE_2D);
 }
 
+/// <summary>
+/// class Cylinder圆柱类
+/// </summary>
+/// <param name="i"></param>
+/// <param name="r"></param>
 void Cylinder::Texture_Circle(int i, float r)
 {
 	glEnable(GL_TEXTURE_2D);
@@ -211,8 +277,9 @@ Cylinder::Cylinder(float globalX, float globalY, float globalZ)
 	this->globalX = globalX;
 	this->globalY = globalY;
 	this->globalZ = globalZ;
+	this->Texture = 1;
 }
-void Cylinder::Draw(int i)//圆柱
+void Cylinder::Draw()//圆柱
 {
 	GLfloat mat_specular[] = { 1., 1., 1., 1.0 };	         // 镜面反射颜色
 	GLfloat mat_shininess[] = { 50.0 };							// 镜面反射参数
@@ -224,10 +291,11 @@ void Cylinder::Draw(int i)//圆柱
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
 	glPushMatrix();
-	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	
 	glEnable(GL_NORMALIZE); glScalef(0.2, 0.2, 0.2);
-	glTranslatef(27, 1, 22);
-	Texture_CylinderCircle(i);
+	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	//glTranslatef(27, 1, 22);
+	Texture_CylinderCircle(this->Texture);
 	glPopMatrix();
 }
 

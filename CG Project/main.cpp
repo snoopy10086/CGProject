@@ -4,6 +4,8 @@
 #include "Shape.h"
 #include "conveyor.h"
 #include <math.h>
+#include <list>
+using namespace std;
 #define PI 3.1415926535
 static int du = 90, OriX = -1, OriY = -1, Px = -1, Py = -1;   //du是视点和x轴的夹角
 static float r = 8, h = 0.0;   //r是视点绕y轴的半径，h是视点高度即在y轴上的坐标
@@ -24,14 +26,83 @@ int wPosH = 100;
 Robot_2 robot21(3.5, 0, 4.8);
 Robot_2 robot22(4.5, 0, 4.8);
 Robot_1 robot1(0, 0, 0);
-conveyor conv1(0, 0, 0, 0);
-Cylinder s1(0,0,0);
-ConeCylinder s2(0, 0, 0);
-Cone s3(0, 0, 0);
-Cube s4(0, 0, 0);
+
+
 void renderScene(void);
 float move = 0;
 int count = 0;
+
+//collections
+list<Shape*> Shapes;						//collections of shapes
+Shape* CurrentChooseShape = NULL;		//now choosen shape
+list<conveyor> Conveyors;				//collections of conyors
+list<Robot> Robots;				//collections of robots
+
+int BindShapeRobot(Robot* R, Shape* S) {
+	if (R->enable == false || R->TheShape != NULL) {
+		return 0;
+	}
+	R->TheShape = S;
+	//S->TheRobot = R;
+	return 1;
+}
+
+//unbind a shape from a robot
+int UnbindShapeRobot(Robot* R, Shape* S) {
+	R->TheShape = NULL;
+	//S->TheRobot = NULL;
+	return 1;
+}
+
+
+
+//called once each update
+//every conyors in collections add motion to shapes
+void AddMotionToShapes() {
+	list<conveyor>::iterator Citer;
+	for (Citer = Conveyors.begin(); Citer != Conveyors.end(); Citer++) {
+		list<Shape*>::iterator Siter;
+		for (Siter = Shapes.begin(); Siter != Shapes.end(); Siter++) {
+			Citer->AddMotion((*Siter));
+		}
+	}
+}
+
+void InitialThings() {
+	Robot_2* robot21 = new Robot_2(3.5, 0, 4.8);
+	Robot_2* robot22 = new Robot_2(4.5, 0, 4.8);
+	Robot_1* robot1 = new Robot_1(0, 0, 0);
+	Robots.push_back(*robot21);
+	Robots.push_back(*robot22);
+	Robots.push_back(*robot1);
+
+	conveyor* conv1 = new conveyor(0, 0, 1, 0);
+	Conveyors.push_back(*conv1);
+
+	Cylinder* s1 = new Cylinder(27, 1, 22);
+	ConeCylinder* s2 = new ConeCylinder(27, 0.5, 27);
+	Cone* s3 = new Cone(30, 0.6, 27);
+	Cube* s4 = new Cube(30, 2, 22);
+	Shapes.push_back(s1);
+	Shapes.push_back(s2);
+	Shapes.push_back(s3);
+	Shapes.push_back(s4);
+
+}
+
+void drawShapes() {
+	list<Shape*>::iterator Siter;
+	for (Siter = Shapes.begin(); Siter != Shapes.end(); Siter++) {
+		(*Siter)->Draw();
+	}
+}
+
+void drawConveyors() {
+	list<conveyor>::iterator Citer;
+	for (Citer = Conveyors.begin(); Citer != Conveyors.end(); Citer++) {
+		Citer->draw();
+	}
+}
 
 void key(unsigned char k, int x, int y)
 {
@@ -100,8 +171,8 @@ void key(unsigned char k, int x, int y)
 	}
 	case 't':
 	{
-		conv1.move = conv1.move - 0.3;
-		conv1.count = (conv1.count + 1) % 5;
+		//conv1.move = conv1.move - 0.3;
+		//conv1.count = (conv1.count + 1) % 5;
 		//printf("%d\n", count);
 		break;
 	}
@@ -213,6 +284,9 @@ void renderScene(void)
 
 	//glColor3f(1.0, 0.0, 0.0);
 	draw();
+	drawConveyors();
+	//drawRobots();
+	drawShapes();
 	//drawSnowMans(true);
 	//pickSnowMans(Px,Py);
 	glutSwapBuffers();                                      //交换两个缓冲区指针
@@ -258,6 +332,7 @@ void init()
 	//initEnvironment();
 	InitList();
 	glEnable(GL_DEPTH_TEST);    //启用深度，根据坐标的远近自动隐藏被遮住的图形（材料）
+	InitialThings();
 }
 
 void reshape(int w, int h)

@@ -23,7 +23,7 @@ protected:
 public:
 	bool ifOntheConveyor(Shape* shape);	//to judge if the shape is on this conveyor
 	void AddMotion(Shape* shape);
-	void draw();
+	virtual void draw();
 	void Move();
 };
 
