@@ -1,6 +1,0 @@
-C:\Users\Dell\Desktop\new1.2.4\1.2.4\x64\Debug\CG Project_1.2.5.exe
-C:\Users\Dell\Desktop\new1.2.4\1.2.4\x64\Debug\CG Project_1.2.5.pdb
-E:\computer graphic\my_project\1.2.5\x64\Debug\CG Project_1.2.5.exe
-E:\computer graphic\my_project\1.2.5\x64\Debug\CG Project_1.2.5.pdb
-E:\computer graphic\my_CGProject\CGProject\CG Project\x64\Debug\CG Project_1.2.5.exe
-E:\computer graphic\my_CGProject\CGProject\CG Project\x64\Debug\CG Project_1.2.5.pdb
