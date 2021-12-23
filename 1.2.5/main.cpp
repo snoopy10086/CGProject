@@ -10,8 +10,9 @@ using namespace std;
 static int du = 90, OriX = -1, OriY = -1, Px = -1, Py = -1;   //du是视点和x轴的夹角
 static float r = 8, h = 0.0;   //r是视点绕y轴的半径，h是视点高度即在y轴上的坐标
 static float c = PI / 180.0;    //弧度和角度转换参数
-
+bool is_visitor = false;//开启碰撞检测
 float eye[] = { 4,1,4 };//{ 6, 1, 6 }
+float origin_eye[3];
 
 float d[] = { 0,0,0 };
 
@@ -23,9 +24,10 @@ int wPosH = 100;
 
 
 //定义各种物体
-Robot_2 robot21(3.5, 0, 4.8);
-Robot_2 robot22(4.5, 0, 4.8);
-Robot_1 robot1(0, 0, 0);
+Robot_2* robot21 = new Robot_2(3.5, 0, 4.8);
+Robot_2* robot22 = new Robot_2(4.5, 0, 4.8);
+Robot_1* robot1 = new Robot_1(0, 0, 0);
+conveyor* conv1 = new conveyor(0, 0, 1, 0);
 
 
 void renderScene(void);
@@ -35,9 +37,57 @@ int count = 0;
 //collections
 list<Shape*> Shapes;						//collections of shapes
 Shape* CurrentChooseShape = NULL;		//now choosen shape
-list<conveyor> Conveyors;				//collections of conyors
-list<Robot> Robots;				//collections of robots
+list<conveyor*> Conveyors;				//collections of conyors
+list<Robot*> Robots;				//collections of robots
 list<Prism> Prisms;
+
+void set_eye() {
+	origin_eye[0] = eye[0];
+	origin_eye[1] = eye[1];
+	origin_eye[2] = eye[2];
+}
+
+void modify_eye() {
+	//wall
+	if (eye[0] >= 7.8)eye[0] = 7.8;
+	if (eye[1] >= 1.6)eye[1] = 1.6;
+	if (is_visitor) {
+		if (eye[2] >= 2.9)eye[2] = 2.9;
+	}
+	else {
+		if (eye[2] >= 7.8)eye[2] = 7.8;
+	}
+	if (eye[0] <= 0.2)eye[0] = 0.2;
+	if (eye[1] <= 0.4)eye[1] = 0.4;
+	if (eye[2] <= 0.2)eye[2] = 0.2;
+	if (is_visitor) {
+
+		//board
+		if (eye[0] >= 0.3 && eye[0] <= 1.9 && eye[1] >= 0.2 && eye[1] <= 1.2 && eye[2] >= 2.3 && eye[2] <= 2.6) {
+			eye[0] = origin_eye[0];
+			eye[1] = origin_eye[1];
+			eye[2] = origin_eye[2];
+		}
+		//door
+		if (getRDoor_2 && eye[0] >= 0.3 && eye[0] <= 1.0 && eye[1] >= 0.2 && eye[1] <= 1.4 && eye[2] >= 0.2 && eye[2] <= 0.7) {
+			eye[0] = origin_eye[0];
+			eye[1] = origin_eye[1];
+			eye[2] = origin_eye[2];
+		}
+		//Closet
+		if ((eye[0] >= 3.45 && eye[0] <= 3.75 || eye[0] >= 4.15 && eye[0] <= 4.45 || eye[0] >= 4.85 && eye[0] <= 5.15 || eye[0] >= 5.55 && eye[0] <= 5.85 || eye[0] >= 6.25 && eye[0] <= 6.55 || eye[0] >= 6.95 && eye[0] <= 7.25) && eye[2] >= 0.4 && eye[2] <= 1.8) {
+			eye[0] = origin_eye[0];
+			eye[1] = origin_eye[1];
+			eye[2] = origin_eye[2];
+		}
+		//Desk
+		if (eye[0] >= 7.2 && eye[0] <= 7.8 && eye[1] >= 0.2 && eye[1] <= 0.7 && eye[2] >= 2.1 && eye[2] <= 2.7) {
+			eye[0] = origin_eye[0];
+			eye[1] = origin_eye[1];
+			eye[2] = origin_eye[2];
+		}
+	}
+}
 
 int BindShapeRobot(Robot* R, Shape* S) {
 	if (R->enable == false || R->TheShape != NULL) {
@@ -60,25 +110,27 @@ int UnbindShapeRobot(Robot* R, Shape* S) {
 //called once each update
 //every conyors in collections add motion to shapes
 void AddMotionToShapes() {
-	list<conveyor>::iterator Citer;
+	list<conveyor*>::iterator Citer;
 	for (Citer = Conveyors.begin(); Citer != Conveyors.end(); Citer++) {
 		list<Shape*>::iterator Siter;
 		for (Siter = Shapes.begin(); Siter != Shapes.end(); Siter++) {
-			Citer->AddMotion((*Siter));
+			(*Citer)->AddMotion((*Siter));
 		}
 	}
 }
 
 void InitialThings() {
-	Robot_2* robot21 = new Robot_2(3.5, 0, 4.8);
-	Robot_2* robot22 = new Robot_2(4.5, 0, 4.8);
-	Robot_1* robot1 = new Robot_1(0, 0, 0);
-	Robots.push_back(*robot21);
-	Robots.push_back(*robot22);
-	Robots.push_back(*robot1);
+	// 20211224 BDZ: 按照现在的键盘操作，如果设计成局部变量没有办法操作改变状态
+	// 
+	//Robot_2* robot21 = new Robot_2(3.5, 0, 4.8);
+	//Robot_2* robot22 = new Robot_2(4.5, 0, 4.8);
+	//Robot_1* robot1 = new Robot_1(0, 0, 0);
+	Robots.push_back(robot21);
+	Robots.push_back(robot22);
+	Robots.push_back(robot1);
 
-	conveyor* conv1 = new conveyor(0, 0, 1, 0);
-	Conveyors.push_back(*conv1);
+	//conveyor* conv1 = new conveyor(0, 0, 1, 0);
+	Conveyors.push_back(conv1);
 
 	Cylinder* s1 = new Cylinder(27, 1, 22);
 	ConeCylinder* s2 = new ConeCylinder(27, 0.5, 27);
@@ -94,6 +146,13 @@ void InitialThings() {
 	Shapes.push_back(s6);
 }
 
+void drawRobots() {
+	list<Robot*>::iterator Riter;
+	for (Riter = Robots.begin(); Riter != Robots.end(); Riter++) {
+		(*Riter)->Draw();
+	}
+}
+
 void drawShapes() {
 	list<Shape*>::iterator Siter;
 	for (Siter = Shapes.begin(); Siter != Shapes.end(); Siter++) {
@@ -102,9 +161,9 @@ void drawShapes() {
 }
 
 void drawConveyors() {
-	list<conveyor>::iterator Citer;
+	list<conveyor*>::iterator Citer;
 	for (Citer = Conveyors.begin(); Citer != Conveyors.end(); Citer++) {
-		Citer->draw();
+		(*Citer)->draw();
 	}
 }
 
@@ -114,70 +173,77 @@ void key(unsigned char k, int x, int y)
 	{
 	case 27:
 	case 'q': {exit(0); break; }
-	case 'a': {//todo, hint: eye[] and center[] are the keys to solve the problems
+	case 'a': {
+		set_eye();
 		eye[0] += step * cos(screenrate_x - PI / 2);
 		eye[2] += step * sin(screenrate_x - PI / 2);
+		modify_eye();
 		break;
 	}
-	case 'd': {//todo
+	case 'd': {
+		set_eye();
 		eye[0] -= step * cos(screenrate_x - PI / 2);
 		eye[2] -= step * sin(screenrate_x - PI / 2);
-
-
+		modify_eye();
 		break;
 	}
-	case 'w': {//todo
-		//eye[2] -= 0.1;
+	case 'w': {
+		set_eye();
 		eye[1] += step * sin(screenrate_y);
 		eye[0] += step * cos(screenrate_y) * cos(screenrate_x);
 		eye[2] += step * cos(screenrate_y) * sin(screenrate_x);
+		modify_eye();
 		break;
 	}
-	case 's': {//todo
+	case 's': {
+		set_eye();
 		eye[1] -= step * sin(screenrate_y);
 		eye[0] -= step * cos(screenrate_y) * cos(screenrate_x);
 		eye[2] -= step * cos(screenrate_y) * sin(screenrate_x);
+		modify_eye();
 		break;
 	}
-	case 'z': {//todo
+	case 'z': {
+		set_eye();
 		eye[1] += 0.1;
-
+		modify_eye();
 		break;
 	}
-	case 'c': {//todo
+	case 'c': {
+		set_eye();
 		eye[1] -= 0.1;
+		modify_eye();
 		break;
 	}
 	case 'r':
 	{
-		robot21.Isrotate = !robot21.Isrotate;
+		robot21->Isrotate = !robot21->Isrotate;
 		break;
 	}
 	case 'y':
 	{
-		robot22.Isrotate = !robot22.Isrotate;
+		robot22->Isrotate = !robot22->Isrotate;
 		break;
 	}
 	case 'i':
 	{
-		robot1.len_inc();
+		robot1->len_inc();
 		break;
 	}
 	case 'k':
 	{
-		robot1.len_dec();
+		robot1->len_dec();
 		break;
 	}
 	case 'e':
 	{
-		robot1.not_catch();
+		robot1->not_catch();
 		break;
 	}
 	case 't':
 	{
-		//conv1.move = conv1.move - 0.3;
-		//conv1.count = (conv1.count + 1) % 5;
-		//printf("%d\n", count);
+		conv1->move = conv1->move - 0.3;
+		conv1->count = (conv1->count + 1) % 5;
 		break;
 	}
 	case '1':
@@ -289,10 +355,8 @@ void renderScene(void)
 	//glColor3f(1.0, 0.0, 0.0);
 	draw();
 	drawConveyors();
-	//drawRobots();
 	drawShapes();
-	//drawSnowMans(true);
-	//pickSnowMans(Px,Py);
+	drawRobots();
 	glutSwapBuffers();                                      //交换两个缓冲区指针
 }
 

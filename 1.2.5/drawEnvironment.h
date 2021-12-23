@@ -16,7 +16,6 @@
 #define BITMAP_ID 0x4D42
 #define imageweight 128
 #define imageheight 128
-//void initEnvironment();
 void InitList();
 void draw();
 void initTexture();
@@ -26,11 +25,15 @@ GLint initClosetList();
 void drawCloset();
 void drawonecloset();
 void initNurbs();
-void drawNurbs(float x,float y,float z);
+void drawfans();
 GLint initDoorList();
 void drawOutsideDoor_1();
 void drawOutsideDoor_2();
+bool getRDoor_1();
+bool getRDoor_2();
 void drawDoor();
+void initDesk();
+void initTile();
 void drawoneDesk();
 void drawDesk();
 GLint initWindowList();

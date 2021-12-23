@@ -92,17 +92,18 @@ enum {
 	snowManHeadDL = 1, snowManBodyDL = 2, snowManHeadDL2 = 3, snowManBodyDL2 = 4,
 };
 GLint wall[10] = { 5,6,7 };
-GLint door[2] = { 8,9 };
+GLint door[2] = { 27,9 };
 GLint window[4] = { 10,23,24,25 };
 GLint bulb[2] = { 11 };
 GLint closet[3] = { 12,13,14 };
-GLint desk[2] = { 26,27 };
+GLint desk[2] = { 26 };
 GLint Robot = 15;
 GLint outside[2] = { 17,18 };
 GLint door_edge[4] = { 19,20,21,22 };
-GLint nurbs[2] = { 26 };
+GLint nurbs[4] = { 28,29,30 };
+GLint tile[64];
 GLfloat r_door[2] = { -180,0 };
-bool r_door_on[2] = { false,false };
+bool r_door_on[2] = { false,true };
 float window_pos[3] = { -0.35,-0.35,-0.35 };
 bool window_pos_on[3] = { false,false,false };
 typedef enum {
@@ -148,6 +149,8 @@ void Change_Window(int i) {
 void InitList() {
 	initTexture();
 	initNurbs();
+	initTile();
+	initDesk();
 	initDoorList();
 	initLightbulbList();
 	initWindowList();
@@ -594,56 +597,6 @@ GLint initWallList() {//把基本的墙面元放入列表
 	return wall[0];
 }
 
-//void initEnvironment()
-//{
-//	GLUquadricObj* sphere, * cone, * base;
-//	static GLfloat sphere_mat[] =
-//	{ 1.f, .5f, 0.f, 1.f };
-//	static GLfloat cone_mat[] =
-//	{ 0.f, .5f, 1.f, 1.f };
-//	static GLfloat sphere_mat2[] =
-//	{ 1.f, .0f, 0.f, 1.f };
-//	static GLfloat cone_mat2[] =
-//	{ 1.f, .0f, 0.f, 1.f };
-//
-//	glNewList(snowManHeadDL, GL_COMPILE);
-//	cone = gluNewQuadric();
-//	base = gluNewQuadric();
-//	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, cone_mat);
-//	glRotatef(-90.f, 1.f, 0.f, 0.f);
-//	gluDisk(base, 0., 0.2, 0.2, 1);
-//	gluCylinder(cone, 0.2, 0, 0.4, 10, 10);
-//	gluDeleteQuadric(cone);
-//	gluDeleteQuadric(base);
-//	glEndList();
-//
-//	glNewList(snowManBodyDL, GL_COMPILE);
-//	sphere = gluNewQuadric();
-//	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, sphere_mat);
-//	gluSphere(sphere, 0.2, 10, 10);
-//	gluDeleteQuadric(sphere);
-//	glEndList();
-//
-//	glNewList(snowManHeadDL2, GL_COMPILE);
-//	cone = gluNewQuadric();
-//	base = gluNewQuadric();
-//	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, cone_mat2);
-//	glRotatef(-90.f, 1.f, 0.f, 0.f);
-//	gluDisk(base, 0., 0.2, 0.2, 1);
-//	gluCylinder(cone, 0.2, 0, 0.4, 10, 10);
-//	gluDeleteQuadric(cone);
-//	gluDeleteQuadric(base);
-//	glEndList();
-//
-//	glNewList(snowManBodyDL2, GL_COMPILE);
-//	sphere = gluNewQuadric();
-//	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, sphere_mat2);
-//	gluSphere(sphere, 0.2, 10, 10);
-//	gluDeleteQuadric(sphere);
-//	glEndList();
-//
-//}
-
 //柜子的列表
 GLint initClosetList() {
 	//这个是柜子的正面
@@ -686,7 +639,7 @@ void DrawRobot1(Robot_2* robot);
 void DrawRobot2(Robot_1* robot);
 
 void draw() {
-	drawNurbs(7.5, 0, 2.5);
+	drawfans();
 	drawWall();
 	drawDoor();
 	drawWindow();
@@ -694,84 +647,61 @@ void draw() {
 	drawCloset();
 	drawGlass();
 	drawBoard();
-	//drawDesk();/////////////////////////////////////////暂时注释掉画桌子，它会导致后面的机械臂画不出来，bug待解决
-	robot21.Draw();
-	robot22.Draw();
-	//conv1.draw();
-	//conv1.Move();
-
-	
-	robot1.Draw();
-
-	//shape
-	//s1.Draw();
-	//s2.Draw();
-	//s3.Draw();
-	//s4.Draw();
+	drawDesk();
 }
-void drawoneDesk() {
-	glPushMatrix();
+
+void initDesk() {
 	GLfloat desk_mat_specular[] = { 0.92, 0.65, 0.35, 1.0 };	         // 镜面反射颜色
 	GLfloat desk_mat_shininess[] = { 50.0 };							// 镜面反射参数
 	GLfloat desk_lmodel_ambient[] = { 0.84, 0.55, 0.25, 1.0 };		// 散射颜色
 	GLfloat desk_lmodel_emmision[] = { 0.0, 0.0, 0.0, 1.0 };
-
+	glNewList(desk[0], GL_COMPILE);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, desk_mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, desk_mat_shininess);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, desk_lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, desk_lmodel_emmision);
+	Texture_cube(1, 2 - 1, 0, 0);
+	glEndList();
+}
+
+void drawoneDesk() {
+	glPushMatrix();
 	glTranslatef(-0.25, 0.3, -0.15);
 	glEnable(GL_NORMALIZE);
 	glScalef(0.02f, 0.3f, 0.02f);
-	Texture_cube(1, 2 - 1, 0, 0);
+	glCallList(desk[0]);
 	glPopMatrix();
 
 	glPushMatrix();
-	glMaterialfv(GL_FRONT, GL_SPECULAR, desk_mat_specular);
-	glMaterialfv(GL_FRONT, GL_SHININESS, desk_mat_shininess);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, desk_lmodel_ambient);
-	glMaterialfv(GL_FRONT, GL_EMISSION, desk_lmodel_emmision);
 	glTranslatef(-0.25, 0.3, 0.15);
 	glEnable(GL_NORMALIZE);
 	glScalef(0.02f, 0.3f, 0.02f);
-	Texture_cube(1, 2 - 1, 0, 0);
+	glCallList(desk[0]);
 	glPopMatrix();
 
 	glPushMatrix();
-	glMaterialfv(GL_FRONT, GL_SPECULAR, desk_mat_specular);
-	glMaterialfv(GL_FRONT, GL_SHININESS, desk_mat_shininess);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, desk_lmodel_ambient);
-	glMaterialfv(GL_FRONT, GL_EMISSION, desk_lmodel_emmision);
 	glTranslatef(0.25, 0.3, -0.15);
 	glEnable(GL_NORMALIZE);
 	glScalef(0.02f, 0.3f, 0.02f);
-	Texture_cube(1, 2 - 1, 0, 0);
+	glCallList(desk[0]);
 	glPopMatrix();
 
 	glPushMatrix();
-	glMaterialfv(GL_FRONT, GL_SPECULAR, desk_mat_specular);
-	glMaterialfv(GL_FRONT, GL_SHININESS, desk_mat_shininess);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, desk_lmodel_ambient);
-	glMaterialfv(GL_FRONT, GL_EMISSION, desk_lmodel_emmision);
 	glTranslatef(0.25, 0.3, 0.15);
 	glEnable(GL_NORMALIZE);
 	glScalef(0.02f, 0.3f, 0.02f);
-	Texture_cube(1, 2 - 1, 0, 0);
+	glCallList(desk[0]);
 	glPopMatrix();
 
 	glPushMatrix();
-	glMaterialfv(GL_FRONT, GL_SPECULAR, desk_mat_specular);
-	glMaterialfv(GL_FRONT, GL_SHININESS, desk_mat_shininess);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, desk_lmodel_ambient);
-	glMaterialfv(GL_FRONT, GL_EMISSION, desk_lmodel_emmision);
 	glTranslatef(0, 0.6, 0);
-	glEnable(GL_NORMALIZE);	
+	glEnable(GL_NORMALIZE);
 	glScalef(0.3f, 0.01f, 0.2f);
-	Texture_cube(1, 2 - 1, 0, 0);
+	glCallList(desk[0]);
 	glPopMatrix();
-
-	glPushMatrix();
+	glEndList();
 }
+
 void drawDesk() {
 	glPushMatrix();
 	glTranslatef(7.5, 0, 2.5);
@@ -1027,6 +957,14 @@ void drawOutsideDoor_2() {
 	glPopMatrix();
 }
 
+bool getRDoor_1() {
+	return r_door_on[0];
+}
+
+bool getRDoor_2() {
+	return r_door_on[1];
+}
+
 //绘制门
 void drawDoor() {
 	glPushMatrix();
@@ -1034,29 +972,29 @@ void drawDoor() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	drawOutsideDoor_1();
 	glPopMatrix();
+
 	glPushMatrix();
 	glTranslatef(1.3, 0.7, 0.0);
 	drawOutsideDoor_2();
 	glPopMatrix();
+
 	glPushMatrix();
 	glTranslatef(0.02, 0.7, 5.0);
 	glRotatef(r_door[0], 0, 1, 0);//-180~-90
 	if (r_door[0] < -45 && r_door_on[0]) r_door[0]++;
 	if (r_door[0] >= -180 && !r_door_on[0]) r_door[0]--;
 	glTranslatef(0.0, 0.0, -0.3);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glCallList(door[0]);
 	glPopMatrix();
+
 	glPushMatrix();
 	glTranslatef(1.0, 0.7, 0.02);
 	glRotatef(r_door[1], 0, 1, 0);//-180~-90
 	if (r_door[1] < 0 && r_door_on[1]) r_door[1]++;
 	if (r_door[1] >= -135 && !r_door_on[1]) r_door[1]--;
 	glTranslatef(0.3, 0.0, 0.0);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glCallList(door[1]);
 	glPopMatrix();
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void setWall() {
@@ -1070,23 +1008,50 @@ void setWall() {
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
 }
+
 GLUnurbsObj* theNurb1;
 GLUnurbsObj* theNurb2;
-GLfloat ctrlpoints[5][5][3] = { 
-{{1.5,-3.5, 2},{2,-1.5, 2},{1,-2, 2},{4,1, 2},{-2,0, 2}},
-{{1.5,-3.5, 1},{2,-1.5, 1},{1,-2, 1},{4,1, 1},{-2,0, 1}},
-{{1.5,-3.5, 0},{2,-1.5, 0},{1,-2, 0},{4,1, 0},{-2,0, 0}},
-{{1.5,-3.5,-1},{2,-1.5,-1},{1,-2,-1},{4,1,-1},{-2,0,-1}},
-{{1.5,-3.5,-2},{2,-1.5,-2},{1,-2,-2},{4,1,-2},{-2,0,-2}} };//控制点
+GLUnurbsObj* theNurb3;
+GLUnurbsObj* theNurb4;
+GLfloat ctrlpoints[5][5][3] = {
+{{1  ,0  , 1  },{2,0.2, 2},{3,0.2, 2},{4,0.2, 1  },{5,0, 0.2}},
+{{0.8,0.1, 0.8},{2,0.2, 1},{3,0.2, 1},{4,0.2, 0.5},{5,0, 0.1}},
+{{0.6,0.2, 0  },{2,0.2, 0},{3,0.3, 0},{4,0.4, 0  },{5,0, 0  }},
+{{0.8,0.1,-0.8},{2,0.2,-1},{3,0.4,-1},{4,0.5,-0.5},{5,0,-0.1}},
+{{1  ,0  ,-1  },{2,0.2,-2},{3,0.4,-2},{4,0.6,-1  },{5,0,-0.2}} };//控制点
+
+GLfloat knot_2[8] = { 0, 0, 0, 0, 1, 1, 1, 1 };
+GLfloat knots[10] = { 0.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0 };
+
+GLfloat ctlpoints_2[4][4][3] = {
+	{ { 0., 3., 0. },{ 1., 3., 0. },{ 2., 3., 0 },{ 3., 3., 0. } },
+	{ { 0., 2., 0. },{ 1., 2., 0. },{ 2., 2., 0 },{ 3., 2., 0. } },
+	{ { 0., 1., 0. },{ 1., 1., 0. },{ 2., 1., 0 },{ 3., 1., 0. } },
+	{ { 0., 0., 0. },{ 1., 0., 0. },{ 2., 0., 0 },{ 3., 0., 0. } }
+};
+
+void initTile() {
+	for (int k = 0; k < 64; k++) {
+		tile[k] = 100 + k;
+		for (int i = 1; i < 4; i++)
+			for (int j = 0; j < 4; j++)
+				ctlpoints_2[i][j][2] = 2 * sin((GLfloat)i + k * 0.1);
+		glNewList(tile[k], GL_COMPILE);
+		gluBeginSurface(theNurb4);
+		gluNurbsSurface(theNurb4, 8, knot_2, 8, knot_2,
+			3 * 4, 3,
+			&ctlpoints_2[0][0][0], 4, 4, GL_MAP2_VERTEX_3);
+		gluEndSurface(theNurb4);
+		glEndList();
+	}
+}
 
 void initNurbs() {
 	glPushMatrix();
-	glClearColor(1.0, 1.0, 1.0, 0.0);//设置背景色
-	glNewList(nurbs[0], GL_COMPILE);
- /*为光照模型指定材质参数*/
-	GLfloat mat_diffuse[] = { 1.0,0.5,0.1,1.0 };
-	GLfloat mat_specular[] = { 1.0,1.0,1.0,1.0 };
-	GLfloat mat_shininess[] = { 100.0 };
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	GLfloat mat_diffuse[] = { 0.5,0.5,0.1,0.4 };
+	GLfloat mat_specular[] = { 0.5,0.5,1.0,0.7 };
+	GLfloat mat_shininess[] = { 50.0 };
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
@@ -1097,31 +1062,74 @@ void initNurbs() {
 	glFrontFace(GL_CW);
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_LINE_SMOOTH);
-	theNurb1 = gluNewNurbsRenderer();//创建NURBS对象theNurb1
+	glNewList(nurbs[0], GL_COMPILE);
+	theNurb1 = gluNewNurbsRenderer();
 	gluNurbsProperty(theNurb1, GLU_SAMPLING_TOLERANCE, 25.0);
-	glLineWidth(2.0);
-	gluNurbsProperty(theNurb1, GLU_DISPLAY_MODE, GLU_OUTLINE_POLYGON);
-	theNurb2 = gluNewNurbsRenderer();//创建NURBS对象theNurb2
-	gluNurbsProperty(theNurb2, GLU_SAMPLING_TOLERANCE, 25.0);
-	gluNurbsProperty(theNurb2, GLU_DISPLAY_MODE, GLU_FILL);
-	GLfloat knots[10] = { 0.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0 };
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	/*第一个曲面*/
+	gluNurbsProperty(theNurb1, GLU_DISPLAY_MODE, GLU_FILL);
 	gluBeginSurface(theNurb1);
-	/*定义曲面形状*/
 	gluNurbsSurface(theNurb1, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
 	gluEndSurface(theNurb1);
-	glPopMatrix();
 	glEndList();
+	glNewList(nurbs[1], GL_COMPILE);
+	theNurb2 = gluNewNurbsRenderer();
+	gluNurbsProperty(theNurb2, GLU_SAMPLING_TOLERANCE, 25.0);
+	gluNurbsProperty(theNurb2, GLU_DISPLAY_MODE, GLU_FILL);
+	gluBeginSurface(theNurb2);
+	gluNurbsSurface(theNurb2, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
+	gluEndSurface(theNurb2);
+	glEndList();
+	glNewList(nurbs[2], GL_COMPILE);
+	theNurb3 = gluNewNurbsRenderer();
+	gluNurbsProperty(theNurb3, GLU_SAMPLING_TOLERANCE, 25.0);
+	gluNurbsProperty(theNurb3, GLU_DISPLAY_MODE, GLU_FILL);
+	gluBeginSurface(theNurb3);
+	gluNurbsSurface(theNurb3, 10, knots, 10, knots, 5 * 3, 3, &ctrlpoints[0][0][0], 5, 5, GL_MAP2_VERTEX_3);
+	gluEndSurface(theNurb3);
+	glEndList();
+	glNewList(nurbs[3], GL_COMPILE);
+	theNurb4 = gluNewNurbsRenderer();
+	gluNurbsProperty(theNurb3, GLU_SAMPLING_TOLERANCE, 25.0);
+	gluNurbsProperty(theNurb3, GLU_DISPLAY_MODE, GLU_FILL);
 }
-void drawNurbs(float x,float y,float z) {
+
+GLfloat fan_r = 0;
+GLint tile_r = 0;
+
+void drawfans() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
-	glTranslatef(x,y,z);
-	glTranslatef(0.1, 0.62, 0.15);
-	glRotatef(270, 0, 1, 0);
+	glTranslatef(4, 1.9, 4);
+	glScalef(0.005, 0.2, 0.005);
+	Texture_cube(2, 8, 22, 0);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(4, 1.7, 4);
+	glRotatef(fan_r++, 0, 1, 0);
+	glTranslatef(-0.5, 0, 0);
 	glScalef(0.1, 0.05, 0.05);
 	glCallList(nurbs[0]);
 	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(4, 1.7, 4);
+	glRotatef(fan_r + 120, 0, 1, 0);
+	glTranslatef(-0.5, 0, 0);
+	glScalef(0.1, 0.05, 0.05);
+	glCallList(nurbs[1]);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(4, 1.7, 4);
+	glRotatef(fan_r + 240, 0, 1, 0);
+	glTranslatef(-0.5, 0, 0);
+	glScalef(0.1, 0.05, 0.05);
+	glCallList(nurbs[2]);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(3.99, 1.4, 4);
+	glScalef(0.005, 0.1, 0.025);
+	glCallList(tile[tile_r++]);
+	glPopMatrix();
+	if (tile_r == 64)tile_r = 0;
 }
 
 //绘制墙面
