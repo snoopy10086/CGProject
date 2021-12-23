@@ -9,6 +9,10 @@ extern int count;
 bool boardmode = false;
 int boardnum = 0;
 int boardcounter = 0;
+
+extern GLfloat global_diffuse[];
+extern bool global_light_enable[];
+
 void  Change_Rust() {
 	boardmode = !boardmode;
 }
@@ -565,12 +569,11 @@ GLint initWallList() {//把基本的墙面元放入列表
 	glEndList();
 	glNewList(wall[1], GL_COMPILE);//天花板
 	glPushMatrix();
-	GLfloat ceiling_mat_specular[] = { 0.85, 0.85, 0.85, 1.0 };	         // 镜面反射颜色
 	GLfloat ceiling_mat_shininess[] = { 50.0 };							// 镜面反射参数
 	GLfloat ceiling_lmodel_ambient[] = { 0.79, 0.79, 0.79, 1.0 };		// 散射颜色
 	GLfloat ceiling_lmodel_emmision[] = { 0.0, 0.0, 0.0, 1.0 };
 
-	glMaterialfv(GL_FRONT, GL_SPECULAR, ceiling_mat_specular);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, ceiling_lmodel_emmision);	// 天花板不反光
 	glMaterialfv(GL_FRONT, GL_SHININESS, ceiling_mat_shininess);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, ceiling_lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, ceiling_lmodel_emmision);
@@ -871,9 +874,9 @@ void drawLightbulb() {
 		glTranslatef(1.6 * i, 0, 0);
 		for (int k = 0; k < 4; k++) {
 			glPushMatrix();
-			if (k == i) {
-				GLfloat lmodel_emmision[] = { 1.0, 1.0, 1.0, 1.0 };
-				glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
+			if ((k == i && global_light_enable[k]) ||		// 主对角线上的灯
+					(k + i == 3 && global_light_enable[i + 4])) {	// 主对角线上的聚光灯
+				glMaterialfv(GL_FRONT, GL_EMISSION, global_diffuse);
 			}
 			else {
 				GLfloat lmodel_emmision[] = { 0.0, 0.0, 0.0, 1.0 };

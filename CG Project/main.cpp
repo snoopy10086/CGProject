@@ -22,8 +22,15 @@ int wWidth = 600, wHeight = 600;
 int wPosW = 100;
 int wPosH = 100;
 
+// 光照全局变量
+GLfloat global_light_color[][4] = { { 1., 0.46, 0.14, 1.0 }, { 1., 0.78, 0.62, 1.0 }, { 1., 1., 1., 1.0 }, { 0.76, 0.81, 1., 1.0 }, { 0.51, 0.65, 1., 1.0 } };
+int light_switch = 2;
+GLfloat global_ambient[] = { 0., 0., 0., 1.0 };
+GLfloat global_diffuse[] = { 1., 1., 1., 1.0 };
+GLfloat global_specular[] = { 1., 1., 1., 1.0 };
+bool global_light_enable[] = { true, false, false, true, false, false, false, false };
 
-//定义各种物体
+// 定义各种物体
 Robot_2* robot21 = new Robot_2(3.5, 0, 4.8);
 Robot_2* robot22 = new Robot_2(4.5, 0, 4.8);
 Robot_1* robot1 = new Robot_1(0, 0, 0);
@@ -246,27 +253,27 @@ void key(unsigned char k, int x, int y)
 		conv1->count = (conv1->count + 1) % 5;
 		break;
 	}
-	case '1':
+	case 'f':
 	{
 		Change_Door_1();
 		break;
 	}
-	case '2':
+	case 'g':
 	{
 		Change_Door_2();
 		break;
 	}
-	case '3':
+	case 'v':
 	{
 		Change_Window(0);
 		break;
 	}
-	case '4':
+	case 'b':
 	{
 		Change_Window(1);
 		break;
 	}
-	case '5':
+	case 'n':
 	{
 		Change_Window(2);
 		break;
@@ -274,77 +281,106 @@ void key(unsigned char k, int x, int y)
 	case 'u': 
 	{
 		Change_Rust();
+		break;
+	}
+	case '0':	case '1':	case '2':	case '3':	case '4':	case '5':	case '6':	case '7':
+	{
+		global_light_enable[k - '0'] = !global_light_enable[k - '0'];
+		break;
+	}
+	case '8':
+	{
+		light_switch = (light_switch + 1) % 5;
+		for (int i = 0; i < 3; i++) {
+			global_diffuse[i] = global_specular[i] = global_light_color[light_switch][i];
+		}
+		break;
 	}
 	}
+}
+
+void setLight() {
+	//点光源 0
+	GLfloat light_pos0[] = { 1.6, 1.0, 1.6, 1 };
+	glLightfv(GL_LIGHT0, GL_POSITION, light_pos0);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, global_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, global_diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, global_specular);
+	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.4f);
+	if (global_light_enable[0]) glEnable(GL_LIGHT0);
+	else glDisable(GL_LIGHT0);
+
+	//点光源 1
+	GLfloat light_pos1[] = { 3.2, 1., 3.2, 1 };
+	glLightfv(GL_LIGHT1, GL_POSITION, light_pos1);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, global_ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, global_diffuse);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, global_specular);
+	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.4f);
+	if (global_light_enable[1]) glEnable(GL_LIGHT1);
+	else glDisable(GL_LIGHT1);
+
+	//点光源 2
+	GLfloat light_pos2[] = { 4.8, 1., 4.8, 1 };
+	glLightfv(GL_LIGHT2, GL_POSITION, light_pos2);
+	glLightfv(GL_LIGHT2, GL_AMBIENT, global_ambient);
+	glLightfv(GL_LIGHT2, GL_DIFFUSE, global_diffuse);
+	glLightfv(GL_LIGHT2, GL_SPECULAR, global_specular);
+	glLightf(GL_LIGHT2, GL_CONSTANT_ATTENUATION, 0.4f);
+	if (global_light_enable[2]) glEnable(GL_LIGHT2);
+	else glDisable(GL_LIGHT2);
+
+	//点光源 3
+	GLfloat light_pos3[] = { 6.4, 1., 6.4, 1 };
+	glLightfv(GL_LIGHT3, GL_POSITION, light_pos3);
+	glLightfv(GL_LIGHT3, GL_AMBIENT, global_ambient);
+	glLightfv(GL_LIGHT3, GL_DIFFUSE, global_diffuse);
+	glLightfv(GL_LIGHT3, GL_SPECULAR, global_specular);
+	glLightf(GL_LIGHT3, GL_CONSTANT_ATTENUATION, 0.8f);
+	if (global_light_enable[3]) glEnable(GL_LIGHT3);
+	else glDisable(GL_LIGHT3);
+
+	// 点光源 4
+	GLfloat light_pos4[] = { 1.6, 1., 6.4, 1 };
+	glLightfv(GL_LIGHT4, GL_POSITION, light_pos4);
+	glLightfv(GL_LIGHT4, GL_AMBIENT, global_ambient);
+	glLightfv(GL_LIGHT4, GL_DIFFUSE, global_diffuse);
+	glLightfv(GL_LIGHT4, GL_SPECULAR, global_specular);
+	if (global_light_enable[4]) glEnable(GL_LIGHT4);
+	else glDisable(GL_LIGHT4);
+
+	//点光源 5
+	GLfloat light_pos5[] = { 3.2, 1., 4.8, 1 };
+	glLightfv(GL_LIGHT5, GL_POSITION, light_pos5);
+	glLightfv(GL_LIGHT5, GL_AMBIENT, global_ambient);
+	glLightfv(GL_LIGHT5, GL_DIFFUSE, global_diffuse);
+	glLightfv(GL_LIGHT5, GL_SPECULAR, global_specular);
+	if (global_light_enable[5]) glEnable(GL_LIGHT5);
+	else glDisable(GL_LIGHT5);
+
+	//点光源 6
+	GLfloat light_pos6[] = { 4.8, 1., 3.2, 1 };
+	glLightfv(GL_LIGHT6, GL_POSITION, light_pos6);
+	glLightfv(GL_LIGHT6, GL_AMBIENT, global_ambient);
+	glLightfv(GL_LIGHT6, GL_DIFFUSE, global_diffuse);
+	glLightfv(GL_LIGHT6, GL_SPECULAR, global_specular);
+	if (global_light_enable[6]) glEnable(GL_LIGHT6);
+	else glDisable(GL_LIGHT6);
+
+	//点光源 7
+	GLfloat light_pos7[] = { 6.4, 1., 1.6, 1 };
+	glLightfv(GL_LIGHT7, GL_POSITION, light_pos7);
+	glLightfv(GL_LIGHT7, GL_AMBIENT, global_ambient);
+	glLightfv(GL_LIGHT7, GL_DIFFUSE, global_diffuse);
+	glLightfv(GL_LIGHT7, GL_SPECULAR, global_specular);
+	if (global_light_enable[7]) glEnable(GL_LIGHT7);
+	else glDisable(GL_LIGHT7);
 }
 
 void renderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//点光源 1
-	GLfloat white_ambient[] = { 0., 0., 0., 1.0 };
-	GLfloat white_diffuse[] = { 1., 1., 1., 1.0 };
-	GLfloat white_specular[] = { 1., 1., 1., 1.0 };
-
-	GLfloat light_pos0[] = { 1.6, 1.0, 1.6, 1 };
-	glLightfv(GL_LIGHT0, GL_POSITION, light_pos0);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, white_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, white_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, white_specular);
-	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.4f);
-	glEnable(GL_LIGHT0);
-
-	GLfloat light_pos1[] = { 3.2, 1., 3.2, 1 };
-	glLightfv(GL_LIGHT1, GL_POSITION, light_pos1);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, white_ambient);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, white_diffuse);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, white_specular);
-	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.4f);
-	//glEnable(GL_LIGHT1);
-	//点光源 2
-	GLfloat light_pos2[] = { 4.8, 1., 4.8, 1 };
-	glLightfv(GL_LIGHT2, GL_POSITION, light_pos2);
-	glLightfv(GL_LIGHT2, GL_AMBIENT, white_ambient);
-	glLightfv(GL_LIGHT2, GL_DIFFUSE, white_diffuse);
-	glLightfv(GL_LIGHT2, GL_SPECULAR, white_specular);
-	glLightf(GL_LIGHT2, GL_CONSTANT_ATTENUATION, 0.4f);
-	//glEnable(GL_LIGHT2);
-	//点光源 3
-	GLfloat light_pos3[] = { 6.4, 1., 6.4, 1 };
-	glLightfv(GL_LIGHT3, GL_POSITION, light_pos3);
-	glLightfv(GL_LIGHT3, GL_AMBIENT, white_ambient);
-	glLightfv(GL_LIGHT3, GL_DIFFUSE, white_diffuse);
-	glLightfv(GL_LIGHT3, GL_SPECULAR, white_specular);
-	glLightf(GL_LIGHT3, GL_CONSTANT_ATTENUATION, 0.8f);
-	glEnable(GL_LIGHT3);
-	// 点光源 4
-	GLfloat light_pos4[] = { 6.4, 1., 6.4, 1 };
-	glLightfv(GL_LIGHT4, GL_POSITION, light_pos4);
-	glLightfv(GL_LIGHT4, GL_AMBIENT, white_ambient);
-	glLightfv(GL_LIGHT4, GL_DIFFUSE, white_diffuse);
-	glLightfv(GL_LIGHT4, GL_SPECULAR, white_specular);
-	//glEnable(GL_LIGHT4);
-	//点光源 5
-	GLfloat light_pos5[] = { 1.6, 1., 6.4, 1 };
-	glLightfv(GL_LIGHT5, GL_POSITION, light_pos4);
-	glLightfv(GL_LIGHT5, GL_AMBIENT, white_ambient);
-	glLightfv(GL_LIGHT5, GL_DIFFUSE, white_diffuse);
-	glLightfv(GL_LIGHT5, GL_SPECULAR, white_specular);
-	//glEnable(GL_LIGHT5);
-	//点光源 6
-	GLfloat light_pos6[] = { 6.4, 1., 3.2, 1 };
-	glLightfv(GL_LIGHT6, GL_POSITION, light_pos4);
-	glLightfv(GL_LIGHT6, GL_AMBIENT, white_ambient);
-	glLightfv(GL_LIGHT6, GL_DIFFUSE, white_diffuse);
-	glLightfv(GL_LIGHT6, GL_SPECULAR, white_specular);
-	//glEnable(GL_LIGHT6);
-	//点光源 7
-	GLfloat light_pos7[] = { 6.4, 1., 3.2, 1 };
-	glLightfv(GL_LIGHT7, GL_POSITION, light_pos4);
-	glLightfv(GL_LIGHT7, GL_AMBIENT, white_ambient);
-	glLightfv(GL_LIGHT7, GL_DIFFUSE, white_diffuse);
-	glLightfv(GL_LIGHT7, GL_SPECULAR, white_specular);
-	//glEnable(GL_LIGHT7);
+	setLight();
 	glLoadIdentity();
 	gluLookAt(eye[0], eye[1], eye[2],
 		eye[0] + r * cos(screenrate_x) * cos(screenrate_y), eye[1] + r * sin(screenrate_y), eye[2] + r * cos(screenrate_y) * sin(screenrate_x),
