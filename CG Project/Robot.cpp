@@ -139,9 +139,9 @@ void Robot_1::Draw()
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
-	glTranslatef(3, 2, 4);
-	glEnable(GL_NORMALIZE); glScalef(0.2, 0.2, 0.2);
-	glEnable(GL_NORMALIZE); glScalef(0.5, 0.5, 0.5);
+	glTranslatef(3 + GripperX, 2 + GripperY, 4 + GripperZ);
+	glEnable(GL_NORMALIZE); glScalef(0.1, 0.1, 0.1);
+
 	if (quad_obj == NULL)
 		quad_obj = gluNewQuadric();
 #ifdef DEBUG
@@ -187,44 +187,44 @@ Robot_2::Robot_2(float PositionX, float PositionY, float PositionZ)
 	this->PositionY = PositionY+0.1;
 	this->PositionZ = PositionZ;
 }
-
 void Robot_2::HandleRotate()
 {
-	if (Robot_2::Isrotate)
+	GLfloat r1_0 = 0;
+	GLfloat r2_0 = 0;
+	GLfloat r3_0 = 45;
+
+	GLfloat r1_1 = 0;
+	GLfloat r2_1 = 35;
+	GLfloat r3_1 = 0;
+
+	int T = 100;
+	if (this->IsBind)
 	{
-		rotate1 += 0.4;
-	}
-	if (Robot_2::Isrotate)
-	{
-		if (forward2) {
-			rotate2 += 0.1;
-			if (rotate2 > 45) {
-				rotate2 = 45;
-				forward2 = !forward2;
-			}
+		if (this->timeflag == T * 5.5) {
+			this->IsBind = false;
+			this->timeflag = -1;
+			this->fCatch = 45;
 		}
 		else {
-			rotate2 -= 0.1;
-			if (rotate2 < 0) {
-				rotate2 = 0;
-				forward2 = !forward2;
+			this->timeflag += 1;
+			if (this->timeflag >= 0 && this->timeflag < 1 * T) {
+				this->rotate1 += (r1_1 - r1_0) / float(T);
+				this->rotate2 += (r2_1 - r2_0) / float(T);
+				this->rotate3 += (r3_1 - r3_0) / float(T);
 			}
-		}
-	}
-	if (Isrotate)
-	{
-		if (forward3) {
-			rotate3 += 0.1;
-			if (rotate3 > 45) {
-				rotate3 = 45;
-				forward3 = !forward3;
+
+			if (this->timeflag >= 1.5 * T && this->timeflag < 2.5 * T) {
+				this->fCatch -= 0.2;
 			}
-		}
-		else {
-			rotate3 -= 0.1;
-			if (rotate3 < 0) {
-				rotate3 = 0;
-				forward3 = !forward3;
+
+			if (this->timeflag >= 3 * T && this->timeflag < 4 * T) {
+				this->fCatch += 0.2;
+			}
+
+			if (this->timeflag >= 4.5 * T && this->timeflag < 5.5 * T) {
+				this->rotate1 += (r1_0 - r1_1) / float(T);
+				this->rotate2 += (r2_0 - r2_1) / float(T);
+				this->rotate3 += (r3_0 - r3_1) / float(T);
 			}
 		}
 	}
@@ -289,6 +289,7 @@ void Robot_2::Draw()
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
 	this->HandleRotate();
+	this->update();
 	glPushMatrix();
 	glTranslatef(PositionX, PositionY, PositionZ);
 	glEnable(GL_NORMALIZE); glScalef(0.2f, 0.2f, 0.2f);
@@ -302,11 +303,21 @@ void Robot_2::Draw()
 	glTranslatef(0, 3.8, 0);
 	glRotatef(-rotate3, 1, 0, 0);
 	glTranslatef(0, -3.8, 0);
-	//机械臂1
+	//机械臂2
+
+
 	glPushMatrix();
 	glTranslatef(0, 4.2, 0.4);
 	DrawRod(0.2, 0.2, 2);
 	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0, 4.2, 2.4);
+	glRotatef(-90, 1, 0, 0);
+	glScalef(0.3, 0.3, 0.3);
+	Draw_Robot();
+	glPopMatrix();
+
 	glPopMatrix();
 	//关节2
 	glPushMatrix();
@@ -346,4 +357,12 @@ void Robot_2::setPositionY(float position) {
 }
 void Robot_2::setPositionZ(float position) {
 	this->PositionZ = position;
+}
+void Robot_2::update()
+{
+	Robot::update();
+}
+void Robot_2::not_is_bind()
+{
+	IsBind = !IsBind;
 }

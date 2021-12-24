@@ -83,8 +83,10 @@ public:
 	GLfloat rotate2 = 0;
 	GLfloat rotate3 = 0;
 	bool Isrotate = false;
+	bool IsBind = false;
 	bool forward2 = true;
 	bool forward3 = true;
+	int timeflag = -1;
 	float PositionX = 4;
 	float PositionY = 0.1;
 	float PositionZ = 4;
@@ -99,9 +101,10 @@ protected:
 	void DrawRod(GLdouble baseR, GLdouble topR, GLdouble h);
 public:
 	void Draw();
+	void update();
 	void HandleRotate();
 	void setPositionX(float position);
 	void setPositionY(float position);
 	void setPositionZ(float position);
-	
+	void not_is_bind();
 };

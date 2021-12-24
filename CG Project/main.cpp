@@ -4,7 +4,7 @@
 #include "Shape.h"
 #include "conveyor.h"
 #include <math.h>
-#include <list>
+#include <vector>
 using namespace std;
 #define PI 3.1415926535
 static int du = 90, OriX = -1, OriY = -1, Px = -1, Py = -1;   //du是视点和x轴的夹角
@@ -31,9 +31,7 @@ GLfloat global_specular[] = { 1., 1., 1., 1.0 };
 bool global_light_enable[] = { true, false, false, true, false, false, false, false };
 
 // 定义各种物体
-Robot_2* robot21 = new Robot_2(3.5, 0, 4.8);
-Robot_2* robot22 = new Robot_2(4.5, 0, 4.8);
-Robot_1* robot1 = new Robot_1(0, 0, 0);
+
 conveyor* conv1 = new conveyor(0, 0, 1, 0);
 
 
@@ -42,11 +40,11 @@ float move = 0;
 int count = 0;
 
 //collections
-list<Shape*> Shapes;						//collections of shapes
+vector<Shape*> Shapes;						//collections of shapes
 Shape* CurrentChooseShape = NULL;		//now choosen shape
-list<conveyor*> Conveyors;				//collections of conyors
-list<Robot*> Robots;				//collections of robots
-list<Prism> Prisms;
+vector<conveyor*> Conveyors;				//collections of conyors
+vector<Robot*> Robots;				//collections of robots
+vector<Prism> Prisms;
 
 void set_eye() {
 	origin_eye[0] = eye[0];
@@ -117,9 +115,9 @@ int UnbindShapeRobot(Robot* R, Shape* S) {
 //called once each update
 //every conyors in collections add motion to shapes
 void AddMotionToShapes() {
-	list<conveyor*>::iterator Citer;
+	vector<conveyor*>::iterator Citer;
 	for (Citer = Conveyors.begin(); Citer != Conveyors.end(); Citer++) {
-		list<Shape*>::iterator Siter;
+		vector<Shape*>::iterator Siter;
 		for (Siter = Shapes.begin(); Siter != Shapes.end(); Siter++) {
 			(*Citer)->AddMotion((*Siter));
 		}
@@ -129,9 +127,9 @@ void AddMotionToShapes() {
 void InitialThings() {
 	// 20211224 BDZ: 按照现在的键盘操作，如果设计成局部变量没有办法操作改变状态
 	// 
-	//Robot_2* robot21 = new Robot_2(3.5, 0, 4.8);
-	//Robot_2* robot22 = new Robot_2(4.5, 0, 4.8);
-	//Robot_1* robot1 = new Robot_1(0, 0, 0);
+	Robot_2* robot21 = new Robot_2(3.5, 0, 4.8);
+	Robot_2* robot22 = new Robot_2(4.5, 0, 4.8);
+	Robot_1* robot1 = new Robot_1(0,0,0);
 	Robots.push_back(robot21);
 	Robots.push_back(robot22);
 	Robots.push_back(robot1);
@@ -154,21 +152,21 @@ void InitialThings() {
 }
 
 void drawRobots() {
-	list<Robot*>::iterator Riter;
+	vector<Robot*>::iterator Riter;
 	for (Riter = Robots.begin(); Riter != Robots.end(); Riter++) {
 		(*Riter)->Draw();
 	}
 }
 
 void drawShapes() {
-	list<Shape*>::iterator Siter;
+	vector<Shape*>::iterator Siter;
 	for (Siter = Shapes.begin(); Siter != Shapes.end(); Siter++) {
 		(*Siter)->Draw();
 	}
 }
 
 void drawConveyors() {
-	list<conveyor*>::iterator Citer;
+	vector<conveyor*>::iterator Citer;
 	for (Citer = Conveyors.begin(); Citer != Conveyors.end(); Citer++) {
 		(*Citer)->draw();
 	}
@@ -224,27 +222,30 @@ void key(unsigned char k, int x, int y)
 	}
 	case 'r':
 	{
-		robot21->Isrotate = !robot21->Isrotate;
+		((Robot_2*)Robots[0])->not_is_bind();
+		((Robot_2*)Robots[1])->not_is_bind();
 		break;
 	}
 	case 'y':
 	{
-		robot22->Isrotate = !robot22->Isrotate;
+
 		break;
 	}
 	case 'i':
 	{
-		robot1->len_inc();
+
 		break;
 	}
 	case 'k':
 	{
-		robot1->len_dec();
+
 		break;
 	}
 	case 'e':
 	{
-		robot1->not_catch();
+		Robots[0]->not_catch();
+		Robots[1]->not_catch();
+		Robots[2]->not_catch();
 		break;
 	}
 	case 't':
