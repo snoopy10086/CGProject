@@ -134,12 +134,6 @@ bool forward2 = true;
 bool forward3 = true;
 
 
-#define BUFSIZE 512
-GLuint selectBuf[BUFSIZE]; // 设置一个选择缓冲区
-
-PickInfo s_part;
-int s_row, s_col;
-
 void Change_Door_1() {
 	r_door_on[0] = !r_door_on[0];
 }
@@ -638,8 +632,8 @@ GLint initClosetList() {
 	return 0;
 }
 
-void DrawRobot1(Robot_2* robot);
-void DrawRobot2(Robot_1* robot);
+
+
 
 void draw() {
 	drawfans();
@@ -1188,25 +1182,3 @@ void drawWall() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-//机械臂2
-void DrawRobot2(Robot_1* robot)
-{
-	robot->update();
-
-	glPushMatrix();
-	GLfloat mat_specular[] = { 1., 1., 1., 1.0 };	         // 镜面反射颜色
-	GLfloat mat_shininess[] = { 50.0 };							// 镜面反射参数
-	GLfloat lmodel_ambient[] = { 1., 1., 1., 1.0 };		// 散射颜色
-	GLfloat lmodel_emmision[] = { 0.0, 0.0, 0.0, 1.0 };
-
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
-	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
-	glTranslatef(3, 2, 4);
-	glEnable(GL_NORMALIZE); glScalef(0.2, 0.2, 0.2);
-	glEnable(GL_NORMALIZE); glScalef(0.5, 0.5, 0.5);
-	robot->Draw();
-	glPopMatrix();
-	glPopMatrix();
-}

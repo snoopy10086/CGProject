@@ -59,3 +59,17 @@ This is a project of 2021 CG course in ZJU.
 - 放置物体：xzk
 - 储存-导入导出：xzk
 - 截屏+保存：zly
+
+
+
+## Update History
+
+#### 12.25 updated by xzk
+
+1. 添加了鼠标选取的相关代码, 调整了参数, 其中启用选择模式后, 需要采用正视图视角选取物体, 否则鼠标选取的准确度很不准。选取结果有s_type标识选中的对象类型, s_id标识对象在vector中的下标。
+2. 部分调整了main.cpp, 增加了函数的声明，略微规范了代码的写法，将list类转成了vector类方便random access 
+3. 添加了鼠标放置的功能, 目前鼠标放置放置的是六棱柱, 效果为在鼠标指向位置放置一个六棱柱, 后续可以拓展(累了)
+4. 添加了glm库 位于include目录下
+5. 添加了model_view.h及model_view.cpp, 实现鼠标位置转化成世界坐标
+6. 修改robot类, 修复bug
+7. 修改了shape类, 保证类下的globalX,globalY, globalZ三个坐标与世界坐标相等

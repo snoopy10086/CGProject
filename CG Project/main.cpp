@@ -1,12 +1,16 @@
 #pragma once
 #include "drawEnvironment.h"
+#include "model_view.h"
 #include "Robot.h"
 #include "Shape.h"
 #include "conveyor.h"
+#include "model_view.h"
 #include <math.h>
 #include <vector>
 using namespace std;
 #define PI 3.1415926535
+
+#define BUFSIZE 512
 static int du = 90, OriX = -1, OriY = -1, Px = -1, Py = -1;   //du是视点和x轴的夹角
 static float r = 8, h = 0.0;   //r是视点绕y轴的半径，h是视点高度即在y轴上的坐标
 static float c = PI / 180.0;    //弧度和角度转换参数
@@ -21,7 +25,8 @@ float step = 0.05;
 int wWidth = 600, wHeight = 600;
 int wPosW = 100;
 int wPosH = 100;
-
+int centerpoint_x = wWidth / 2, centerpoint_y = wHeight / 2;
+static float cons = 89 * c;
 // 光照全局变量
 GLfloat global_light_color[][4] = { { 1., 0.46, 0.14, 1.0 }, { 1., 0.78, 0.62, 1.0 }, { 1., 1., 1., 1.0 }, { 0.76, 0.81, 1., 1.0 }, { 0.51, 0.65, 1., 1.0 } };
 int light_switch = 2;
@@ -36,6 +41,29 @@ conveyor* conv1 = new conveyor(0, 0, 1, 0);
 
 
 void renderScene(void);
+void reshape(int w, int h);
+void set_eye();
+void modify_eye();
+int BindShapeRobot(Robot* R, Shape* S);
+int UnbindShapeRobot(Robot* R, Shape* S);
+void AddMotionToShapes();
+void InitialThings();
+void drawRobots();
+void drawConveyors();
+void drawShapes();
+void key(unsigned char k, int x, int y);
+void setLight();
+void startPicking(int cursorX, int cursorY);
+void processHits(GLint hits, GLuint buffer[]);
+void stopPicking();
+void Mouse(int button, int state, int x, int y);
+void onMouseMove(int x, int y);
+void mouse_move(int mx, int my);
+void init();
+void reshape(int w, int h);
+
+
+
 float move = 0;
 int count = 0;
 
@@ -45,6 +73,13 @@ Shape* CurrentChooseShape = NULL;		//now choosen shape
 vector<conveyor*> Conveyors;				//collections of conyors
 vector<Robot*> Robots;				//collections of robots
 vector<Prism> Prisms;
+
+typedef enum {
+	__robot = 100, __shape, __conveyor, NONE
+}TYPE;
+GLuint selectBuf[BUFSIZE]; // 设置一个选择缓冲区
+TYPE s_type;
+int s_id;
 
 void set_eye() {
 	origin_eye[0] = eye[0];
@@ -137,12 +172,12 @@ void InitialThings() {
 	//conveyor* conv1 = new conveyor(0, 0, 1, 0);
 	Conveyors.push_back(conv1);
 
-	Cylinder* s1 = new Cylinder(27, 1, 22);
-	ConeCylinder* s2 = new ConeCylinder(27, 0.5, 27);
-	Cone* s3 = new Cone(30, 0.6, 27);
-	Cube* s4 = new Cube(30, 2, 22);
-	Prism* s5 = new Prism(27, 1, 18);
-	Trustum* s6 = new Trustum(30, 1, 20);
+	Cylinder* s1 = new Cylinder(3, 1, 2);
+	ConeCylinder* s2 = new ConeCylinder(3, 1, 3);
+	Cone* s3 = new Cone(3, 1, 1);
+	Cube* s4 = new Cube(3.5, 1, 1);
+	Prism* s5 = new Prism(3.5, 1, 2);
+	Trustum* s6 = new Trustum(3.5, 1, 3);
 	Shapes.push_back(s1);
 	Shapes.push_back(s2);
 	Shapes.push_back(s3);
@@ -153,23 +188,46 @@ void InitialThings() {
 
 void drawRobots() {
 	vector<Robot*>::iterator Riter;
+	int i = 0;
+	glPushName(__robot);
+	glPushName(0);
 	for (Riter = Robots.begin(); Riter != Robots.end(); Riter++) {
+		glLoadName(i);
+		i++;
 		(*Riter)->Draw();
 	}
+	glPopName();
+	glPopName();
 }
 
 void drawShapes() {
 	vector<Shape*>::iterator Siter;
+	int i = 0;
+	glPushName(__shape);
+	glPushName(0);
 	for (Siter = Shapes.begin(); Siter != Shapes.end(); Siter++) {
+		glLoadName(i);
+		i++;
 		(*Siter)->Draw();
 	}
+	glPopName();
+	glPopName();
 }
 
 void drawConveyors() {
 	vector<conveyor*>::iterator Citer;
+	int i = 0;
+	glPushName(__conveyor);
+	glPushName(0);
 	for (Citer = Conveyors.begin(); Citer != Conveyors.end(); Citer++) {
+		
+		glLoadName(i);
+		i++;
 		(*Citer)->draw();
+
 	}
+	glPopName();
+	glPopName();
 }
 
 void key(unsigned char k, int x, int y)
@@ -388,21 +446,107 @@ void renderScene(void)
 		0, 1, 0);				// 场景（0，0，0）的视点中心 (0,5,50)，Y轴向上
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
-
-	//glColor3f(1.0, 0.0, 0.0);
 	draw();
 	drawConveyors();
 	drawShapes();
 	drawRobots();
 	glutSwapBuffers();                                      //交换两个缓冲区指针
 }
+void startPicking(int cursorX, int cursorY)
+{
+	GLint viewport[4]; //视口大小，四个值按顺序为x, y, width, height
+
+	glRenderMode(GL_SELECT); //拾取前，需要进入选择模式
+
+	glMatrixMode(GL_PROJECTION); //选择投影矩阵。判断是以投影的方式进行的。
+	glPushMatrix(); //向状态机压入投影矩阵
+	glLoadIdentity(); //重置矩阵，为了构建拾取矩阵
+
+	glGetIntegerv(GL_VIEWPORT, viewport);//返回当前视口的数值，并存入viewport数组中
+	gluPickMatrix(cursorX, viewport[3] - cursorY, 0.5, 0.5, viewport); //建立拾取矩阵，前两个参数为将窗口坐标cursor转化为OpenGL坐标，第三、四个参数是选择框的大小，最后一个就是视口的位置和大小
+	glOrtho(-10, 10, -10, 10, -10, 10);
+	glMatrixMode(GL_MODELVIEW);//进入视图变换状态
+	glInitNames(); //初始化名字栈，用来存放目标物体的名字
+}
+
+void processHits(GLint hits, GLuint buffer[])
+{
+	unsigned int i, j;
+	GLuint names, * ptr, minZ, * ptrNames = NULL, numberOfNames;
+
+	printf("hits = %d\n", hits);
+	ptr = (GLuint*)buffer;
+	minZ = 0xffffffff;
+
+	for (i = 0; i < hits; i++) {
+		names = *ptr;
+		ptr++;
+
+		if (*ptr < minZ) {
+			numberOfNames = names;
+			minZ = *ptr;
+			ptrNames = ptr + 2;
+		}
+
+		ptr += names + 2;
+	}
+
+	printf("The closest hit names are ");
+	ptr = ptrNames;
+	for (j = 0; j < numberOfNames; j++, ptr++) {
+		printf("%d ", *ptr);
+	}
+	printf("\n");
+
+	s_type = (TYPE)ptrNames[0];
+	s_id = ptrNames[1];
+}
+
+void stopPicking() {
+	int hits;
+
+	// restoring the original projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glFlush();
+
+	// returning to normal rendering model
+	hits = glRenderMode(GL_RENDER);
+
+	// if there are hits process them
+	if (hits != 0)
+		processHits(hits, selectBuf);
+	else
+		s_type = NONE;
+}
 
 void Mouse(int button, int state, int x, int y)
 {
 	if (state == GLUT_DOWN)  //记录鼠标按下位置
+	{
+		GLfloat view[16], pro[16];
+		glm::vec3 res;
 		OriX = x, OriY = y;
+		startPicking(x, y);
+		drawConveyors();
+		drawShapes();
+		drawRobots();
+		stopPicking();
+		if (s_type == NONE)
+		{
+			glGetFloatv(GL_MODELVIEW_MATRIX, view);
+			glGetFloatv(GL_PROJECTION_MATRIX, pro);
+			res = getViewPos(x, y, pro, view);
+			printf("%f,%f,%f\n", eye[0], eye[1], eye[2]);
+			Prism* p = new Prism(res[0], res[1] , res[2]);
+			Shapes.push_back(p);
+			cout << res[0] << " " << res[1] << " " << res[2] << " " << Shapes.size() << endl;
+		}
+	}
 	if (state == GLUT_UP)  //记录鼠标按下位置
 		Px = x, Py = y;
+	renderScene();
 }
 
 void onMouseMove(int x, int y)   //处理鼠标拖动
@@ -413,8 +557,7 @@ void onMouseMove(int x, int y)   //处理鼠标拖动
 	else if (h < -1.0) h = -1.0;
 	OriX = x, OriY = y;  //将此时的坐标作为旧值，为下一次计算增量做准备
 }
-int centerpoint_x = wWidth / 2, centerpoint_y = wHeight / 2;
-static float cons = 89 * c;
+
 void mouse_move(int mx, int my)
 {
 	float offsetx = mx - OriX;
@@ -426,12 +569,13 @@ void mouse_move(int mx, int my)
 	screenrate_y = screenrate_y < -cons ? -cons : (screenrate_y > cons ? cons : screenrate_y);
 
 
-
+	
 	SetCursorPos(wPosW + centerpoint_x + 8, wPosH + centerpoint_y + 31);
 	OriX = centerpoint_x;
 	OriY = centerpoint_y;
 
 }
+
 void init()
 {
 	//initEnvironment();
@@ -445,7 +589,9 @@ void reshape(int w, int h)
 	glViewport(0, 0, w, h);    //截图;1、2为视口的左下角;3、4为视口的宽度和高度
 	glMatrixMode(GL_PROJECTION);    //将当前矩阵指定为投影矩阵
 	glLoadIdentity();
-	gluPerspective(45, (float)w / h, 0.1, 100.0); //1、视野在Y-Z平面的角度[0,180];2、投影平面宽度与高度的比率;3、近截剪面到视点的距离;4、远截剪面到视点的距离
+	wWidth = w;
+	wHeight = h;
+	gluPerspective(45, (float)w / h, 0.1, 1000.0); //1、视野在Y-Z平面的角度[0,180];2、投影平面宽度与高度的比率;3、近截剪面到视点的距离;4、远截剪面到视点的距离
 	glMatrixMode(GL_MODELVIEW);     //对模型视景矩阵堆栈应用随后的矩阵操作.
 }
 
@@ -456,14 +602,16 @@ int main(int argc, char* argv[])
 	glutInitWindowPosition(wPosW, wPosH);
 	glutInitWindowSize(wWidth, wHeight);
 	glutCreateWindow("CG Project");
+	glSelectBuffer(BUFSIZE, selectBuf);
 	init();
 	glutReshapeFunc(reshape);       //
 	glutDisplayFunc(renderScene);           //
 	glutIdleFunc(renderScene);          //设置不断调用显示函数
 	glutMouseFunc(Mouse);
-	glutMotionFunc(onMouseMove);
+	glutMotionFunc(mouse_move);
 	glutPassiveMotionFunc(mouse_move);
 	glutKeyboardFunc(key);
+	glutSetCursor(GLUT_CURSOR_DESTROY);
 	glutMainLoop();//enters the GLUT event processing loop.
 	return 0;
 }

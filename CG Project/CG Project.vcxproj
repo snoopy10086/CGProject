@@ -79,6 +79,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>E:\Folder\Secrets\Computer Graphics\CGProject\CG Project\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -143,6 +144,7 @@
     <ClInclude Include="conveyor.h" />
     <ClInclude Include="glew.h" />
     <ClInclude Include="drawEnvironment.h" />
+    <ClInclude Include="model_view.h" />
     <ClInclude Include="Robot.h" />
     <ClInclude Include="Shape.h" />
   </ItemGroup>
@@ -150,6 +152,7 @@
     <ClCompile Include="conveyor.cpp" />
     <ClCompile Include="drawEnvironment.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="model_view.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="Shape.cpp" />
   </ItemGroup>

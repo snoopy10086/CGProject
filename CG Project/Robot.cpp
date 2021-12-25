@@ -11,22 +11,6 @@ void Robot::Draw()
 	cout << "Draw function that should never be called!" << endl;
 }
 
-//bool Robot::CollisionDetec(Shape* S)
-//{
-//	if (!this->enable)
-//		return false;
-//	float x1 = S->getGlobalX();
-//	float y1 = S->getGlobalY();
-//	float z1 = S->getGlobalZ();
-//	float x2 = this->getGripperX();
-//	float y2 = this->getGripperY();
-//	float z2 = this->getGripperZ();
-//	float distance = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2));
-//	if (distance < CollisionThreshold)
-//		return true;
-//	else
-//		return false;
-//}
 void Robot::Draw_Claw(float angle)
 {
 	glPushMatrix();

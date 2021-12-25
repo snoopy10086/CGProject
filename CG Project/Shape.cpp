@@ -68,9 +68,9 @@ void Prism::Draw()
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
 	glPushMatrix();
 	
-	glEnable(GL_NORMALIZE); glScalef(0.2, 0.2, 0.2);
+	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
-
+	glScalef(0.2, 0.2, 0.2);
 	static GLfloat vtx[12][3] =  //棱柱顶点坐标
 	{
 		//0-5下层，
@@ -183,8 +183,9 @@ void Trustum::Draw()
 	glPushMatrix();
 
 	glEnable(GL_NORMALIZE); 
-	glScalef(0.2, 0.2, 0.2);//之所以没有贴着地面是这个原因
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	glScalef(0.2, 0.2, 0.2);//之所以没有贴着地面是这个原因
+	
 
 	static GLfloat vtx[12][3] =  //棱台顶点坐标
 	{
@@ -294,9 +295,9 @@ void Cube::Draw()//立方体
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
 	glPushMatrix();
-	
-	glEnable(GL_NORMALIZE); glScalef(0.2, 0.2, 0.2);
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	glEnable(GL_NORMALIZE); glScalef(0.2, 0.2, 0.2);
+	
 	//glTranslatef(30, 2, 22);
 	Texture_cube(1, this->Texture, 0, 0);
 	glPopMatrix();
@@ -327,8 +328,9 @@ void Cone::Draw()//圆锥
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
 	glPushMatrix();
-	glEnable(GL_NORMALIZE); glScalef(0.2, 0.2, 0.2);
+	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	glScalef(0.2, 0.2, 0.2);
 	//glTranslatef(30, 0.6, 27);
 	glRotatef(-90, 1, 0, 0);
 	Texture_Cone(this->Texture);
@@ -387,8 +389,9 @@ void ConeCylinder::Draw()//圆台
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
 	glPushMatrix();
 	
-	glEnable(GL_NORMALIZE); glScalef(0.2, 0.2, 0.2);
+	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	glScalef(0.2, 0.2, 0.2);
 	//glTranslatef(27, 0.5, 27);////不应该在这里位移
 	glRotatef(-90, 1, 0, 0);
 	Texture_ConeCylinder(this->Texture);
@@ -491,8 +494,9 @@ void Cylinder::Draw()//圆柱
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
 	glPushMatrix();
 	
-	glEnable(GL_NORMALIZE); glScalef(0.2, 0.2, 0.2);
+	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	glScalef(0.2, 0.2, 0.2);
 	//glTranslatef(27, 1, 22);
 	Texture_CylinderCircle(this->Texture);
 	glPopMatrix();

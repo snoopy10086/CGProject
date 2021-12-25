@@ -30,6 +30,9 @@
     <ClInclude Include="Shape.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="model_view.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="drawEnvironment.cpp">
@@ -45,6 +48,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Shape.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="model_view.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
