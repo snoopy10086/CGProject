@@ -191,6 +191,9 @@ void initTexture() {
 	texload(29, (char*)"./texture/24.bmp");
 	texload(30, (char*)"./texture/25.bmp");
 	texload(31, (char*)"./texture/26.bmp");
+	texload(32, (char*)"./texture/mk2.bmp");
+	texload(33, (char*)"./texture/27.bmp");
+	texload(34, (char*)"./texture/28.bmp");
 	const GLubyte* extensions = glGetString(GL_EXTENSIONS);
 	bool multiTexturingSupported = strstr((const char*)extensions, "GL_ARB_multitexture ") != NULL;
 

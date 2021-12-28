@@ -4,10 +4,11 @@ class Shape
 {
 public:
 	//Robot* TheRobot;
-	float globalX, globalY, globalZ;  // 世界坐标系的坐标
-	float rotateX, rotateY, rotateZ;  // 相对于x, y, z轴旋转角度
-	float scale;
-	int Texture;
+	float globalX=0, globalY=0, globalZ=0;  // 世界坐标系的坐标
+	float rotateX=0, rotateY=0, rotateZ=0;  // 相对于x, y, z轴旋转角度
+	float scaleX=1, scaleY = 1, scaleZ = 1;
+	int Texture=0;
+	int Texture2=0;
 	double getGlobalX() {
 		return this->globalX;
 	}
@@ -19,7 +20,7 @@ public:
 	}
 	void transfer(double dx, double dy, double dz);  // 平移
 	void rotate(double dx, double dy, double dz);  // 旋转
-	void Scaling(float scale);
+	void scaling(float scaleX, float scaleY, float scaleZ );
 	virtual void Draw();				// 供外部调用的绘制函数
 };
 
@@ -40,7 +41,7 @@ public:
 	Cylinder(float globalX, float globalY, float globalZ);
 private:
 	void Texture_Circle(int i, float r);
-	void Texture_CylinderCircle(int i);
+	void Texture_CylinderCircle(int i,int j);
 	void Texture_Cylinder(int i);
 };
 

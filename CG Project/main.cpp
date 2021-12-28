@@ -26,8 +26,8 @@ float d[] = { 0,0,0 };
 float screenrate_x = -PI / 2, screenrate_y = 0;//鼠标屏幕坐标相对于中心点移动的比例
 float step = 0.05;
 int wWidth = 600, wHeight = 600;
-int wPosW = 100;
-int wPosH = 100;
+int wPosW = 600;//////////////////////////////////原为（100，100），这样方便调试的时候能看到控制台输出:)
+int wPosH = 200;
 int centerpoint_x = wWidth / 2, centerpoint_y = wHeight / 2;
 static float cons = 89 * c;
 // 光照全局变量
@@ -40,7 +40,9 @@ bool global_light_enable[] = { true, false, false, true, false, false, false, fa
 
 // 定义各种物体
 
-conveyor* conv1 = new conveyor(0, 0, 1, 0);
+conveyor* conv1 = new conveyor(4, 0, 4.6, 1, 0);
+conveyor* conv2 = new conveyor(4, 0, 5.8, 1, 0);
+//conv2->rotate(0, 180, 0);
 
 
 void renderScene(void);
@@ -64,7 +66,6 @@ void onMouseMove(int x, int y);
 void mouse_move(int mx, int my);
 void init();
 void reshape(int w, int h);
-
 
 
 float move = 0;
@@ -148,8 +149,6 @@ int UnbindShapeRobot(Robot* R, Shape* S) {
 	return 1;
 }
 
-
-
 //called once each update
 //every conyors in collections add motion to shapes
 void AddMotionToShapes() {
@@ -165,28 +164,44 @@ void AddMotionToShapes() {
 void InitialThings() {
 	// 20211224 BDZ: 按照现在的键盘操作，如果设计成局部变量没有办法操作改变状态
 	// 
-	Robot_2* robot21 = new Robot_2(3.5, 0, 4.8);
-	Robot_2* robot22 = new Robot_2(4.5, 0, 4.8);
+	Robot_2* robot21 = new Robot_2(2.7, 0, 5.2);
+	Robot_2* robot22 = new Robot_2(5.2, 0, 5.2);
 	Robot_1* robot1 = new Robot_1(0,0,0);
 	Robots.push_back(robot21);
 	Robots.push_back(robot22);
 	Robots.push_back(robot1);
 
-	//conveyor* conv1 = new conveyor(0, 0, 1, 0);
+	//conveyor* conv1 = new conveyor(0, 0, 1, 0);----改到全局了
+	conv2->rotate(0, 180, 0);
 	Conveyors.push_back(conv1);
+	Conveyors.push_back(conv2);
 
-	Cylinder* s1 = new Cylinder(3, 1, 2);
-	ConeCylinder* s2 = new ConeCylinder(3, 1, 3);
-	Cone* s3 = new Cone(3, 1, 1);
-	Cube* s4 = new Cube(3.5, 1, 1);
-	Prism* s5 = new Prism(3.5, 1, 2);
-	Trustum* s6 = new Trustum(3.5, 1, 3);
+	Cylinder* s1 = new Cylinder(3, 0, 4);
+	s1->scaling(0.5, 0.125, 0.5);
+	Cylinder* c1 = new Cylinder(4.7,0.2,4.6);//放到传送带上
+	c1->scaling(0.5, 0.125, 0.5);
+	Cylinder* c2 = new Cylinder(4.5, 0.2, 4.6);//放到传送带上
+	c2->scaling(0.5, 0.125, 0.5);
+	ConeCylinder* s2 = new ConeCylinder(3, 0, 2.5);
+	Cone* s3 = new Cone(2, 0, 1);
+	Cube* s4 = new Cube(3, 0, 1);
+	Cube* c3 = new Cube(4.3, 0.2, 4.6);
+	c3->scaling(0.25, 0.25, 0.25);
+	Cube* c4 = new Cube(4.3, 0.2, 5.8);
+	c4->scaling(0.25, 0.25, 0.25);
+	Prism* s5 = new Prism(3.5, 0, 2);
+	Trustum* s6 = new Trustum(3, 0, 2);
+	Shapes.push_back(c1);
+	Shapes.push_back(c2);
+	Shapes.push_back(c3);
+	Shapes.push_back(c4);
 	Shapes.push_back(s1);
 	Shapes.push_back(s2);
 	Shapes.push_back(s3);
 	Shapes.push_back(s4);
 	Shapes.push_back(s5);
 	Shapes.push_back(s6);
+	
 }
 
 void drawRobots() {
@@ -366,8 +381,12 @@ void key(unsigned char k, int x, int y)
 	}
 	case 't':
 	{
-		conv1->move = conv1->move - 0.3;
-		conv1->count = (conv1->count + 1) % 5;
+		vector<conveyor*>::iterator Citer;
+		for (Citer = Conveyors.begin(); Citer != Conveyors.end(); Citer++) {
+			//(*Citer)->move = (*Citer)->move - 0.03;
+			(*Citer)->count = ((*Citer)->count + 1) % 5;
+		}
+		AddMotionToShapes();
 		break;
 	}
 	case 'f':
@@ -595,7 +614,7 @@ void Mouse(int button, int state, int x, int y)
 		drawShapes();
 		drawRobots();
 		stopPicking();
-		if (s_type == NONE)
+		if (s_type == NONE)/////改成__conveyor就是在传送带范围放东西;NONE是除传送带范围放置
 		{
 			glGetFloatv(GL_MODELVIEW_MATRIX, view);
 			glGetFloatv(GL_PROJECTION_MATRIX, pro);
@@ -630,12 +649,9 @@ void mouse_move(int mx, int my)
 	screenrate_y = screenrate_y + (-offsety / 2 / centerpoint_y * PI);
 	screenrate_y = screenrate_y < -cons ? -cons : (screenrate_y > cons ? cons : screenrate_y);
 
-
-	
 	SetCursorPos(wPosW + centerpoint_x + 8, wPosH + centerpoint_y + 31);
 	OriX = centerpoint_x;
 	OriY = centerpoint_y;
-
 }
 
 void init()

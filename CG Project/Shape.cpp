@@ -17,19 +17,24 @@ void Shape::transfer(double dx, double dy, double dz)
 
 void Shape::rotate(double dx, double dy, double dz)
 {
+	//cout << "rx" << this->rotateX << endl;
 	this->rotateX += dx;
 	this->rotateY += dy;
 	this->rotateZ += dz;
+	
+	//cout << "rotate" << endl;
 }
 
-void Shape::Scaling(float scale)
+void Shape::scaling(float scaleX, float scaleY, float scaleZ)
 {
-	if (scale <= 0) {
+	if (scaleX <= 0|| scaleY <= 0|| scaleZ <= 0) {
 		cout << "scale negative!" << endl;
 		return;
 	}
 	else {
-		this->scale *= scale;
+		this->scaleX *= scaleX;
+		this->scaleY *= scaleY;
+		this->scaleZ *= scaleZ;
 	}
 }
 
@@ -51,7 +56,7 @@ Prism::Prism(float globalX, float globalY, float globalZ)
 	this->globalX = globalX;
 	this->globalY = globalY;
 	this->globalZ = globalZ;
-	this->Texture = 1;
+	this->Texture = 33;
 }
 void Prism::Draw()
 {	
@@ -70,7 +75,12 @@ void Prism::Draw()
 	
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
-	glScalef(0.2, 0.2, 0.2);
+	glTranslatef(0, 0.099, 0);//为了globalY为0的时候能画在地板上
+	glScalef(0.2, 0.2, 0.2);//这是为了默认画出来的shape大小不要太夸张
+	glScalef(this->scaleX, this->scaleY, this->scaleZ);
+	glRotatef(this->rotateX, 1, 0, 0);
+	glRotatef(this->rotateY, 0, 1, 0);
+	glRotatef(this->rotateZ, 0, 0, 1);
 	static GLfloat vtx[12][3] =  //棱柱顶点坐标
 	{
 		//0-5下层，
@@ -181,11 +191,15 @@ void Trustum::Draw()
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
 	glPushMatrix();
-
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
-	glScalef(0.2, 0.2, 0.2);//之所以没有贴着地面是这个原因
-	
+	glTranslatef(0, 0.099, 0);
+	glScalef(0.2, 0.2, 0.2);
+	glScalef(this->scaleX, this->scaleY, this->scaleZ);
+	glRotatef(this->rotateX, 1, 0, 0);
+	glRotatef(this->rotateY, 0, 1, 0);
+	glRotatef(this->rotateZ, 0, 0, 1);
+	//glScalef(0.2, 0.2, 0.2);
 
 	static GLfloat vtx[12][3] =  //棱台顶点坐标
 	{
@@ -295,11 +309,16 @@ void Cube::Draw()//立方体
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
 	glPushMatrix();
+	glEnable(GL_NORMALIZE);	
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
-	glEnable(GL_NORMALIZE); glScalef(0.2, 0.2, 0.2);
+	glTranslatef(0, 0.2 * this->scaleY+0.099, 0);//为了默认时能画在地板上
+	glScalef(0.2, 0.2, 0.2);
+	glScalef(this->scaleX, this->scaleY, this->scaleZ);
+	glRotatef(this->rotateX, 1, 0, 0);
+	glRotatef(this->rotateY, 0, 1, 0);
+	glRotatef(this->rotateZ, 0, 0, 1);
 	
-	//glTranslatef(30, 2, 22);
-	Texture_cube(1, this->Texture, 0, 0);
+	Texture_cube(1, this->Texture, 0, 0);//该函数画出来的是一个原点在中心，长宽高为2的立方体
 	glPopMatrix();
 }
 
@@ -330,9 +349,13 @@ void Cone::Draw()//圆锥
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	glTranslatef(0, 0.099, 0);
 	glScalef(0.2, 0.2, 0.2);
-	//glTranslatef(30, 0.6, 27);
-	glRotatef(-90, 1, 0, 0);
+	glScalef(this->scaleX, this->scaleY, this->scaleZ);
+	glRotatef(this->rotateX, 1, 0, 0);
+	glRotatef(this->rotateY, 0, 1, 0);
+	glRotatef(this->rotateZ, 0, 0, 1);
+	glRotatef(-90, 1, 0, 0);//为了不设置rotateXYZ的时候是尖尖朝上的
 	Texture_Cone(this->Texture);
 	glPopMatrix();
 }
@@ -374,7 +397,7 @@ ConeCylinder::ConeCylinder(float globalX, float globalY, float globalZ)
 	this->globalX = globalX;
 	this->globalY = globalY;
 	this->globalZ = globalZ;
-	this->Texture = 1;
+	this->Texture = 34;
 }
 void ConeCylinder::Draw()//圆台
 {
@@ -391,8 +414,12 @@ void ConeCylinder::Draw()//圆台
 	
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	glTranslatef(0, 0.099, 0);
 	glScalef(0.2, 0.2, 0.2);
-	//glTranslatef(27, 0.5, 27);////不应该在这里位移
+	glScalef(this->scaleX, this->scaleY, this->scaleZ);
+	glRotatef(this->rotateX, 1, 0, 0);
+	glRotatef(this->rotateY, 0, 1, 0);
+	glRotatef(this->rotateZ, 0, 0, 1);
 	glRotatef(-90, 1, 0, 0);
 	Texture_ConeCylinder(this->Texture);
 	glPopMatrix();
@@ -480,6 +507,7 @@ Cylinder::Cylinder(float globalX, float globalY, float globalZ)
 	this->globalY = globalY;
 	this->globalZ = globalZ;
 	this->Texture = 1;
+	this->Texture2 = 32;
 }
 void Cylinder::Draw()//圆柱
 {
@@ -496,20 +524,25 @@ void Cylinder::Draw()//圆柱
 	
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	glTranslatef(0, 0.099, 0);	
+	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glScalef(0.2, 0.2, 0.2);
-	//glTranslatef(27, 1, 22);
-	Texture_CylinderCircle(this->Texture);
+	glRotatef(this->rotateX, 1, 0, 0);
+	glRotatef(this->rotateY, 0, 1, 0);
+	glRotatef(this->rotateZ, 0, 0, 1);
+	glRotatef(-90, 1, 0, 0);
+	Texture_CylinderCircle(this->Texture, this->Texture2);
 	glPopMatrix();
 }
 
-void Cylinder::Texture_CylinderCircle(int i)//两端封口的圆柱体,i纹理编号
+void Cylinder::Texture_CylinderCircle(int i,int j)//两端封口的圆柱体,i纹理编号
 {
 	glPushMatrix();
 	Texture_Cylinder(i);
 	glTranslatef(0, 0, 2);
-	Texture_Circle(i, 0.5);
+	Texture_Circle(j, 0.5);
 	glTranslatef(0, 0, -2);
-	Texture_Circle(i, 0.5);
+	Texture_Circle(j, 0.5);
 	glPopMatrix();
 }
 
