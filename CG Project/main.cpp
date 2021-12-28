@@ -1,4 +1,5 @@
 #pragma once
+#define _CRT_SECURE_NO_WARNINGS
 #include "drawEnvironment.h"
 #include "model_view.h"
 #include "Robot.h"
@@ -6,10 +7,12 @@
 #include "conveyor.h"
 #include "model_view.h"
 #include <math.h>
+#include <time.h>
+#include <string.h>
 #include <vector>
 using namespace std;
 #define PI 3.1415926535
-
+#define BMP_Header_Length 54
 #define BUFSIZE 512
 static int du = 90, OriX = -1, OriY = -1, Px = -1, Py = -1;   //du是视点和x轴的夹角
 static float r = 8, h = 0.0;   //r是视点绕y轴的半径，h是视点高度即在y轴上的坐标
@@ -230,6 +233,61 @@ void drawConveyors() {
 	glPopName();
 }
 
+void TakePicture(void)
+{
+	FILE* DummyFile;
+	FILE* SaveFile;
+	GLubyte* PixelData;
+	GLubyte  BMP_Header[BMP_Header_Length];
+	GLint i, j;
+	GLint DataLength;
+	time_t t = time(0);
+	char NowTime[64];
+	strftime(NowTime, sizeof(NowTime), "%Y_%m_%d_%H_%M_%S", localtime(&t));
+
+	i = wWidth * 3;
+	while (i % 4 != 0)
+		++i;
+	DataLength = i * wHeight;
+
+	PixelData = (GLubyte*)malloc(DataLength);
+	if (PixelData == 0)
+		exit(0);
+
+	DummyFile = fopen("picture//test.bmp", "rb");
+	if (DummyFile == 0)
+		exit(0);
+
+	char FileName[50] = "picture//CGProject_";
+	strcat(strcat(FileName, NowTime), ".bmp");
+	SaveFile = fopen(FileName, "wb"); //只写
+	if (SaveFile == 0)
+		exit(0);
+
+	fread(BMP_Header, sizeof(BMP_Header), 1, DummyFile);
+	fwrite(BMP_Header, sizeof(BMP_Header), 1, SaveFile);
+
+	fseek(SaveFile, 0x0012, SEEK_SET); 
+	i = wWidth;
+	j = wHeight;
+	fwrite(&i, sizeof(i), 1, SaveFile);
+	fwrite(&j, sizeof(j), 1, SaveFile);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);  
+	glReadPixels(0, 0, wWidth, wHeight,
+		GL_BGR_EXT, GL_UNSIGNED_BYTE, PixelData);
+
+	// 写入像素数据
+	fseek(SaveFile, 0, SEEK_END);
+	fwrite(PixelData, DataLength, 1, SaveFile);
+
+	// 释放内存和关闭文件
+	fclose(DummyFile);
+	fclose(SaveFile);
+	free(PixelData);
+
+}
+
 void key(unsigned char k, int x, int y)
 {
 	switch (k)
@@ -341,6 +399,10 @@ void key(unsigned char k, int x, int y)
 	{
 		Change_Rust();
 		break;
+	}
+	case 'p':
+	{
+		TakePicture();
 	}
 	case '0':	case '1':	case '2':	case '3':	case '4':	case '5':	case '6':	case '7':
 	{
