@@ -25,9 +25,9 @@ float d[] = { 0,0,0 };
 
 float screenrate_x = -PI / 2, screenrate_y = 0;//鼠标屏幕坐标相对于中心点移动的比例
 float step = 0.05;
-int wWidth = 600, wHeight = 600;
-int wPosW = 600;//////////////////////////////////原为（100，100），这样方便调试的时候能看到控制台输出:)
-int wPosH = 200;
+int wWidth = 1536, wHeight = 846;
+int wPosW = 0;//////////////////////////////////原为（100，100），这样方便调试的时候能看到控制台输出:)
+int wPosH = 0;
 int centerpoint_x = wWidth / 2, centerpoint_y = wHeight / 2;
 static float cons = 89 * c;
 // 光照全局变量
@@ -166,6 +166,7 @@ void InitialThings() {
 	// 
 	Robot_2* robot21 = new Robot_2(2.7, 0, 5.2);
 	Robot_2* robot22 = new Robot_2(5.2, 0, 5.2);
+	robot22->rotate1 += 180;
 	Robot_1* robot1 = new Robot_1(0,0,0);
 	Robots.push_back(robot21);
 	Robots.push_back(robot22);
@@ -175,26 +176,25 @@ void InitialThings() {
 	conv2->rotate(0, 180, 0);
 	Conveyors.push_back(conv1);
 	Conveyors.push_back(conv2);
-
 	Cylinder* s1 = new Cylinder(3, 0, 4);
 	s1->scaling(0.5, 0.125, 0.5);
-	Cylinder* c1 = new Cylinder(4.7,0.2,4.6);//放到传送带上
-	c1->scaling(0.5, 0.125, 0.5);
-	Cylinder* c2 = new Cylinder(4.5, 0.2, 4.6);//放到传送带上
-	c2->scaling(0.5, 0.125, 0.5);
+	Cylinder* c1 = new Cylinder(4.6, 0.2, 4.6);//放到传送带上4.70.25.2
+	c1->scaling(0.6, 0.125, 0.6);
+	//Cylinder* c2 = new Cylinder(4.5, 0.2, 4.6);//放到传送带上
+	//c2->scaling(0.5, 0.125, 0.5);
 	ConeCylinder* s2 = new ConeCylinder(3, 0, 2.5);
 	Cone* s3 = new Cone(2, 0, 1);
 	Cube* s4 = new Cube(3, 0, 1);
-	Cube* c3 = new Cube(4.3, 0.2, 4.6);
-	c3->scaling(0.25, 0.25, 0.25);
-	Cube* c4 = new Cube(4.3, 0.2, 5.8);
-	c4->scaling(0.25, 0.25, 0.25);
+	//Cube* c3 = new Cube(4.3, 0.2, 4.6);
+	//c3->scaling(0.25, 0.25, 0.25);
+	//Cube* c4 = new Cube(4.3, 0.2, 5.8);
+	//c4->scaling(0.25, 0.25, 0.25);
 	Prism* s5 = new Prism(3.5, 0, 2);
 	Trustum* s6 = new Trustum(3, 0, 2);
 	Shapes.push_back(c1);
-	Shapes.push_back(c2);
-	Shapes.push_back(c3);
-	Shapes.push_back(c4);
+	//Shapes.push_back(c2);
+	//Shapes.push_back(c3);
+	//Shapes.push_back(c4);
 	Shapes.push_back(s1);
 	Shapes.push_back(s2);
 	Shapes.push_back(s3);
@@ -351,10 +351,20 @@ void key(unsigned char k, int x, int y)
 		modify_eye();
 		break;
 	}
-	case 'r':
+	case '9':
 	{
 		((Robot_2*)Robots[0])->not_is_bind();
+		((Robot_2*)Robots[0])->TheShape = (Shape*)Shapes[0];
+		//BindShapeRobot((Robot_2*)Robots[0], (Shape*)Shapes[0]);
+		//((Robot_2*)Robots[1])->not_is_bind();
+		break;
+	}
+	case 'r':
+	{
 		((Robot_2*)Robots[1])->not_is_bind();
+		((Robot_2*)Robots[1])->TheShape = (Shape*)Shapes[0];
+		//((Robot_2*)Robots[1])->enable = true;
+		//BindShapeRobot((Robot_2*)Robots[0], (Shape*)Shapes[0]);
 		break;
 	}
 	case 'y':
@@ -676,6 +686,9 @@ void reshape(int w, int h)
 int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);                                          //初始化glut库
+	//wWidth = glutGet(GLUT_SCREEN_WIDTH);
+	//wHeight = glutGet(GLUT_SCREEN_HEIGHT);
+	//cout << wWidth << wHeight;
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);      //设置初始显示模式
 	glutInitWindowPosition(wPosW, wPosH);
 	glutInitWindowSize(wWidth, wHeight);

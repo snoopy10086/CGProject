@@ -16,6 +16,14 @@ public:
 	float GripperX;
 	float GripperY;
 	float GripperZ;
+ 
+	float BindPositionX = 0;
+	float BindPositionY = 0.8;
+	float BindPositionZ = 0;
+
+
+
+
 	/* 
 	 * bCatch : the state of the claw, if bCatch is set, the robot is catch a shape 
 	 */
@@ -79,7 +87,7 @@ public:
 	 * length : the length of the arm
 	 * quad_obj : use to draw the arm
 	 */
-	GLfloat rotate1 = 45;
+	GLfloat rotate1 = 90;
 	GLfloat rotate2 = 0;
 	GLfloat rotate3 = 0;
 	bool Isrotate = false;
@@ -99,6 +107,7 @@ protected:
 	 */
 	void DrawJoint();
 	void DrawRod(GLdouble baseR, GLdouble topR, GLdouble h);
+	void SetBindPosition();
 public:
 	void Draw();
 	void update();

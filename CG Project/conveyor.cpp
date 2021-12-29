@@ -8,13 +8,16 @@ using namespace std;
 extern unsigned int texture[50];
 void Texture_cube(int n, int i, int j, int k);
 
+//K=3.1415926/180,用于角度制和弧度制的转换，c++的sin cos函数用的是弧度制
+#define K 0.0174532925
+
 conveyor::conveyor(float PositionX, float PositionY, float PositionZ, float MotionX, float MotionY)
 {
 	this->PositionX = PositionX;
 	this->PositionY = PositionY;
 	this->PositionZ = PositionZ;
 	this->MotionX = MotionX;
-	this->MotionY = MotionY;
+	this->MotionZ = MotionZ;
 }
 
 void conveyor::rotate(double dx, double dy, double dz)
@@ -30,16 +33,10 @@ bool conveyor::ifOntheConveyor(Shape* shape)
 	float shapeZ = shape->getGlobalZ();
 	float shapeX = shape->getGlobalX();
 	float shapeY = shape->getGlobalY();
-
-	if (fabs(shapeY - 0.2) < 1e-6 && shapeX > this->PositionX - 0.75 && shapeX< this->PositionX + 0.75 && shapeZ>this->PositionZ - 0.2 && shapeZ < this->PositionZ + 0.2)
+	
+	if (shapeY > 0.16 && shapeY<0.3 && shapeX > this->PositionX - 0.75 && shapeX< this->PositionX + 0.75 && shapeZ>this->PositionZ - 0.2 && shapeZ < this->PositionZ + 0.2)
 	{ 
-		/*cout << "sy:" << shapeY << endl;
-		cout << "sx:" << shapeX << endl;
-		cout << "sz:" << shapeZ << endl;
-		cout << "py:" << this->PositionY << endl;
-		cout << "px:" << this->PositionX << endl;
-		cout << "pz:" << this->PositionZ << endl;
-		cout << "------------------" << endl;*/
+		
 		return true;
 	}
 	return false;
@@ -49,11 +46,9 @@ void conveyor::AddMotion(Shape* shape)//若shape在传送带上就运动
 {
 	if (ifOntheConveyor(shape)) 
 	{
-		this->MotionX = -0.1;
-		//shape->rotateX = this->ConrotateX;//其上的物体要和传送带一起选择才能往传送带转的方向移动---这样写不对，单靠motionX不够
-		//shape->rotateY = this->ConrotateY;
-		//shape->rotateZ = this->ConrotateZ;
-		shape->transfer(this->MotionX, this->MotionY, 0);
+		this->MotionX = -0.1 * cos(this->ConrotateY * K);
+		this->MotionZ = 0.1 * sin(this->ConrotateY * K);
+		shape->transfer(this->MotionX, 0, this->MotionZ);
 	}
 	return ;
 }

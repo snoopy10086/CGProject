@@ -12,7 +12,7 @@ public:
 	//(X,Y) means left up point of this conveyor
 	//float PositionZ;
 	float MotionX=0;
-	float MotionY=0;
+	float MotionZ = 0;
 	int count = 0;
 	float move = 0;///²»ÐèÒª
 	conveyor(float PositionX, float PositionY, float PositionZ, float MotionX, float MotionY);

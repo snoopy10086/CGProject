@@ -5,7 +5,8 @@
 using namespace std;
 
 extern unsigned int texture[50];
-
+#define PI 3.1415926535
+static float c = PI / 180.0;    //弧度和角度转换参数
 void Robot::Draw()
 {
 	cout << "Draw function that should never be called!" << endl;
@@ -52,6 +53,7 @@ void Robot::Draw_Claw(float angle)
 }
 void Robot::Draw_Robot()
 {
+
 	glPushMatrix();
 
 #ifdef DEBUG
@@ -163,6 +165,7 @@ void Robot_1::len_dec()
 	length -= 0.05;
 }
 
+
 //绘制机械臂
 //处理旋转的函数
 Robot_2::Robot_2(float PositionX, float PositionY, float PositionZ)
@@ -173,18 +176,25 @@ Robot_2::Robot_2(float PositionX, float PositionY, float PositionZ)
 }
 void Robot_2::HandleRotate()
 {
-	GLfloat r1_0 = 0;
+	//this->TheShape->globalX = this->BindPositionX;
+	//this->TheShape->globalY = this->BindPositionY;
+	//this->TheShape->globalZ = this->BindPositionZ;
+	GLfloat r1_0 = 90;
 	GLfloat r2_0 = 0;
-	GLfloat r3_0 = 45;
+	GLfloat r3_0 = 0;
 
-	GLfloat r1_1 = 0;
+	GLfloat r1_1 = 130;
 	GLfloat r2_1 = 35;
 	GLfloat r3_1 = 0;
+
+	GLfloat r1_2 = 45;
+	GLfloat r2_2 = 35;
+	GLfloat r3_2 = 0;
 
 	int T = 100;
 	if (this->IsBind)
 	{
-		if (this->timeflag == T * 5.5) {
+		if (this->timeflag == T * 5) {
 			this->IsBind = false;
 			this->timeflag = -1;
 			this->fCatch = 45;
@@ -197,20 +207,34 @@ void Robot_2::HandleRotate()
 				this->rotate3 += (r3_1 - r3_0) / float(T);
 			}
 
-			if (this->timeflag >= 1.5 * T && this->timeflag < 2.5 * T) {
-				this->fCatch -= 0.2;
+			if (this->timeflag >= 1 * T && this->timeflag < 2 * T) {
+				this->fCatch -= 0.35;
 			}
 
-			if (this->timeflag >= 3 * T && this->timeflag < 4 * T) {
-				this->fCatch += 0.2;
+			if (this->timeflag >= 2 * T && this->timeflag < 3 * T) {
+				this->rotate1 += (r1_2 - r1_1) / float(T);
+				this->rotate2 += (r2_2 - r2_1) / float(T);
+				this->rotate3 += (r3_2 - r3_1) / float(T);
+				SetBindPosition();
 			}
 
-			if (this->timeflag >= 4.5 * T && this->timeflag < 5.5 * T) {
-				this->rotate1 += (r1_0 - r1_1) / float(T);
-				this->rotate2 += (r2_0 - r2_1) / float(T);
-				this->rotate3 += (r3_0 - r3_1) / float(T);
+			if (this->timeflag >= 3 * T && this->timeflag < 3.5 * T) {
+				this->fCatch += 0.35;
 			}
+
+			if (this->timeflag >= 3.5 * T && this->timeflag < 4 * T) {
+				this->TheShape->globalY += (0.2 - 0.32) / float(T)*2;
+			}
+
+			if (this->timeflag >= 4 * T && this->timeflag < 5 * T) {
+				this->rotate1 += (r1_0 - r1_2) / float(T);
+				this->rotate2 += (r2_0 - r2_2) / float(T);
+				this->rotate3 += (r3_0 - r3_2) / float(T);
+			}
+
+			
 		}
+
 	}
 }
 //绘制杆
@@ -289,7 +313,6 @@ void Robot_2::Draw()
 	glTranslatef(0, -3.8, 0);
 	//机械臂2
 
-
 	glPushMatrix();
 	glTranslatef(0, 4.2, 0.4);
 	DrawRod(0.2, 0.2, 2);
@@ -333,6 +356,27 @@ void Robot_2::Draw()
 	glPopMatrix();
 	glPopMatrix();
 }
+
+void Robot_2::SetBindPosition(void)
+{
+	float l2 = 0.5;
+	float l1 = 0.28;
+	float l3 = 0.8;
+	BindPositionX = -l2 * sin(rotate2 * c) - l3 * cos(rotate2 * c - (rotate3) * c);
+	BindPositionY = l1+l2*cos(rotate2 * c) - l3 * sin(rotate2 * c - (rotate3) * c);
+	BindPositionZ = 0;
+
+	float temp = BindPositionX;
+	BindPositionX = temp * cos(-(rotate1+90) * c);
+	BindPositionZ = temp * sin(-(rotate1 + 90) * c);
+	if (TheShape != NULL)
+	{
+		this->TheShape->globalX = this->BindPositionX + this->PositionX;
+		this->TheShape->globalY = this->BindPositionY + this->PositionY;
+		this->TheShape->globalZ = this->BindPositionZ + this->PositionZ;
+	}
+}
+
 void Robot_2::setPositionX(float position) {
 	this->PositionX = position;
 }
