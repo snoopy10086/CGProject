@@ -100,15 +100,71 @@ glRotatef(this->rotateZ, 0, 0, 1);
 + 在draw里面增加了`glTranslatef(0, 0.099, 0);	`，使得new一个shape的时候，globalY为0时b表示画在地板上。（地板应该有0.099的厚度）
 + 保证每个shape的globalY是底面的高度，便于判断是否在传送带上；globalY=0.2是在传送带上的条件之一
 
+--------
+
+1，new一个shape的时候它会在哪？
+
+首先，房间是8\*8\*2：
+
+![](README.assets\axis.png)
+
+globalY=0的时候它就在地板上，globalY是每个物块的最低点。
+
+
+
+2，new一个conveyor的时候它会在哪？
+
+PositionY=0的时候它就在地板上。下面是场景中现有的传送带的示意。PositionX，PositionZ是传送带的中心位置。
+
+![](README.assets\conveyor.png)
+
+
+
+3，物块什么时候会随传送带运动？
+
+conveyor.cpp中的ifOntheConveyor函数会做判断，满足以下条件物块就会随着传送带运动：
+
+```c++
+if (shapeY > 0.16 && shapeY<0.3 && shapeX > this->PositionX - 0.75 && shapeX< this->PositionX + 0.75 && shapeZ>this->PositionZ - 0.2 && shapeZ < this->PositionZ + 0.2)
+	{ 
+		
+		return true;
+	}
+```
+
+也就是通过物块和传送带的世界坐标进行判断。
+
+------
+
 
 
 ##### 2，修改了conveyor类
 
 + 增加了PositionZ
+
 + new一个时，PositionY=0时是画在地板上
+
 + 修改了传送带和物块绑定的函数
   + 每次调用传送带移动函数时，判断它上面有没有物体，有则带着物体一起走
-  + 遍历shape vector看有没有shape在传送带上
+  + 遍历conveyorvector， shape vector看有没有shape在传送带上
   + 现在是当物体运动到传送带一端会停在那里，那么后面来的物体怎么处理？需要碰撞检测吗？（不然现在会重合在一起）
+  
 + 目前是按下t之后是所有传送带都开始运动（是否需要分别控制？）
-+ 传送带上的物体怎么才能和传送带一个方向运动(假如传送带和x轴45°-------这时需要motionY了)
+
++ 传送带上的物体怎么才能和传送带一个方向运动：conveyor.cpp中
+
+  ```c++
+  void conveyor::AddMotion(Shape* shape)//若shape在传送带上就运动
+  {
+  	if (ifOntheConveyor(shape)) 
+  	{
+  		this->MotionX = -0.1 * cos(this->ConrotateY * K);
+  		this->MotionZ = 0.1 * sin(this->ConrotateY * K);
+  		shape->transfer(this->MotionX, 0, this->MotionZ);
+  	}
+  	return ;
+  }
+  ```
+
+  ConrotateY是传送带绕y轴旋转的量，MotionX，MotionZ是物块在x轴，z轴上运动速度的分量，0.1表征物块运动的速度。所以现在检测到物块在传送带上，该物块就会随传送带运动。
+
