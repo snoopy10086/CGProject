@@ -158,7 +158,7 @@ void conveyor::draw()
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->PositionX, this->PositionY, this->PositionZ);
-	glTranslatef(0,0.2,0);//PositionY为0时能在地面上
+	glTranslatef(0,0.101,0);//PositionY为0时能在地面上
 	glScalef(0.2, 0.2, 0.2);
 	glRotatef(this->ConrotateX, 1, 0, 0);
 	glRotatef(this->ConrotateY, 0, 1, 0);

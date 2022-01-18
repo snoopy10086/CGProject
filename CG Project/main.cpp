@@ -26,6 +26,7 @@ float d[] = { 0,0,0 };
 float screenrate_x = -PI / 2, screenrate_y = 0;//鼠标屏幕坐标相对于中心点移动的比例
 float step = 0.05;
 int wWidth = 1536, wHeight = 846;
+//int wWidth = 846, wHeight = 846;
 int wPosW = 0;//////////////////////////////////原为（100，100），这样方便调试的时候能看到控制台输出:)
 int wPosH = 0;
 int centerpoint_x = wWidth / 2, centerpoint_y = wHeight / 2;
@@ -40,9 +41,6 @@ bool global_light_enable[] = { true, false, false, true, false, false, false, fa
 
 // 定义各种物体
 
-conveyor* conv1 = new conveyor(4, 0, 4.6, 1, 0);
-conveyor* conv2 = new conveyor(4, 0, 5.8, 1, 0);
-//conv2->rotate(0, 180, 0);
 
 
 void renderScene(void);
@@ -166,6 +164,8 @@ void InitialThings() {
 	// 
 	Robot_2* robot21 = new Robot_2(2.7, 0, 5.2);
 	Robot_2* robot22 = new Robot_2(5.2, 0, 5.2);
+	conveyor* conv1 = new conveyor(4, 0, 4.6, 1, 0);
+	conveyor* conv2 = new conveyor(4, 0, 5.8, 1, 0);
 	robot22->rotate1 += 180;
 	Robot_1* robot1 = new Robot_1(0,0,0);
 	Robots.push_back(robot21);
@@ -369,7 +369,10 @@ void key(unsigned char k, int x, int y)
 	}
 	case 'y':
 	{
-
+		if (CurrentChooseShape != NULL)
+		{
+			CurrentChooseShape->scaling(2,2,2);
+		}
 		break;
 	}
 	case 'i':
@@ -629,10 +632,28 @@ void Mouse(int button, int state, int x, int y)
 			glGetFloatv(GL_MODELVIEW_MATRIX, view);
 			glGetFloatv(GL_PROJECTION_MATRIX, pro);
 			res = getViewPos(x, y, pro, view);
-			printf("%f,%f,%f\n", eye[0], eye[1], eye[2]);
+			//printf("%f,%f,%f\n", eye[0], eye[1], eye[2]);
 			Prism* p = new Prism(res[0], res[1] , res[2]);
 			Shapes.push_back(p);
 			cout << res[0] << " " << res[1] << " " << res[2] << " " << Shapes.size() << endl;
+		}
+		else
+		{
+			switch (s_type)
+			{
+			case __robot:
+				CurrentChooseShape = NULL;
+				break;
+			case __shape:
+				CurrentChooseShape = Shapes[s_id];
+				break;
+			case __conveyor:
+				CurrentChooseShape = NULL;
+				break;
+			default:
+				CurrentChooseShape = NULL;
+				break;
+			}
 		}
 	}
 	if (state == GLUT_UP)  //记录鼠标按下位置
@@ -674,6 +695,7 @@ void init()
 
 void reshape(int w, int h)
 {
+	cout << "12312312" << endl;
 	glViewport(0, 0, w, h);    //截图;1、2为视口的左下角;3、4为视口的宽度和高度
 	glMatrixMode(GL_PROJECTION);    //将当前矩阵指定为投影矩阵
 	glLoadIdentity();

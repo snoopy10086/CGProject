@@ -299,7 +299,7 @@ void Robot_2::Draw()
 	this->HandleRotate();
 	this->update();
 	glPushMatrix();
-	glTranslatef(PositionX, PositionY, PositionZ);
+	glTranslatef(PositionX, PositionY - 0.099, PositionZ);
 	glEnable(GL_NORMALIZE); glScalef(0.2f, 0.2f, 0.2f);
 	glPushMatrix();
 	glRotatef(rotate1, 0, 1, 0);

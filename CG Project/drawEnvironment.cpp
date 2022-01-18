@@ -641,13 +641,15 @@ GLint initClosetList() {
 void draw() {
 	drawfans();
 	drawWall();
-	drawDoor();
 	drawWindow();
 	drawLightbulb();
-	drawCloset();
 	drawGlass();
+	glTranslatef(0,-0.099,0);
+	drawCloset();
+	drawDoor();
 	drawBoard();
 	drawDesk();
+	glTranslatef(0, 0.099, 0);
 }
 
 void initDesk() {
@@ -1165,7 +1167,7 @@ void drawWall() {
 		glCallList(wall[2]);
 		glPopMatrix();
 	}
-	glTranslatef(-8.0, -1.0, -4.0);
+	glTranslatef(-8.0, -1.099, -4.0);
 	for (int k = 0; k < 40; k++) {//µØ°å
 		glPushMatrix();
 		glTranslatef(k * 0.2, 0, 0);
@@ -1173,7 +1175,7 @@ void drawWall() {
 		glCallList(wall[0]);
 		glPopMatrix();
 	}
-	glTranslatef(0.0, 2.0, 0.0);
+	glTranslatef(0.0, 2.099, 0.0);
 	for (int k = 0; k < 40; k++) {//Ìì»¨°å
 		glPushMatrix();
 		glTranslatef(k * 0.2, 0, 0);

@@ -75,7 +75,7 @@ void Prism::Draw()
 	
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
-	glTranslatef(0, 0.099, 0);//为了globalY为0的时候能画在地板上
+
 	glScalef(0.2, 0.2, 0.2);//这是为了默认画出来的shape大小不要太夸张
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glRotatef(this->rotateX, 1, 0, 0);
@@ -193,7 +193,7 @@ void Trustum::Draw()
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
-	glTranslatef(0, 0.099, 0);
+
 	glScalef(0.2, 0.2, 0.2);
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glRotatef(this->rotateX, 1, 0, 0);
@@ -311,7 +311,7 @@ void Cube::Draw()//立方体
 	glPushMatrix();
 	glEnable(GL_NORMALIZE);	
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
-	glTranslatef(0, 0.2 * this->scaleY+0.099, 0);//为了默认时能画在地板上
+	glTranslatef(0, 0.2 * this->scaleY, 0);//为了默认时能画在地板上
 	glScalef(0.2, 0.2, 0.2);
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glRotatef(this->rotateX, 1, 0, 0);
@@ -349,7 +349,7 @@ void Cone::Draw()//圆锥
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
-	glTranslatef(0, 0.099, 0);
+
 	glScalef(0.2, 0.2, 0.2);
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glRotatef(this->rotateX, 1, 0, 0);
@@ -414,7 +414,7 @@ void ConeCylinder::Draw()//圆台
 	
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
-	glTranslatef(0, 0.099, 0);
+
 	glScalef(0.2, 0.2, 0.2);
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glRotatef(this->rotateX, 1, 0, 0);
@@ -524,7 +524,7 @@ void Cylinder::Draw()//圆柱
 	
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
-	glTranslatef(0, 0.099, 0);	
+
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glScalef(0.2, 0.2, 0.2);
 	glRotatef(this->rotateX, 1, 0, 0);

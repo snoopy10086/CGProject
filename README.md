@@ -173,3 +173,45 @@ if (shapeY > 0.16 && shapeY<0.3 && shapeX > this->PositionX - 0.75 && shapeX< th
 
   ConrotateY是传送带绕y轴旋转的量，MotionX，MotionZ是物块在x轴，z轴上运动速度的分量，0.1表征物块运动的速度。所以现在检测到物块在传送带上，该物块就会随传送带运动。
 
+#### 2022/1/19 updated by xzk
+
+* 修正地板的y轴坐标, 原先地板y轴坐标为0.099, 因此将地板向下平移0.099, 同时需要将各个shape类的globalY以及场景中部分物体的Y坐标进行修正
+
+* 修正屏幕坐标到世界坐标系转换函数, 使其更具鲁棒性
+
+* 将鼠标选中shape对象的指针赋值给currentChooseShape全局变量, 具体逻辑见下
+
+	```c
+		if (s_type == NONE)/////改成__conveyor就是在传送带范围放东西;NONE是除传送带范围放置
+		{
+			glGetFloatv(GL_MODELVIEW_MATRIX, view);
+			glGetFloatv(GL_PROJECTION_MATRIX, pro);
+			res = getViewPos(x, y, pro, view);
+			//printf("%f,%f,%f\n", eye[0], eye[1], eye[2]);
+			Prism* p = new Prism(res[0], res[1] , res[2]);
+			Shapes.push_back(p);
+			cout << res[0] << " " << res[1] << " " << res[2] << " " << Shapes.size() << endl;
+		}
+		else
+		{
+			switch (s_type)
+			{
+			case __robot:
+				CurrentChooseShape = NULL;
+				break;
+			case __shape:
+				CurrentChooseShape = Shapes[s_id];
+				break;
+	        case __conveyor:
+				CurrentChooseShape = NULL;
+				break;
+			default:
+				CurrentChooseShape = NULL;
+				break;
+			}
+		}
+	```
+
+	当当前选中物体为shape类时, 给**CurrentChooseShape**指针赋值, 同时 如果需要对robot或者conveyor对象进行操作也预留了对应的空间可以进行处理。
+
+* k键用来测试current_choose_shape的功能, 当其不为null时 放大一倍, 可自行修改
