@@ -74,7 +74,6 @@ protected:
 	void Texture_Sphere(int i);
 };
 
-
 class Cone : public Shape
 {
 public:
@@ -91,6 +90,24 @@ public:
 	Cube(float globalX, float globalY, float globalZ);
 private:
 
+};
+
+
+class LiWuHePingMian : public Cube
+{
+public:
+	virtual void Draw();
+	LiWuHePingMian(float globalX, float globalY, float globalZ);
+	LiWuHePingMian(float globalX, float globalY, float globalZ, int Type);
+};
+class LiWuHe : public Cube
+{
+public:
+	virtual void Draw();
+	LiWuHe(float globalX, float globalY, float globalZ);
+	LiWuHe(float globalX, float globalY, float globalZ, int Type);
+private:
+	void texture_LiWuHe(int i);
 };
 
 //ÁùÀâÖùÌå

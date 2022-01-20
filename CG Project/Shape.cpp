@@ -594,8 +594,9 @@ Sphere::Sphere(float globalX, float globalY, float globalZ)
 	this->globalX = globalX;
 	this->globalY = globalY;
 	this->globalZ = globalZ;
-	this->Type = 0;//三种口味，分别是豆沙抹茶蓝莓？什么鬼畜月饼（x
-	this->scaling(0.12, 0.1, 0.1);
+	this->Type = 0;
+	this->scaling(0.1, 0.1, 0.15);
+	this->rotate(0, 15, 15);
 }
 Sphere::Sphere(float globalX, float globalY, float globalZ,int Type)
 {
@@ -603,8 +604,8 @@ Sphere::Sphere(float globalX, float globalY, float globalZ,int Type)
 	this->globalY = globalY;
 	this->globalZ = globalZ;
 	this->Type = Type;
-	this->scaling(0.12, 0.1, 0.1);
-	this->rotate(15, 15, 15);
+	this->scaling(0.1, 0.1, 0.15);
+	this->rotate(0, 15, 15);
 }
 void Sphere::Draw()//球
 {
@@ -624,23 +625,174 @@ void Sphere::Draw()//球
 void Sphere::Texture_Sphere(int i)//决定球的颜色
 {
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texture[35]);  //选择纹理texture[1]
-	GLfloat mat_specular[] = { .5, .5, .5, .5 };	         // 镜面反射颜色
-	GLfloat mat_shininess[] = { 100.0 };							// 镜面反射参数
-	GLfloat lmodel_ambient[] = { .5, .5, .5, .5 };		// 散射颜色
-	GLfloat lmodel_emmision[] = { 0.0, 0.0, 0.0, 0.0 };
-	mat_specular[this->Type] += 0.5;
-	lmodel_ambient[this->Type] += 0.5;
+	glBindTexture(GL_TEXTURE_2D, texture[42+i]);  //选择纹理texture[1]
+	GLfloat mat_specular[] = { 1., 1., 1., 1.0 };	         // 镜面反射颜色
+	GLfloat mat_shininess[] = { 50.0 };							// 镜面反射参数
+	GLfloat lmodel_ambient[] = { 1., 1., 1., 1.0 };		// 散射颜色
+	GLfloat lmodel_emmision[] = { 0.0, 0.0, 0.0, 1.0 };
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
 	glPushMatrix();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	GLUquadricObj* left1 = gluNewQuadric();
-	gluQuadricDrawStyle(left1, GLU_FILL);
-	gluQuadricTexture(left1, GL_TRUE);//启用纹理，可以绑定不同的纹理进行贴图
-	glutSolidSphere(1,100,100);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
+
+	GLUquadricObj* sphere = gluNewQuadric();
+	gluQuadricNormals(sphere, GLU_SMOOTH);
+	gluQuadricDrawStyle(sphere, GLU_FILL);
+	gluQuadricTexture(sphere, GL_TRUE);
+	gluSphere(sphere, 1.0, 50, 50);
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
+}
+
+
+LiWuHePingMian::LiWuHePingMian(float globalX, float globalY, float globalZ):Cube(globalX, globalY, globalZ)
+{
+	this->Type = 3;//3 or 4
+	this->Texture = 42 + this->Type;
+	this->scaling(0.3, 0.02, 0.3);
+}
+LiWuHePingMian::LiWuHePingMian(float globalX, float globalY, float globalZ, int Type) : Cube(globalX, globalY, globalZ)
+{
+	this->Type = Type;
+	this->Texture = 42 + this->Type;
+	this->scaling(0.3, 0.02, 0.3);
+}
+
+void LiWuHePingMian::Draw()//礼物盒平面
+{
+	GLfloat mat_specular[] = { 1., 1., 1., 1.0 };	         // 镜面反射颜色
+	GLfloat mat_shininess[] = { 50.0 };							// 镜面反射参数
+	GLfloat lmodel_ambient[] = { 1., 1., 1., 1.0 };		// 散射颜色
+	GLfloat lmodel_emmision[] = { 0.0, 0.0, 0.0, 1.0 };
+
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
+	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
+	glPushMatrix();
+	glEnable(GL_NORMALIZE);
+	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	glTranslatef(0, 0.2 * this->scaleY, 0);//为了默认时能画在地板上
+	glScalef(0.2, 0.2, 0.2);
+	glScalef(this->scaleX, this->scaleY, this->scaleZ);
+	glRotatef(this->rotateX, 1, 0, 0);
+	glRotatef(this->rotateY, 0, 1, 0);
+	glRotatef(this->rotateZ, 0, 0, 1);
+	Texture_cube(1, this->Texture, 0, 0);//该函数画出来的是一个原点在中心，长宽高为2的立方体
+	glTranslatef(1.5, 0, 0);
+	glScalef(0.5, 1, 1);
+	Texture_cube(1, this->Texture, 0, 0);//该函数画出来的是一个原点在中心，长宽高为2的立方体
+	glTranslatef(-6, 0, 0);
+	Texture_cube(1, this->Texture, 0, 0);//该函数画出来的是一个原点在中心，长宽高为2的立方体
+	glTranslatef(3, 0, 1.5);
+	glScalef(2, 1, 0.5);
+	Texture_cube(1, this->Texture, 0, 0);//该函数画出来的是一个原点在中心，长宽高为2的立方体
+	glTranslatef(0, 0, -6);
+	Texture_cube(1, this->Texture, 0, 0);//该函数画出来的是一个原点在中心，长宽高为2的立方体
+	glScalef(1, 1, 2);
+	glTranslatef(3, 0, 1.5);
+	Texture_cube(1, this->Texture, 0, 0);//该函数画出来的是一个原点在中心，长宽高为2的立方体
+	glPopMatrix();
+}
+
+
+LiWuHe::LiWuHe(float globalX, float globalY, float globalZ) :Cube(globalX, globalY, globalZ)
+{
+	this->Type = 3;//3 or 4
+	this->Texture = 44 + this->Type;
+	this->scaling(0.3, 0.3, 0.3);
+}
+LiWuHe::LiWuHe(float globalX, float globalY, float globalZ, int Type) : Cube(globalX, globalY, globalZ)
+{
+	this->Type = Type;
+	this->Texture = 44 + this->Type;
+	this->scaling(0.3, 0.3, 0.3);
+}
+
+void LiWuHe::Draw()//礼物盒
+{
+	GLfloat mat_specular[] = { 1., 1., 1., 1.0 };	         // 镜面反射颜色
+	GLfloat mat_shininess[] = { 50.0 };							// 镜面反射参数
+	GLfloat lmodel_ambient[] = { 1., 1., 1., 1.0 };		// 散射颜色
+	GLfloat lmodel_emmision[] = { 0.0, 0.0, 0.0, 1.0 };
+
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
+	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
+	glPushMatrix();
+	glEnable(GL_NORMALIZE);
+	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	glTranslatef(0, 0.2 * this->scaleY, 0);//为了默认时能画在地板上
+	glScalef(0.2, 0.2, 0.2);
+	glScalef(this->scaleX, this->scaleY, this->scaleZ);
+	glRotatef(this->rotateX, 1, 0, 0);
+	glRotatef(this->rotateY, 0, 1, 0);
+	glRotatef(this->rotateZ, 0, 0, 1);
+	texture_LiWuHe(this->Texture);//该函数画出来的是一个原点在中心，长宽高为2的立方体
+	glTranslatef(0, 1, 0);
+	glScalef(1.2, 0.4, 1.2);
+	texture_LiWuHe(this->Texture);//该函数画出来的是一个原点在中心，长宽高为2的立方体
+	glTranslatef(0, 1.02, 0);
+	glScalef(1, 0.02, 1);
+	texture_LiWuHe(this->Texture + 2);//该函数画出来的是一个原点在中心，长宽高为2的立方体
+	glPopMatrix();
+}
+
+
+void LiWuHe::texture_LiWuHe(int i)
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture[i]);  //选择纹理texture[1]
+	glPushMatrix();
+
+	glBegin(GL_QUADS);
+	glNormal3f(0.0, 0.0, 1.0);
+	glTexCoord2i(1, 1); glVertex3i(-1, 1, 1);
+	glTexCoord2i(1, 0); glVertex3i(-1, -1, 1);
+	glTexCoord2i(0, 0); glVertex3i(1, -1, 1);
+	glTexCoord2i(0, 1); glVertex3i(1, 1, 1);
+
+	glNormal3f(0.0, 0.0, -1.0);
+	glTexCoord2i(1, 1); glVertex3i(-1, 1, -1);
+	glTexCoord2i(1, 0); glVertex3i(-1, -1, -1);
+	glTexCoord2i(0, 0); glVertex3i(1, -1, -1);
+	glTexCoord2i(0, 1); glVertex3i(1, 1, -1);
+
+	glNormal3f(1.0, 0.0, 0.0);
+	glTexCoord2i(0, 1); glVertex3i(1, -1, 1);
+	glTexCoord2i(1, 1); glVertex3i(1, -1, -1);
+	glTexCoord2i(1, 0); glVertex3i(1, 1, -1);
+	glTexCoord2i(0, 0); glVertex3i(1, 1, 1);
+
+	glNormal3f(-1.0, 0.0, 0.0);
+	glTexCoord2i(0, 1); glVertex3i(-1, -1, 1);
+	glTexCoord2i(1, 1); glVertex3i(-1, -1, -1);
+	glTexCoord2i(1, 0); glVertex3i(-1, 1, -1);
+	glTexCoord2i(0, 0); glVertex3i(-1, 1, 1);
+
+	glNormal3f(0.0, 1.0, 0.0);
+	glTexCoord2i(1, 1); glVertex3i(-1, 1, 1);
+	glTexCoord2i(1, 0); glVertex3i(-1, 1, -1);
+	glTexCoord2i(0, 0); glVertex3i(1, 1, -1);
+	glTexCoord2i(0, 1); glVertex3i(1, 1, 1);
+
+	glNormal3f(0.0, -1.0, 0.0);
+	glTexCoord2i(1, 1); glVertex3i(-1, -1, 1);
+	glTexCoord2i(1, 0); glVertex3i(-1, -1, -1);
+	glTexCoord2i(0, 0); glVertex3i(1, -1, -1);
+	glTexCoord2i(0, 1); glVertex3i(1, -1, 1);
+
+	glEnd();
+	glPopMatrix();
+
+	glDisable(GL_TEXTURE_2D);	//关闭纹理texture[1]
 }

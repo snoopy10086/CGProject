@@ -191,11 +191,19 @@ void InitialThings() {
 	YueBing* c3 = new YueBing(4.2, 0.2, 4.6, b3->RetType());//放到传送带上4.70.25.2
 	printf("C3 HAS A TYPE %d\n", c3->RetType());
 	YueBingPi* c4 = new YueBingPi(4.0, 0.2, 4.6);//放到传送带上4.70.25.2
+	LiWuHePingMian* l1 = new LiWuHePingMian(4.6, 0.2, 5.8);
+	LiWuHePingMian* l2 = new LiWuHePingMian(3.6, 0.2, 5.8,4);
+	LiWuHe* l3 = new LiWuHe(4.3, 0.2, 5.8);
+	LiWuHe* l4 = new LiWuHe(3.3, 0.2, 5.8, 4);
 	ConeCylinder* s2 = new ConeCylinder(3, 0, 2.5);
 	Cone* s3 = new Cone(2, 0, 1);
 	Cube* s4 = new Cube(3, 0, 1);
 	Prism* s5 = new Prism(3.5, 0, 2);
 	Trustum* s6 = new Trustum(3, 0, 2);
+	Shapes.push_back(l4);
+	Shapes.push_back(l3);
+	Shapes.push_back(l2);
+	Shapes.push_back(l1);
 	Shapes.push_back(c4);
 	Shapes.push_back(b3);
 	Shapes.push_back(c3);

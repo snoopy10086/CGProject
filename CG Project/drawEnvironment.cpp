@@ -104,7 +104,7 @@ GLint desk[2] = { 26 };
 GLint Robot = 15;
 GLint outside[2] = { 17,18 };
 GLint door_edge[4] = { 19,20,21,22 };
-GLint nurbs[4] = { 28,29,30 };
+GLint nurbs[5] = { 28,29,30 };
 GLint tile[64];
 GLfloat r_door[2] = { -180,0 };
 bool r_door_on[2] = { false,true };
@@ -158,7 +158,7 @@ void InitList() {
 }
 
 void initTexture() {
-	glGenTextures(50, texture);
+	glGenTextures(100, texture);
 	texload(0, (char*)"./texture/1.bmp");
 	texload(1, (char*)"./texture/2.bmp");
 	texload(2, (char*)"./texture/3.bmp");
@@ -201,6 +201,15 @@ void initTexture() {
 	texload(39, (char*)"./texture/yb4.bmp");
 	texload(40, (char*)"./texture/yb5.bmp");
 	texload(41, (char*)"./texture/yb6.bmp");
+	texload(42, (char*)"./texture/xl0.bmp");
+	texload(43, (char*)"./texture/xl1.bmp");
+	texload(44, (char*)"./texture/xl2.bmp");
+	texload(45, (char*)"./texture/box0.bmp");
+	texload(46, (char*)"./texture/box1.bmp");
+	texload(47, (char*)"./texture/box00.bmp");
+	texload(48, (char*)"./texture/box10.bmp");
+	texload(49, (char*)"./texture/box01.bmp");
+	texload(50, (char*)"./texture/box11.bmp");
 	const GLubyte* extensions = glGetString(GL_EXTENSIONS);
 	bool multiTexturingSupported = strstr((const char*)extensions, "GL_ARB_multitexture ") != NULL;
 
