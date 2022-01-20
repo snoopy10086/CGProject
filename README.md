@@ -215,3 +215,14 @@ if (shapeY > 0.16 && shapeY<0.3 && shapeX > this->PositionX - 0.75 && shapeX< th
 	当当前选中物体为shape类时, 给**CurrentChooseShape**指针赋值, 同时 如果需要对robot或者conveyor对象进行操作也预留了对应的空间可以进行处理。
 
 * k键用来测试current_choose_shape的功能, 当其不为null时 放大一倍, 可自行修改
+
+#### 2022/1/20 updated by bdz & zsk
+zsk:
+- 做好了饼皮、馅料、月饼、礼物盒皮和礼物盒
+- 增加了shape中的Type属性与RetType函数，说明如下：
++ 默认Type为-1
++ 饼皮Type为-2
++ 三种馅料Type为0 1 2
++ 三种月饼Type为10 11 12
++ 两种礼盒皮Type为3 4
++ 两种礼盒Type为23 24
