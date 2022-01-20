@@ -1,12 +1,1 @@
-C:\Users\Dell\Desktop\new1.2.4\1.2.4\x64\Debug\CG Project_1.2.5.exe
-C:\Users\Dell\Desktop\new1.2.4\1.2.4\x64\Debug\CG Project_1.2.5.pdb
-E:\computer graphic\my_project\1.2.5\x64\Debug\CG Project_1.2.5.exe
-E:\computer graphic\my_project\1.2.5\x64\Debug\CG Project_1.2.5.pdb
-D:\ZJU\21-22-1大三秋冬学期\计算机图形学-张宏鑫\CGProject\1.2.5\x64\Debug\CG Project_1.2.5.exe
-D:\ZJU\21-22-1大三秋冬学期\计算机图形学-张宏鑫\CGProject\CG Project\x64\Debug\CG Project_1.2.5.exe
-E:\computer graphic\my_CGProject\CGProject\CG Project\x64\Debug\CG Project_1.2.5.exe
-E:\computer graphic\my_CGProject\CGProject\CG Project\x64\Debug\CG Project_1.2.5.pdb
-D:\课程\大三上\计算机图形学\大作业\CGProject\CG Project\x64\Debug\CG Project_1.2.5.exe
-E:\computer graphic\my_CGProject\CGProject\CGProject\CG Project\x64\Debug\CG Project_1.2.5.exe
-E:\computer graphic\my_CGProject\CGProject\CGProject\CG Project\x64\Debug\CG Project_1.2.5.pdb
-D:\Codes\C++\Graph\project\CGProject\CGProject\CG Project\x64\Debug\CG Project_1.2.5.exe
+C:\Users\76365\Desktop\CGProject\CG Project\x64\Debug\CG Project_1.2.5.exe
