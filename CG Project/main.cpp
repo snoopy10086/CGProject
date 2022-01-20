@@ -10,6 +10,7 @@
 #include <time.h>
 #include <string.h>
 #include <vector>
+#include<algorithm>
 using namespace std;
 #define PI 3.1415926535
 #define BMP_Header_Length 54
@@ -27,7 +28,7 @@ float screenrate_x = -PI / 2, screenrate_y = 0;//Êó±êÆÁÄ»×ø±êÏà¶ÔÓÚÖĞĞÄµãÒÆ¶¯µÄ±
 float step = 0.05;
 int wWidth = 1536, wHeight = 846;
 //int wWidth = 846, wHeight = 846;
-int wPosW = 0;//////////////////////////////////Ô­Îª£¨100£¬100£©£¬ÕâÑù·½±ãµ÷ÊÔµÄÊ±ºòÄÜ¿´µ½¿ØÖÆÌ¨Êä³ö:)
+int wPosW = 0;// Ô­Îª£¨100£¬100£©£¬ÕâÑù·½±ãµ÷ÊÔµÄÊ±ºòÄÜ¿´µ½¿ØÖÆÌ¨Êä³ö:)
 int wPosH = 0;
 int centerpoint_x = wWidth / 2, centerpoint_y = wHeight / 2;
 static float cons = 89 * c;
@@ -64,7 +65,8 @@ void onMouseMove(int x, int y);
 void mouse_move(int mx, int my);
 void init();
 void reshape(int w, int h);
-
+void mooncakeCollision();
+bool shapeCompare(const Shape* a, const Shape* b);
 
 float move = 0;
 int count = 0;
@@ -72,7 +74,7 @@ int count = 0;
 //collections
 vector<Shape*> Shapes;						//collections of shapes
 Shape* CurrentChooseShape = NULL;		//now choosen shape
-vector<conveyor*> Conveyors;				//collections of conyors
+vector<conveyor*> Conveyors;				//collections of conveyors
 vector<Robot*> Robots;				//collections of robots
 vector<Prism> Prisms;
 
@@ -160,8 +162,6 @@ void AddMotionToShapes() {
 }
 
 void InitialThings() {
-	// 20211224 BDZ: °´ÕÕÏÖÔÚµÄ¼üÅÌ²Ù×÷£¬Èç¹ûÉè¼Æ³É¾Ö²¿±äÁ¿Ã»ÓĞ°ì·¨²Ù×÷¸Ä±ä×´Ì¬
-	// 
 	Robot_2* robot21 = new Robot_2(2.7, 0, 5.2);
 	Robot_2* robot22 = new Robot_2(5.2, 0, 5.2);
 	conveyor* conv1 = new conveyor(4, 0, 4.6, 1, 0);
@@ -178,23 +178,23 @@ void InitialThings() {
 	Conveyors.push_back(conv2);
 	Cylinder* s1 = new Cylinder(3, 0, 4);
 	s1->scaling(0.5, 0.125, 0.5);
-	Sphere* b1 = new Sphere(3.6, 0.2, 4.6);//·Åµ½´«ËÍ´øÉÏ4.70.25.2
+	Sphere* b1 = new Sphere(3.6, 0.2, 4.6);//ÏÚÁÏ0£¬·Åµ½´«ËÍ´øÉÏ4.70.25.2
 	printf("B1 HAS A TYPE %d\n", b1->RetType());
-	YueBing* c1 = new YueBing(4.6, 0.2, 4.6, b1->RetType());//·Åµ½´«ËÍ´øÉÏ4.70.25.2
+	YueBing* c1 = new YueBing(4.6, 0.2, 4.6, b1->RetType() + 10);//ÔÂ±ı10£¬·Åµ½´«ËÍ´øÉÏ4.70.25.2
 	printf("C1 HAS A TYPE %d\n", c1->RetType());
-	Sphere* b2 = new Sphere(3.4, 0.2, 4.6,1);//·Åµ½´«ËÍ´øÉÏ4.70.25.2
+	Sphere* b2 = new Sphere(3.4, 0.2, 4.6,1);//ÏÚÁÏ1£¬·Åµ½´«ËÍ´øÉÏ4.70.25.2
 	printf("B2 HAS A TYPE %d\n", b2->RetType());
-	YueBing* c2 = new YueBing(4.4, 0.2, 4.6, b2->RetType());//ÓÃÕâ¸örettypeº¯Êı¾Í¿ÉÒÔ´´½¨ÏÚÁÏÀàĞÍ¶ÔÓ¦µÄÔÂ±ıÀàĞÍ
+	YueBing* c2 = new YueBing(4.4, 0.2, 4.6, b2->RetType() + 10);//ÔÂ±ı11£¬ÓÃÕâ¸örettypeº¯Êı¾Í¿ÉÒÔ´´½¨ÏÚÁÏÀàĞÍ¶ÔÓ¦µÄÔÂ±ıÀàĞÍ
 	printf("C2 HAS A TYPE %d\n", c2->RetType());
-	Sphere* b3 = new Sphere(3.2, 0.2, 4.6, 2);//·Åµ½´«ËÍ´øÉÏ4.70.25.2
+	Sphere* b3 = new Sphere(3.2, 0.2, 4.6, 2);//ÏÚÁÏ2£¬·Åµ½´«ËÍ´øÉÏ4.70.25.2
 	printf("B3 HAS A TYPE %d\n", b3->RetType());
-	YueBing* c3 = new YueBing(4.2, 0.2, 4.6, b3->RetType());//·Åµ½´«ËÍ´øÉÏ4.70.25.2
+	YueBing* c3 = new YueBing(4.2, 0.2, 4.6, b3->RetType() + 10);//ÔÂ±ı12£¬·Åµ½´«ËÍ´øÉÏ4.70.25.2
 	printf("C3 HAS A TYPE %d\n", c3->RetType());
-	YueBingPi* c4 = new YueBingPi(4.0, 0.2, 4.6);//·Åµ½´«ËÍ´øÉÏ4.70.25.2
-	LiWuHePingMian* l1 = new LiWuHePingMian(4.6, 0.2, 5.8);
-	LiWuHePingMian* l2 = new LiWuHePingMian(3.6, 0.2, 5.8,4);
-	LiWuHe* l3 = new LiWuHe(4.3, 0.2, 5.8);
-	LiWuHe* l4 = new LiWuHe(3.3, 0.2, 5.8, 4);
+	YueBingPi* c4 = new YueBingPi(4.0, 0.2, 4.6);//ÔÂ±ıÆ¤-2£¬·Åµ½´«ËÍ´øÉÏ4.70.25.2
+	LiWuHePingMian* l1 = new LiWuHePingMian(4.6, 0.2, 5.8, 3);	//ÀñÎïºĞÆ¤3
+	LiWuHePingMian* l2 = new LiWuHePingMian(3.6, 0.2, 5.8, 4);	//ÀñÎïºĞÆ¤4
+	LiWuHe* l3 = new LiWuHe(4.3, 0.2, 5.8, 23);	//ÀñÎïºĞ23
+	LiWuHe* l4 = new LiWuHe(3.3, 0.2, 5.8, 24); //ÀñÎïºĞ24
 	ConeCylinder* s2 = new ConeCylinder(3, 0, 2.5);
 	Cone* s3 = new Cone(2, 0, 1);
 	Cube* s4 = new Cube(3, 0, 1);
@@ -374,16 +374,12 @@ void key(unsigned char k, int x, int y)
 	{
 		((Robot_2*)Robots[0])->not_is_bind();
 		((Robot_2*)Robots[0])->TheShape = (Shape*)Shapes[0];
-		//BindShapeRobot((Robot_2*)Robots[0], (Shape*)Shapes[0]);
-		//((Robot_2*)Robots[1])->not_is_bind();
 		break;
 	}
 	case 'r':
 	{
 		((Robot_2*)Robots[1])->not_is_bind();
 		((Robot_2*)Robots[1])->TheShape = (Shape*)Shapes[0];
-		//((Robot_2*)Robots[1])->enable = true;
-		//BindShapeRobot((Robot_2*)Robots[0], (Shape*)Shapes[0]);
 		break;
 	}
 	case 'y':
@@ -559,6 +555,7 @@ void renderScene(void)
 		0, 1, 0);				// ³¡¾°£¨0£¬0£¬0£©µÄÊÓµãÖĞĞÄ (0,5,50)£¬YÖáÏòÉÏ
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
+	mooncakeCollision();
 	draw();
 	drawConveyors();
 	drawShapes();
@@ -746,4 +743,54 @@ int main(int argc, char* argv[])
 	glutSetCursor(GLUT_CURSOR_DESTROY);
 	glutMainLoop();//enters the GLUT event processing loop.
 	return 0;
+}
+
+// ¼ì²â²¢´¦ÀíÊÇ·ñÓĞÔÂ±ıÏÚÁÏÓëÔÂ±ıÆ¤¡¢ÔÂ±ıÓëÀñºĞ°ü×°µÄÅö×²
+void mooncakeCollision() {
+	vector<Shape*>::iterator Siter;
+	vector<Shape*>::iterator subSiter;
+	int i = 0;
+	sort(Shapes.begin(), Shapes.end(), shapeCompare);
+	bool collisionFlag = false;
+	for (Siter = Shapes.begin(); Siter + 1 != Shapes.end();) {
+		collisionFlag = false;
+		for (subSiter = Siter + 1; subSiter != Shapes.end(); subSiter++) {
+			if (abs((*Siter)->getGlobalX() - (*subSiter)->getGlobalX()) > 0.03) {
+				break;
+			}
+			else if (((*Siter)->getGlobalY() == (*subSiter)->getGlobalY())
+				&& ((*Siter)->getGlobalZ() == (*subSiter)->getGlobalZ())){
+				if (((*Siter)->RetType() == -2 && (*subSiter)->RetType() > 0 && (*subSiter)->RetType() < 3)
+					|| ((*subSiter)->RetType() == -2 && (*Siter)->RetType() > 0 && (*Siter)->RetType() < 3)) {
+					// ÏÚÁÏÓë±ıÆ¤Ïà×²
+					YueBing* mooncake = new YueBing((*Siter)->getGlobalX(), (*Siter)->getGlobalY(), (*Siter)->getGlobalZ(), 
+						(*Siter)->RetType() == -2 ? (*subSiter)->RetType() + 10  : (*Siter)->RetType() + 10);
+					Shapes.push_back(mooncake);
+					collisionFlag = true;
+					break;
+				}
+				else if (((*Siter)->RetType() >= 10 && (*Siter)->RetType() <= 12 && (*subSiter)->RetType() == 3 && (*subSiter)->RetType() == 4)
+					|| ((*subSiter)->RetType() >= 10 && (*subSiter)->RetType() <= 12 && (*Siter)->RetType() == 3 && (*Siter)->RetType() == 4)) {
+					// ÔÂ±ıÓëÀñÆ·ºĞÏà×²
+					LiWuHe* gift = new LiWuHe((*Siter)->getGlobalX(), (*Siter)->getGlobalY(), (*Siter)->getGlobalZ(),
+						(*Siter)->RetType() >= 10 ? (*subSiter)->RetType() + 20 : (*Siter)->RetType() + 20);
+					collisionFlag = true;
+					break;
+				}
+			}
+		}
+		if (collisionFlag) {	// ÓĞÏà×²·¢Éú
+			int bias = subSiter - Siter;
+			Siter = Shapes.erase(Siter);
+			Shapes.erase(Siter + bias - 1);
+		}
+		else {
+			Siter++;
+		}
+	}
+}
+
+bool shapeCompare(const Shape* a, const Shape* b) {
+	return a->globalX < b->globalX || (a->globalX == b->globalX && a->globalY < b->globalY)
+		|| (a->globalX == b->globalX && a->globalY == b->globalY && a->globalZ < b->globalZ);
 }

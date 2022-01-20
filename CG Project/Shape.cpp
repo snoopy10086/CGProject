@@ -571,6 +571,7 @@ YueBingPi::YueBingPi(float globalX, float globalY, float globalZ) :Cylinder(glob
 	this->Texture = 41;
 	this->Texture2 = 41;
 	this->scaling(0.8, 0.03, 0.8);
+	this->Type = -2;// 月饼皮
 }
 
 YueBing::YueBing(float globalX, float globalY, float globalZ) :Cylinder(globalX, globalY, globalZ) {
@@ -580,8 +581,8 @@ YueBing::YueBing(float globalX, float globalY, float globalZ) :Cylinder(globalX,
 	SetType(0);
 }
 YueBing::YueBing(float globalX, float globalY, float globalZ,int Type) :Cylinder(globalX, globalY, globalZ){
-	this->Texture = 35 + Type + 3;
-	this->Texture2 = 35 + Type;
+	this->Texture = 35 + Type - 10 + 3;
+	this->Texture2 = 35 + Type - 10;
 	this->scaling(0.6, 0.125, 0.6);
 	SetType(Type);
 }
@@ -706,14 +707,14 @@ void LiWuHePingMian::Draw()//礼物盒平面
 
 LiWuHe::LiWuHe(float globalX, float globalY, float globalZ) :Cube(globalX, globalY, globalZ)
 {
-	this->Type = 3;//3 or 4
-	this->Texture = 44 + this->Type;
+	this->Type = 23;//23 or 24
+	this->Texture = 44 + this->Type - 20;
 	this->scaling(0.3, 0.3, 0.3);
 }
 LiWuHe::LiWuHe(float globalX, float globalY, float globalZ, int Type) : Cube(globalX, globalY, globalZ)
 {
 	this->Type = Type;
-	this->Texture = 44 + this->Type;
+	this->Texture = 44 + this->Type - 20;
 	this->scaling(0.3, 0.3, 0.3);
 }
 
