@@ -3,7 +3,7 @@
 #include <iostream>
 #include<cmath>
 using namespace std;
-
+ 
 extern unsigned int texture[50];
 #define PI 3.1415926535
 static float c = PI / 180.0;    //弧度和角度转换参数
