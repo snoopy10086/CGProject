@@ -1,1 +1,3 @@
 C:\Users\76365\Desktop\CGProject\CG Project\x64\Debug\CG Project_1.2.5.exe
+E:\computer graphic\my_CGProject\CGProject\CG Project\x64\Debug\CG Project_1.2.5.exe
+E:\computer graphic\my_CGProject\CGProject\CG Project\x64\Debug\CG Project_1.2.5.pdb

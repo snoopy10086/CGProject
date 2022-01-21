@@ -567,6 +567,7 @@ void Cylinder::Texture_Cylinder(int i)
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 }
+
 YueBingPi::YueBingPi(float globalX, float globalY, float globalZ) :Cylinder(globalX, globalY, globalZ) {
 	this->Texture = 41;
 	this->Texture2 = 41;

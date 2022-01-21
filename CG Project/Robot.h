@@ -20,10 +20,6 @@ public:
 	float BindPositionX = 0;
 	float BindPositionY = 0.8;
 	float BindPositionZ = 0;
-
-
-
-
 	/* 
 	 * bCatch : the state of the claw, if bCatch is set, the robot is catch a shape 
 	 */
