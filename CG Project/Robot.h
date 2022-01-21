@@ -89,7 +89,9 @@ public:
 	 */
 	GLfloat rotate1 = 90;
 	GLfloat rotate2 = 0;
-	GLfloat rotate3 = 0;
+	GLfloat rotate3 = 45;
+	GLfloat rotate4 = 90;
+
 	bool Isrotate = false;
 	bool IsBind = false;
 	bool forward2 = true;
@@ -98,6 +100,7 @@ public:
 	float PositionX = 4;
 	float PositionY = 0.1;
 	float PositionZ = 4;
+	float ZoomIndex = 1.0;
 	Robot_2(float PositionX, float PositionY, float PositionZ);
 
 	GLUquadricObj* quad_obj = NULL;

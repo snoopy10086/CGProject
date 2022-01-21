@@ -3,7 +3,7 @@
 #include <iostream>
 #include<cmath>
 using namespace std;
- 
+
 extern unsigned int texture[50];
 #define PI 3.1415926535
 static float c = PI / 180.0;    //弧度和角度转换参数
@@ -181,20 +181,23 @@ void Robot_2::HandleRotate()
 	//this->TheShape->globalZ = this->BindPositionZ;
 	GLfloat r1_0 = 90;
 	GLfloat r2_0 = 0;
-	GLfloat r3_0 = 0;
+	GLfloat r3_0 = 45;
+	GLfloat r4_0 = 90;
 
-	GLfloat r1_1 = 130;
-	GLfloat r2_1 = 35;
-	GLfloat r3_1 = 0;
+	GLfloat r1_1 = 135;
+	GLfloat r2_1 = 0;
+	GLfloat r3_1 = 90;
+	GLfloat r4_1 = 90;
 
 	GLfloat r1_2 = 45;
-	GLfloat r2_2 = 35;
-	GLfloat r3_2 = 0;
+	GLfloat r2_2 = 0;
+	GLfloat r3_2 = 90;
+	GLfloat r4_2 = 90;
 
 	int T = 100;
 	if (this->IsBind)
 	{
-		if (this->timeflag == T * 5) {
+		if (this->timeflag == T * 4.5) {
 			this->IsBind = false;
 			this->timeflag = -1;
 			this->fCatch = 45;
@@ -205,6 +208,7 @@ void Robot_2::HandleRotate()
 				this->rotate1 += (r1_1 - r1_0) / float(T);
 				this->rotate2 += (r2_1 - r2_0) / float(T);
 				this->rotate3 += (r3_1 - r3_0) / float(T);
+				this->rotate4 += (r4_1 - r4_0) / float(T);
 			}
 
 			if (this->timeflag >= 1 * T && this->timeflag < 2 * T) {
@@ -215,6 +219,7 @@ void Robot_2::HandleRotate()
 				this->rotate1 += (r1_2 - r1_1) / float(T);
 				this->rotate2 += (r2_2 - r2_1) / float(T);
 				this->rotate3 += (r3_2 - r3_1) / float(T);
+				this->rotate4 += (r4_2 - r4_1) / float(T);
 				SetBindPosition();
 			}
 
@@ -222,14 +227,12 @@ void Robot_2::HandleRotate()
 				this->fCatch += 0.35;
 			}
 
-			if (this->timeflag >= 3.5 * T && this->timeflag < 4 * T) {
-				this->TheShape->globalY += (0.2 - 0.32) / float(T)*2;
-			}
 
-			if (this->timeflag >= 4 * T && this->timeflag < 5 * T) {
+			if (this->timeflag >= 3.5 * T && this->timeflag < 4.5 * T) {
 				this->rotate1 += (r1_0 - r1_2) / float(T);
 				this->rotate2 += (r2_0 - r2_2) / float(T);
 				this->rotate3 += (r3_0 - r3_2) / float(T);
+				this->rotate4 += (r4_0 - r4_2) / float(T);
 			}
 
 			
@@ -300,7 +303,7 @@ void Robot_2::Draw()
 	this->update();
 	glPushMatrix();
 	glTranslatef(PositionX, PositionY - 0.099, PositionZ);
-	glEnable(GL_NORMALIZE); glScalef(0.2f, 0.2f, 0.2f);
+	glEnable(GL_NORMALIZE); glScalef(1.0/6.0 * ZoomIndex, 1.0 / 6.0 * ZoomIndex, 1.0 / 6.0 * ZoomIndex);
 	glPushMatrix();
 	glRotatef(rotate1, 0, 1, 0);
 	glPushMatrix();
@@ -308,24 +311,48 @@ void Robot_2::Draw()
 	glRotatef(rotate2, 1, 0, 0);
 	glTranslatef(0, -1.2, 0);
 	glPushMatrix();
-	glTranslatef(0, 3.8, 0);
-	glRotatef(-rotate3, 1, 0, 0);
-	glTranslatef(0, -3.8, 0);
-	//机械臂2
-
+	glTranslatef(0, 4.2, 0);
+	glRotatef(rotate3, 1, 0, 0);
+	glTranslatef(0, -4.2, 0);
 	glPushMatrix();
-	glTranslatef(0, 4.2, 0.4);
-	DrawRod(0.2, 0.2, 2);
+	glTranslatef(0, 8, 0);
+	glRotatef(rotate4, 1, 0, 0);
+	glTranslatef(0, -8, 0);
+
+	//机械臂3
+	glPushMatrix();
+	glTranslatef(0, 8, 0);
+	glRotatef(90, 0, 0, 1);
+	glRotatef(90, 0, 1, 0);
+	DrawRod(0.2, 0.1, 2);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0, 4.2, 2.4);
-	glRotatef(-90, 1, 0, 0);
-	glScalef(0.3, 0.3, 0.3);
+	glTranslatef(0, 10, 0);
+	glRotatef(180, 1, 0, 0);
+	glScalef(0.25, 0.25, 0.25);
 	Draw_Robot();
 	glPopMatrix();
 
 	glPopMatrix();
+
+	//关节3
+	glPushMatrix();
+	//glRotatef(-90, 1, 0, 0);
+	glTranslatef(0, 7.4, 0);
+	DrawJoint();
+	glPopMatrix();
+
+	//机械臂2
+	glPushMatrix();
+	glTranslatef(0, 4.6, 0);
+	glRotatef(90, 0, 0, 1);
+	glRotatef(90, 0, 1, 0);
+	DrawRod(0.2, 0.2, 2.8);
+	glPopMatrix();
+
+	glPopMatrix();
+
 	//关节2
 	glPushMatrix();
 	glTranslatef(0, 3.6, 0);
@@ -359,16 +386,16 @@ void Robot_2::Draw()
 
 void Robot_2::SetBindPosition(void)
 {
-	float l2 = 0.5;
-	float l1 = 0.28;
-	float l3 = 0.8;
-	BindPositionX = -l2 * sin(rotate2 * c) - l3 * cos(rotate2 * c - (rotate3) * c);
-	BindPositionY = l1+l2*cos(rotate2 * c) - l3 * sin(rotate2 * c - (rotate3) * c);
-	BindPositionZ = 0;
+	float l2 = 0.5/1.2 * ZoomIndex;
+	float l1 = 0.28 / 1.2 * ZoomIndex;
+	float l3 = 0.8 / 1.2 * ZoomIndex;
+	float l4 = 0.8 / 1.2*ZoomIndex;
+	BindPositionX = -l2 * sin(rotate2 * c) - l3 * sin((rotate2 + rotate3) * c) - l4 * sin((rotate2 + rotate3 + rotate4) * c);
+	BindPositionY = 0.099 -l1 - l2 * cos(rotate2 * c) - l3 * cos((rotate2 + rotate3) * c) - l4 * cos((rotate2 + rotate3 + rotate4) * c);;
 
 	float temp = BindPositionX;
-	BindPositionX = temp * cos(-(rotate1+90) * c);
-	BindPositionZ = temp * sin(-(rotate1 + 90) * c);
+	BindPositionX = 0.04 * ZoomIndex +temp * cos(-(rotate1 + 90) * c);
+	BindPositionZ = 0.025 * ZoomIndex +temp * sin(-(rotate1 + 90) * c);
 	if (TheShape != NULL)
 	{
 		this->TheShape->globalX = this->BindPositionX + this->PositionX;
