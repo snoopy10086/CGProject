@@ -575,6 +575,7 @@ YueBingPi::YueBingPi(float globalX, float globalY, float globalZ) :Cylinder(glob
 	this->Type = -2;// ÔÂ±ýÆ¤
 }
 
+
 YueBing::YueBing(float globalX, float globalY, float globalZ) :Cylinder(globalX, globalY, globalZ) {
 	this->Texture = 35 + 3;
 	this->Texture2 = 35;
@@ -614,9 +615,9 @@ void Sphere::Draw()//Çò
 	glPushMatrix();
 	glEnable(GL_NORMALIZE);
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	glTranslatef(0, 0.2* this->scaleY, 0);
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glScalef(0.2, 0.2, 0.2);
-	glTranslatef(0, 0.5, 0);
 	glRotatef(this->rotateX, 1, 0, 0);
 	glRotatef(this->rotateY, 0, 1, 0);
 	glRotatef(this->rotateZ, 0, 0, 1);

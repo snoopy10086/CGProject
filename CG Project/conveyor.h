@@ -27,6 +27,6 @@ public:
 	bool ifOntheConveyor(Shape* shape);	//to judge if the shape is on this conveyor
 	void AddMotion(Shape* shape);
 	virtual void draw();
-	void MoveShape();///不需要
+	//void MoveShape();///不需要
 };
 
