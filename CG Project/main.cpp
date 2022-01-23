@@ -779,10 +779,12 @@ void mooncakeCollision() {
 				cout << "#bx:" << (*Siter)->getGlobalX() << "#by:" << (*Siter)->getGlobalY() << "#bz:" << (*Siter)->getGlobalZ() << endl;
 				cout << "#cx:" << (*subSiter)->getGlobalX() << "#cy:" << (*subSiter)->getGlobalY() << "#cz:" << (*subSiter)->getGlobalZ() << endl;
 			}
-			if (abs((*Siter)->getGlobalX() - (*subSiter)->getGlobalX()) > 0.019
-				|| abs((*Siter)->getGlobalZ() - (*subSiter)->getGlobalZ()) > 0.55
-				|| abs((*Siter)->getGlobalY() - (*subSiter)->getGlobalY())>0.017) {
-				cout << "p" << endl;
+			if (abs((*Siter)->getGlobalX() - (*subSiter)->getGlobalX()) > 0.019) {
+				break;
+			}
+			else if (abs((*Siter)->getGlobalZ() - (*subSiter)->getGlobalZ()) > 0.06
+				|| abs((*Siter)->getGlobalY() - (*subSiter)->getGlobalY()) > 0.016) {
+				// cout << "p" << endl;
 				continue;
 			}
 			else {
@@ -807,13 +809,10 @@ void mooncakeCollision() {
 				}
 			}
 		}
-		if (collisionFlag) {	// 有相撞发生			
-			/*int bias = subSiter - Siter;
-			Siter = Shapes2.erase(Siter);
-			Shapes2.erase(Siter + bias - 1);*/
+		if (collisionFlag) {	// 有相撞发生
 			vector<Shape*>::iterator tempIter;
-			//cout << "c" << endl;
-			for (tempIter = Shapes.begin(); tempIter != Shapes.end();) {			
+			for (tempIter = Shapes.begin(); tempIter != Shapes.end();) {
+				cout << "*Siter:" << *Siter << ", * subSiter:" << *subSiter << ", tempIter:" << *tempIter << endl;
 				if ((*tempIter) == (*Siter) || (*tempIter) == (*subSiter)) {
 					tempIter = Shapes.erase(tempIter);
 				}
@@ -821,6 +820,9 @@ void mooncakeCollision() {
 					tempIter++;
 				}
 			}
+			int bias = subSiter - Siter;
+			Siter = Shapes2.erase(Siter);
+			Shapes2.erase(Siter + bias - 1);
 		}
 		else {
 			Siter++;
