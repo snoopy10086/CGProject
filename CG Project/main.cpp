@@ -164,8 +164,8 @@ void InitialThings() {
 	//机械臂
 	Robot_2* robot21 = new Robot_2(cx1+1+dis/2+0.95, 0, (cz1+cz2)/2);    
 	Robot_2* robot22 = new Robot_2(cx1 + 1 + dis / 2, 0, cz1-0.5);
-	Robot_2* robot23 = new Robot_2(1.5, 0, (cz1 + cz2) / 2);
-	Robot_2* robot24 = new Robot_2(1.5, 0, cz2+0.8);
+	Robot_2* robot23 = new Robot_2(1.65, 0, (cz1 + cz2) / 2);
+	Robot_2* robot24 = new Robot_2(1.65, 0, cz2+0.8);
 	robot21->rotate1 += 180;
 	robot22->rotate1 += 270;
 	Robot_1* robot1 = new Robot_1(0,0,0);
@@ -199,13 +199,14 @@ void InitialThings() {
 	//printf("C3 HAS A TYPE %d\n", c3->RetType());
 	//YueBingPi* c4 = new YueBingPi(cx2 + 0.5, 0.2, cz2);//月饼皮-2，放到传送带2上
 	YueBingPi* c4 = new YueBingPi(cx2 + 0.8, 0.2, cz1);//月饼皮-2，放到传送带2上
+	YueBingPi* c41 = new YueBingPi(cx2 + 0.8, 0.2, cz1);//月饼皮-2，放到传送带2上
 	LiWuHePingMian* l1 = new LiWuHePingMian(cx1 + 0.75, 0.2, cz2, 3);	//礼物盒皮3,传送带3：2.98, 0, 4.6
 	//LiWuHePingMian* l2 = new LiWuHePingMian(3.6, 0.2, 5.8, 4);	//礼物盒皮4
 	//LiWuHe* l3 = new LiWuHe(cx2 + 0.6, 0.2, cz2, 23);	//礼物盒23
 	//LiWuHe* l4 = new LiWuHe(3.3, 0.2, 5.8, 24); //礼物盒24
 	//平台，放做好的月饼
 	Cube* table = new Cube(cx1-1, 0, cz2+0.6+dis);
-	table->scaling(1.2, 0.4, 1.2);
+	table->scaling(1.2, 0.5, 1.2);
 	//闲置的shape，展示我们实现了这些立方体=.=
 	Cylinder* s1 = new Cylinder(3, 0, 4);
 	s1->scaling(0.5, 0.125, 0.5);
@@ -229,7 +230,7 @@ void InitialThings() {
 	/*
 	Shapes.push_back(c2);
 	Shapes.push_back(c3);*/
-	Shapes.push_back(c4);
+	Shapes.push_back(c41);
 	Shapes.push_back(s1);
 	Shapes.push_back(s2);
 	Shapes.push_back(s3);
@@ -395,19 +396,19 @@ void key(unsigned char k, int x, int y)
 	case 'i':
 	{
 		((Robot_2*)Robots[1])->not_is_bind();
-		((Robot_2*)Robots[1])->TheShape = (Shape*)Shapes[0];
+		((Robot_2*)Robots[1])->TheShape = (Shape*)Shapes[9];//这是写死的方法，第一次碰撞后得到的月饼编号是8
 		break;
 	}
 	case 'k':
 	{
 		((Robot_2*)Robots[2])->not_is_bind();
-		((Robot_2*)Robots[2])->TheShape = (Shape*)Shapes[0];
+		((Robot_2*)Robots[2])->TheShape = (Shape*)Shapes[9];
 		break;
 	}
 	case 'm':
 	{
 		((Robot_2*)Robots[3])->not_is_bind();
-		((Robot_2*)Robots[3])->TheShape = (Shape*)Shapes[0];
+		((Robot_2*)Robots[3])->TheShape = (Shape*)Shapes[0];//第一次碰撞后得到的礼物盒
 		break;
 	}
 	case 'y':
@@ -782,7 +783,7 @@ void mooncakeCollision() {
 			if (abs((*Siter)->getGlobalX() - (*subSiter)->getGlobalX()) > 0.019) {
 				break;
 			}
-			else if (abs((*Siter)->getGlobalZ() - (*subSiter)->getGlobalZ()) > 0.06
+			else if (abs((*Siter)->getGlobalZ() - (*subSiter)->getGlobalZ()) > 0.056
 				|| abs((*Siter)->getGlobalY() - (*subSiter)->getGlobalY()) > 0.016) {
 				// cout << "p" << endl;
 				continue;
@@ -791,7 +792,6 @@ void mooncakeCollision() {
 				if (((*Siter)->RetType() == -2 && (*subSiter)->RetType() >= 0 && (*subSiter)->RetType() <= 2)
 					|| ((*subSiter)->RetType() == -2 && (*Siter)->RetType() >= 0 && (*Siter)->RetType() <= 2)) {
 					// 馅料与饼皮相撞得月饼
-					//cout << "t" << endl;
 					YueBing* mooncake = new YueBing((*Siter)->getGlobalX(), (*Siter)->getGlobalY(), (*Siter)->getGlobalZ(), 
 						(*Siter)->RetType() == -2 ? (*subSiter)->RetType() + 10  : (*Siter)->RetType() + 10);
 					Shapes.push_back(mooncake);//在原Shapes上进行改动
