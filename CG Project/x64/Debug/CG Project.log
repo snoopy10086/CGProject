@@ -1,63 +1,63 @@
-﻿D:\vs2019\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(491,5): warning MSB8028: 中间目录(x64\Debug\)包含从另一个项目(CG Project.vcxproj)共享的文件。   这会导致错误的清除和重新生成行为。
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: 中间目录(x64\Debug\)包含从另一个项目(CG Project.vcxproj)共享的文件。   这会导致错误的清除和重新生成行为。
   main.cpp
-E:\computer graphic\my_CGProject\CGProject\CG Project\Robot.h(21,22): warning C4305: “初始化”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\Robot.h(97,18): warning C4305: “初始化”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(20,28): warning C4305: “初始化”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(27,29): warning C4305: “初始化”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(28,18): warning C4305: “初始化”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(36,157): warning C4305: “初始化”: 从“double”到“GLfloat”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(93,32): warning C4305: “=”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(94,32): warning C4305: “=”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(96,33): warning C4305: “=”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(99,33): warning C4305: “=”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(101,32): warning C4305: “=”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(102,32): warning C4305: “=”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(103,32): warning C4305: “=”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(113,6): warning C4551: 缺少参数列表的函数调用
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(162,16): warning C4305: “初始化”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(162,56): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(165,44): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(166,58): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(167,58): warning C4305: “参数”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(168,45): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(168,50): warning C4305: “参数”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(188,46): warning C4305: “参数”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(188,29): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(201,52): warning C4305: “参数”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(201,36): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(202,53): warning C4305: “参数”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(202,37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(203,66): warning C4305: “参数”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(203,46): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(208,42): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(209,30): warning C4305: “参数”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(350,46): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(351,46): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(357,46): warning C4244: “-=”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(358,46): warning C4244: “-=”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(380,16): warning C4305: “+=”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(386,16): warning C4305: “-=”: 从“double”到“float”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(491,44): warning C4305: “初始化”: 从“double”到“GLfloat”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(501,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(511,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(521,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(531,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(540,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(549,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(558,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(610,16): warning C4018: “<”: 有符号/无符号不匹配
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(701,24): warning C4244: “+=”: 从“double”转换到“int”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(702,31): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(710,16): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(711,16): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(713,30): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(715,30): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(712,8): warning C4101: “p”: 未引用的局部变量
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(795,106): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(795,82): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(795,58): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(804,100): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(804,76): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(804,52): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\computer graphic\my_CGProject\CGProject\CG Project\main.cpp(823,13): warning C4244: “初始化”: 从“__int64”转换到“int”，可能丢失数据
-  CG Project.vcxproj -> E:\computer graphic\my_CGProject\CGProject\CG Project\x64\Debug\CG Project_1.2.5.exe
+C:\Users\76365\Desktop\CGProject\CG Project\Robot.h(21,22): warning C4305: “初始化”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\Robot.h(97,18): warning C4305: “初始化”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(20,28): warning C4305: “初始化”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(27,29): warning C4305: “初始化”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(28,18): warning C4305: “初始化”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(36,157): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(93,32): warning C4305: “=”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(94,32): warning C4305: “=”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(96,33): warning C4305: “=”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(99,33): warning C4305: “=”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(101,32): warning C4305: “=”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(102,32): warning C4305: “=”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(103,32): warning C4305: “=”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(113,6): warning C4551: 缺少参数列表的函数调用
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(162,16): warning C4305: “初始化”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(162,56): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(165,44): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(166,58): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(167,58): warning C4305: “参数”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(168,45): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(168,50): warning C4305: “参数”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(188,46): warning C4305: “参数”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(188,29): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(201,52): warning C4305: “参数”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(201,36): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(202,53): warning C4305: “参数”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(202,37): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(203,66): warning C4305: “参数”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(203,46): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(208,42): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(209,30): warning C4305: “参数”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(350,46): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(351,46): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(357,46): warning C4244: “-=”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(358,46): warning C4244: “-=”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(380,16): warning C4305: “+=”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(386,16): warning C4305: “-=”: 从“double”到“float”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(499,44): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(509,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(519,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(529,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(539,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(548,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(557,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(566,43): warning C4305: “初始化”: 从“double”到“GLfloat”截断
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(618,16): warning C4018: “<”: 有符号/无符号不匹配
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(709,24): warning C4244: “+=”: 从“double”转换到“int”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(710,31): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(718,16): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(719,16): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(721,30): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(723,30): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(720,8): warning C4101: “p”: 未引用的局部变量
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(803,106): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(803,82): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(803,58): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(812,100): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(812,76): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(812,52): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+C:\Users\76365\Desktop\CGProject\CG Project\main.cpp(832,13): warning C4244: “初始化”: 从“__int64”转换到“int”，可能丢失数据
+  CG Project.vcxproj -> C:\Users\76365\Desktop\CGProject\CG Project\x64\Debug\CG Project_1.2.5.exe

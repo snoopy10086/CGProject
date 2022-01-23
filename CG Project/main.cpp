@@ -230,7 +230,7 @@ void InitialThings() {
 	/*
 	Shapes.push_back(c2);
 	Shapes.push_back(c3);*/
-	Shapes.push_back(c41);
+	//Shapes.push_back(c41);
 	Shapes.push_back(s1);
 	Shapes.push_back(s2);
 	Shapes.push_back(s3);
@@ -777,8 +777,8 @@ void mooncakeCollision() {
 		collisionFlag = false;
 		for (subSiter = Siter + 1; subSiter != Shapes2.end(); subSiter++) {
 			if (((*subSiter)->RetType() == 0 && (*Siter)->RetType() == -2) || ((*subSiter)->RetType() == -2 && (*Siter)->RetType() == 0)) {
-				cout << "#bx:" << (*Siter)->getGlobalX() << "#by:" << (*Siter)->getGlobalY() << "#bz:" << (*Siter)->getGlobalZ() << endl;
-				cout << "#cx:" << (*subSiter)->getGlobalX() << "#cy:" << (*subSiter)->getGlobalY() << "#cz:" << (*subSiter)->getGlobalZ() << endl;
+				// cout << "#bx:" << (*Siter)->getGlobalX() << "#by:" << (*Siter)->getGlobalY() << "#bz:" << (*Siter)->getGlobalZ() << endl;
+				// cout << "#cx:" << (*subSiter)->getGlobalX() << "#cy:" << (*subSiter)->getGlobalY() << "#cz:" << (*subSiter)->getGlobalZ() << endl;
 			}
 			if (abs((*Siter)->getGlobalX() - (*subSiter)->getGlobalX()) > 0.019) {
 				break;
@@ -812,9 +812,10 @@ void mooncakeCollision() {
 		if (collisionFlag) {	// 有相撞发生
 			vector<Shape*>::iterator tempIter;
 			for (tempIter = Shapes.begin(); tempIter != Shapes.end();) {
-				cout << "*Siter:" << *Siter << ", * subSiter:" << *subSiter << ", tempIter:" << *tempIter << endl;
 				if ((*tempIter) == (*Siter) || (*tempIter) == (*subSiter)) {
+					// cout << "*Siter:" << *Siter << ", * subSiter:" << *subSiter << ", tempIter:" << *tempIter << endl;
 					tempIter = Shapes.erase(tempIter);
+					cout << "Successfully erase" << endl;
 				}
 				else {
 					tempIter++;
@@ -823,6 +824,7 @@ void mooncakeCollision() {
 			int bias = subSiter - Siter;
 			Siter = Shapes2.erase(Siter);
 			Shapes2.erase(Siter + bias - 1);
+			break;
 		}
 		else {
 			Siter++;
