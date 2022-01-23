@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <gl/glut.h>
 #include <stdio.h>
+#include <math.h>
 #include <string.h>
 #include"Shape.h"
+#include <vector>
 #define CollisionThreshold (0.5f)
 //#define DEBUG
 /*
@@ -20,10 +22,6 @@ public:
 	float BindPositionX = 0;
 	float BindPositionY = 0.8;
 	float BindPositionZ = 0;
-
-
-
-
 	/* 
 	 * bCatch : the state of the claw, if bCatch is set, the robot is catch a shape 
 	 */
@@ -94,6 +92,7 @@ public:
 
 	bool Isrotate = false;
 	bool IsBind = false;
+	bool Check = false;
 	bool forward2 = true;
 	bool forward3 = true;
 	int timeflag = -1;

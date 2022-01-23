@@ -41,9 +41,6 @@ GLfloat global_specular[] = { 1., 1., 1., 1.0 };
 bool global_light_enable[] = { true, false, false, true, false, false, false, false };
 
 // 定义各种物体
-
-
-
 void renderScene(void);
 void reshape(int w, int h);
 void set_eye();
@@ -161,66 +158,86 @@ void AddMotionToShapes() {
 	}
 }
 
+//传送带和月饼原料位置参数
+float dis = 0.6,cx1 = 3, cx2 = cx1+dis+2, cz1 = 4, cz2 = cz1+dis+0.4;
 void InitialThings() {
-	Robot_2* robot21 = new Robot_2(2.7, 0, 5.2);
-	Robot_2* robot22 = new Robot_2(5.2, 0, 5.2);
-	conveyor* conv1 = new conveyor(4, 0, 4.6, 1, 0);
-	conveyor* conv2 = new conveyor(4, 0, 5.8, 1, 0);
-	robot22->rotate1 += 180;
+	//机械臂
+	Robot_2* robot21 = new Robot_2(cx1+1+dis/2+1, 0, (cz1+cz2)/2);    
+	Robot_2* robot22 = new Robot_2(cx1 + 1 + dis / 2, 0, cz1-0.5);
+	Robot_2* robot23 = new Robot_2(1.65, 0, (cz1 + cz2) / 2);
+	Robot_2* robot24 = new Robot_2(1.65, 0, cz2+0.4);
+	robot21->rotate1 += 180;
+	robot22->rotate1 += 270;
 	Robot_1* robot1 = new Robot_1(0,0,0);
 	Robots.push_back(robot21);
 	Robots.push_back(robot22);
+	Robots.push_back(robot23);
+	Robots.push_back(robot24);
 	Robots.push_back(robot1);
-
-	//conveyor* conv1 = new conveyor(0, 0, 1, 0);----改到全局了
-	conv2->rotate(0, 180, 0);
+	//传送带
+	conveyor* conv1 = new conveyor(cx2, 0, cz2, 1, 0);
+	conveyor* conv2 = new conveyor(cx2, 0, cz1, 1, 0);
+	conveyor* conv3 = new conveyor(cx1, 0, cz2, 1, 0);
+	conveyor* conv4 = new conveyor(cx1, 0, cz1, 1, 0);	
+	//conv2->rotate(0, 180, 0);
 	Conveyors.push_back(conv1);
 	Conveyors.push_back(conv2);
+	Conveyors.push_back(conv3);
+	Conveyors.push_back(conv4);
+	//月饼皮、馅料、礼物盒
+	Sphere* b1 = new Sphere(cx2+0.8, 0.2, cz2,0);//馅料0，放到传送带1上
+	printf("B1 HAS A TYPE %d\n", b1->RetType());
+	//YueBing* c1 = new YueBing(cx2 + 0.8, 0.2, cz1, b1->RetType() + 10);//月饼10，放到传送带上4.70.25.2
+	//printf("C1 HAS A TYPE %d\n", c1->RetType());
+	//Sphere* b2 = new Sphere(cx2 + 0.6, 0.2, cz2,1);//馅料1，放到传送带上4.70.25.2
+	//printf("B2 HAS A TYPE %d\n", b2->RetType());
+	//YueBing* c2 = new YueBing(4.4, 0.2, 4.6, b2->RetType() + 10);//月饼11，用这个rettype函数就可以创建馅料类型对应的月饼类型
+	//printf("C2 HAS A TYPE %d\n", c2->RetType());
+	//Sphere* b3 = new Sphere(3.2, 0.2, 4.6, 2);//馅料2，放到传送带上4.70.25.2
+	//printf("B3 HAS A TYPE %d\n", b3->RetType());
+	//YueBing* c3 = new YueBing(4.2, 0.2, 4.6, b3->RetType() + 10);//月饼12，放到传送带上4.70.25.2
+	//printf("C3 HAS A TYPE %d\n", c3->RetType());
+	//YueBingPi* c4 = new YueBingPi(cx2 + 0.5, 0.2, cz2);//月饼皮-2，放到传送带2上
+	YueBingPi* c4 = new YueBingPi(cx2 + 0.8, 0.2, cz1);//月饼皮-2，放到传送带2上
+	YueBingPi* c41 = new YueBingPi(cx2 + 0.8, 0.2, cz1);//月饼皮-2，放到传送带2上
+	LiWuHePingMian* l1 = new LiWuHePingMian(cx1 + 0.75, 0.2, cz2, 3);	//礼物盒皮3,传送带3：2.98, 0, 4.6
+	//LiWuHePingMian* l2 = new LiWuHePingMian(3.6, 0.2, 5.8, 4);	//礼物盒皮4
+	//LiWuHe* l3 = new LiWuHe(cx2 + 0.6, 0.2, cz2, 23);	//礼物盒23
+	//LiWuHe* l4 = new LiWuHe(3.3, 0.2, 5.8, 24); //礼物盒24
+	//平台，放做好的月饼
+	Cube* table = new Cube(cx1-1, 0, cz2+0.6+dis);
+	table->scaling(1.2, 0.5, 1.2);
+	//闲置的shape，展示我们实现了这些立方体=.=
 	Cylinder* s1 = new Cylinder(3, 0, 4);
 	s1->scaling(0.5, 0.125, 0.5);
-	Sphere* b1 = new Sphere(3.6, 0.2, 4.6);//馅料0，放到传送带上4.70.25.2
-	printf("B1 HAS A TYPE %d\n", b1->RetType());
-	YueBing* c1 = new YueBing(4.6, 0.2, 4.6, b1->RetType() + 10);//月饼10，放到传送带上4.70.25.2
-	printf("C1 HAS A TYPE %d\n", c1->RetType());
-	Sphere* b2 = new Sphere(3.4, 0.2, 4.6,1);//馅料1，放到传送带上4.70.25.2
-	printf("B2 HAS A TYPE %d\n", b2->RetType());
-	YueBing* c2 = new YueBing(4.4, 0.2, 4.6, b2->RetType() + 10);//月饼11，用这个rettype函数就可以创建馅料类型对应的月饼类型
-	printf("C2 HAS A TYPE %d\n", c2->RetType());
-	Sphere* b3 = new Sphere(3.2, 0.2, 4.6, 2);//馅料2，放到传送带上4.70.25.2
-	printf("B3 HAS A TYPE %d\n", b3->RetType());
-	YueBing* c3 = new YueBing(4.2, 0.2, 4.6, b3->RetType() + 10);//月饼12，放到传送带上4.70.25.2
-	printf("C3 HAS A TYPE %d\n", c3->RetType());
-	YueBingPi* c4 = new YueBingPi(4.0, 0.2, 4.6);//月饼皮-2，放到传送带上4.70.25.2
-	LiWuHePingMian* l1 = new LiWuHePingMian(4.6, 0.2, 5.8, 3);	//礼物盒皮3
-	LiWuHePingMian* l2 = new LiWuHePingMian(3.6, 0.2, 5.8, 4);	//礼物盒皮4
-	LiWuHe* l3 = new LiWuHe(4.3, 0.2, 5.8, 23);	//礼物盒23
-	LiWuHe* l4 = new LiWuHe(3.3, 0.2, 5.8, 24); //礼物盒24
 	ConeCylinder* s2 = new ConeCylinder(3, 0, 2.5);
 	Cone* s3 = new Cone(2, 0, 1);
 	Cube* s4 = new Cube(3, 0, 1);
 	Prism* s5 = new Prism(3.5, 0, 2);
 	Trustum* s6 = new Trustum(3, 0, 2);
-	Shapes.push_back(l4);
-	Shapes.push_back(l3);
-	Shapes.push_back(l2);
+	//Shapes.push_back(l4);
+	//Shapes.push_back(l3);
+	//Shapes.push_back(l2);
+	Shapes.push_back(b1);
 	Shapes.push_back(l1);
 	Shapes.push_back(c4);
-	Shapes.push_back(b3);
+	//Shapes.push_back(c1);
+	/*Shapes.push_back(b3);
 	Shapes.push_back(c3);
-	Shapes.push_back(b2);
+	
+	Shapes.push_back(c2);*/
+	//Shapes.push_back(l3);
+	/*
 	Shapes.push_back(c2);
-	Shapes.push_back(b1);
-	Shapes.push_back(c1);
-	//Shapes.push_back(c2);
-	//Shapes.push_back(c3);
-	//Shapes.push_back(c4);
+	Shapes.push_back(c3);*/
+	//Shapes.push_back(c41);
 	Shapes.push_back(s1);
 	Shapes.push_back(s2);
 	Shapes.push_back(s3);
 	Shapes.push_back(s4);
 	Shapes.push_back(s5);
 	Shapes.push_back(s6);
-	
+	Shapes.push_back(table);	
 }
 
 void drawRobots() {
@@ -372,32 +389,31 @@ void key(unsigned char k, int x, int y)
 	}
 	case '9':
 	{
-		((Robot_2*)Robots[0])->not_is_bind();
-		((Robot_2*)Robots[0])->TheShape = (Shape*)Shapes[0];
+		((Robot_2*)Robots[0])->Check = true;
+		break;
+
+	} 
+	case 'i':
+	{
+		((Robot_2*)Robots[1])->Check = true;
 		break;
 	}
-	case 'r':
+	case 'k':
 	{
-		((Robot_2*)Robots[1])->not_is_bind();
-		((Robot_2*)Robots[1])->TheShape = (Shape*)Shapes[0];
+		((Robot_2*)Robots[2])->Check = true;
+		break;
+	}
+	case 'm':
+	{
+		((Robot_2*)Robots[3])->Check = true;
 		break;
 	}
 	case 'y':
 	{
 		if (CurrentChooseShape != NULL)
 		{
-			CurrentChooseShape->scaling(2,2,2);
+			CurrentChooseShape->scaling(2, 2, 2);
 		}
-		break;
-	}
-	case 'i':
-	{
-
-		break;
-	}
-	case 'k':
-	{
-
 		break;
 	}
 	case 'e':
@@ -747,42 +763,65 @@ int main(int argc, char* argv[])
 
 // 检测并处理是否有月饼馅料与月饼皮、月饼与礼盒包装的碰撞
 void mooncakeCollision() {
+	vector<Shape*> Shapes2;//复制一份到Shapes2用于sort，不动原来的Shapes
+	Shapes2.assign ( Shapes.begin(), Shapes.end());
 	vector<Shape*>::iterator Siter;
 	vector<Shape*>::iterator subSiter;
 	int i = 0;
-	sort(Shapes.begin(), Shapes.end(), shapeCompare);
+	sort(Shapes2.begin(), Shapes2.end(), shapeCompare);
 	bool collisionFlag = false;
-	for (Siter = Shapes.begin(); Siter + 1 != Shapes.end();) {
+	for (Siter = Shapes2.begin(); Siter + 1 != Shapes2.end();) {
 		collisionFlag = false;
-		for (subSiter = Siter + 1; subSiter != Shapes.end(); subSiter++) {
-			if (abs((*Siter)->getGlobalX() - (*subSiter)->getGlobalX()) > 0.03) {
+		for (subSiter = Siter + 1; subSiter != Shapes2.end(); subSiter++) {
+			if (((*subSiter)->RetType() == 0 && (*Siter)->RetType() == -2) || ((*subSiter)->RetType() == -2 && (*Siter)->RetType() == 0)) {
+				// cout << "#bx:" << (*Siter)->getGlobalX() << "#by:" << (*Siter)->getGlobalY() << "#bz:" << (*Siter)->getGlobalZ() << endl;
+				// cout << "#cx:" << (*subSiter)->getGlobalX() << "#cy:" << (*subSiter)->getGlobalY() << "#cz:" << (*subSiter)->getGlobalZ() << endl;
+			}
+			if (abs((*Siter)->getGlobalX() - (*subSiter)->getGlobalX()) > 0.019) {
 				break;
 			}
-			else if (((*Siter)->getGlobalY() == (*subSiter)->getGlobalY())
-				&& ((*Siter)->getGlobalZ() == (*subSiter)->getGlobalZ())){
-				if (((*Siter)->RetType() == -2 && (*subSiter)->RetType() > 0 && (*subSiter)->RetType() < 3)
-					|| ((*subSiter)->RetType() == -2 && (*Siter)->RetType() > 0 && (*Siter)->RetType() < 3)) {
-					// 馅料与饼皮相撞
+			else if (abs((*Siter)->getGlobalZ() - (*subSiter)->getGlobalZ()) > 0.056
+				|| abs((*Siter)->getGlobalY() - (*subSiter)->getGlobalY()) > 0.016) {
+				// cout << "p" << endl;
+				continue;
+			}
+			else {
+				if (((*Siter)->RetType() == -2 && (*subSiter)->RetType() >= 0 && (*subSiter)->RetType() <= 2)
+					|| ((*subSiter)->RetType() == -2 && (*Siter)->RetType() >= 0 && (*Siter)->RetType() <= 2)) {
+					// 馅料与饼皮相撞得月饼
 					YueBing* mooncake = new YueBing((*Siter)->getGlobalX(), (*Siter)->getGlobalY(), (*Siter)->getGlobalZ(), 
 						(*Siter)->RetType() == -2 ? (*subSiter)->RetType() + 10  : (*Siter)->RetType() + 10);
-					Shapes.push_back(mooncake);
+					Shapes.push_back(mooncake);//在原Shapes上进行改动
 					collisionFlag = true;
 					break;
 				}
 				else if (((*Siter)->RetType() >= 10 && (*Siter)->RetType() <= 12 && (*subSiter)->RetType() == 3 && (*subSiter)->RetType() == 4)
 					|| ((*subSiter)->RetType() >= 10 && (*subSiter)->RetType() <= 12 && (*Siter)->RetType() == 3 && (*Siter)->RetType() == 4)) {
-					// 月饼与礼品盒相撞
+					// 月饼与礼品盒皮相撞得礼盒
 					LiWuHe* gift = new LiWuHe((*Siter)->getGlobalX(), (*Siter)->getGlobalY(), (*Siter)->getGlobalZ(),
-						(*Siter)->RetType() >= 10 ? (*subSiter)->RetType() + 20 : (*Siter)->RetType() + 20);
+						(*Siter)->RetType() >= 10 ? (*subSiter)->RetType() + 20 : (*Siter)->RetType() + 20);					
+					Shapes.push_back(gift);
 					collisionFlag = true;
 					break;
 				}
 			}
 		}
 		if (collisionFlag) {	// 有相撞发生
+			vector<Shape*>::iterator tempIter;
+			for (tempIter = Shapes.begin(); tempIter != Shapes.end();) {
+				if ((*tempIter) == (*Siter) || (*tempIter) == (*subSiter)) {
+					// cout << "*Siter:" << *Siter << ", * subSiter:" << *subSiter << ", tempIter:" << *tempIter << endl;
+					tempIter = Shapes.erase(tempIter);
+					cout << "Successfully erase" << endl;
+				}
+				else {
+					tempIter++;
+				}
+			}
 			int bias = subSiter - Siter;
-			Siter = Shapes.erase(Siter);
-			Shapes.erase(Siter + bias - 1);
+			Siter = Shapes2.erase(Siter);
+			Shapes2.erase(Siter + bias - 1);
+			break;
 		}
 		else {
 			Siter++;
