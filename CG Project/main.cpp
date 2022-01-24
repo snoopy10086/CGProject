@@ -47,7 +47,7 @@ void set_eye();
 void modify_eye();
 int BindShapeRobot(Robot* R, Shape* S);
 int UnbindShapeRobot(Robot* R, Shape* S);
-void AddMotionToShapes();
+void AddMotionToShapes(conveyor* Conv);
 void InitialThings();
 void drawRobots();
 void drawConveyors();
@@ -148,13 +148,10 @@ int UnbindShapeRobot(Robot* R, Shape* S) {
 
 //called once each update
 //every conyors in collections add motion to shapes
-void AddMotionToShapes() {
-	vector<conveyor*>::iterator Citer;
-	for (Citer = Conveyors.begin(); Citer != Conveyors.end(); Citer++) {
-		vector<Shape*>::iterator Siter;
-		for (Siter = Shapes.begin(); Siter != Shapes.end(); Siter++) {
-			(*Citer)->AddMotion((*Siter));
-		}
+void AddMotionToShapes(conveyor* Conv) {
+	vector<Shape*>::iterator Siter;
+	for (Siter = Shapes.begin(); Siter != Shapes.end(); Siter++) {
+		Conv->AddMotion((*Siter));
 	}
 }
 
@@ -164,8 +161,8 @@ void InitialThings() {
 	//机械臂
 	Robot_2* robot21 = new Robot_2(cx1+1+dis/2+1, 0, (cz1+cz2)/2);    
 	Robot_2* robot22 = new Robot_2(cx1 + 1 + dis / 2, 0, cz1-0.5);
-	Robot_2* robot23 = new Robot_2(1.65, 0, (cz1 + cz2) / 2);
-	Robot_2* robot24 = new Robot_2(1.65, 0, cz2+0.4);
+	Robot_2* robot23 = new Robot_2(1.7, 0, (cz1 + cz2) / 2);
+	Robot_2* robot24 = new Robot_2(1.65, 0, cz2+0.5);
 	robot21->rotate1 += 180;
 	robot22->rotate1 += 270;
 	Robot_1* robot1 = new Robot_1(0,0,0);
@@ -179,33 +176,22 @@ void InitialThings() {
 	conveyor* conv2 = new conveyor(cx2, 0, cz1, 1, 0);
 	conveyor* conv3 = new conveyor(cx1, 0, cz2, 1, 0);
 	conveyor* conv4 = new conveyor(cx1, 0, cz1, 1, 0);	
-	//conv2->rotate(0, 180, 0);
+	conveyor* conv5 = new conveyor(1.65, 0, cz2+1, 1, 0);
 	Conveyors.push_back(conv1);
 	Conveyors.push_back(conv2);
 	Conveyors.push_back(conv3);
 	Conveyors.push_back(conv4);
+	Conveyors.push_back(conv5);
 	//月饼皮、馅料、礼物盒
 	Sphere* b1 = new Sphere(cx2+0.8, 0.2, cz2,0);//馅料0，放到传送带1上
-	//YueBing* c1 = new YueBing(cx2 + 0.8, 0.2, cz1, b1->RetType() + 10);//月饼10，放到传送带上4.70.25.2
-	//printf("C1 HAS A TYPE %d\n", c1->RetType());
-	//Sphere* b2 = new Sphere(cx2 + 0.6, 0.2, cz2,1);//馅料1，放到传送带上4.70.25.2
-	//printf("B2 HAS A TYPE %d\n", b2->RetType());
-	//YueBing* c2 = new YueBing(4.4, 0.2, 4.6, b2->RetType() + 10);//月饼11，用这个rettype函数就可以创建馅料类型对应的月饼类型
-	//printf("C2 HAS A TYPE %d\n", c2->RetType());
-	//Sphere* b3 = new Sphere(3.2, 0.2, 4.6, 2);//馅料2，放到传送带上4.70.25.2
-	//printf("B3 HAS A TYPE %d\n", b3->RetType());
-	//YueBing* c3 = new YueBing(4.2, 0.2, 4.6, b3->RetType() + 10);//月饼12，放到传送带上4.70.25.2
-	//printf("C3 HAS A TYPE %d\n", c3->RetType());
-	//YueBingPi* c4 = new YueBingPi(cx2 + 0.5, 0.2, cz2);//月饼皮-2，放到传送带2上
+	Sphere* b2 = new Sphere(cx2 + 0.6, 0.2, cz2,1);//馅料1，放到传送带上4.70.25.2
+	Sphere* b3 = new Sphere(cx2 + 0.4, 0.2, cz2, 2);//馅料2，放到传送带上4.70.25.2
 	YueBingPi* c4 = new YueBingPi(cx2 + 0.8, 0.2, cz1);//月饼皮-2，放到传送带2上
-	YueBingPi* c41 = new YueBingPi(cx2 + 0.8, 0.2, cz1);//月饼皮-2，放到传送带2上
-	LiWuHePingMian* l1 = new LiWuHePingMian(cx1 + 0.75, 0.2, cz2, 3);	//礼物盒皮3,传送带3：2.98, 0, 4.6
-	//LiWuHePingMian* l2 = new LiWuHePingMian(3.6, 0.2, 5.8, 4);	//礼物盒皮4
-	//LiWuHe* l3 = new LiWuHe(cx2 + 0.6, 0.2, cz2, 23);	//礼物盒23
-	//LiWuHe* l4 = new LiWuHe(3.3, 0.2, 5.8, 24); //礼物盒24
-	//平台，放做好的月饼
-	Cube* table = new Cube(cx1-1, 0, cz2+0.6+dis);
-	table->scaling(1.2, 0.5, 1.2);
+	YueBingPi* c5 = new YueBingPi(cx2 + 0.6, 0.2, cz1);//月饼皮-2，放到传送带2上
+	YueBingPi* c6 = new YueBingPi(cx2 + 0.4, 0.2, cz1);//月饼皮-2，放到传送带2上
+	LiWuHePingMian* l1 = new LiWuHePingMian(cx1 + 0.8, 0.2, cz2, 3);	//礼物盒皮3,传送带3：2.98, 0, 4.6
+	LiWuHePingMian* l2 = new LiWuHePingMian(cx1 + 0.5, 0.2, cz2, 4);	//礼物盒皮4
+	LiWuHePingMian* l3 = new LiWuHePingMian(cx1 + 0.2, 0.2, cz2, 4);
 	//闲置的shape，展示我们实现了这些立方体=.=
 	Cylinder* s1 = new Cylinder(3, 0, 4);
 	s1->scaling(0.5, 0.125, 0.5);
@@ -214,29 +200,21 @@ void InitialThings() {
 	Cube* s4 = new Cube(3, 0, 1);
 	Prism* s5 = new Prism(3.5, 0, 2);
 	Trustum* s6 = new Trustum(3, 0, 2);
-	//Shapes.push_back(l4);
-	//Shapes.push_back(l3);
-	//Shapes.push_back(l2);
 	Shapes.push_back(b1);
-	Shapes.push_back(l1);
+	Shapes.push_back(b2);
+	Shapes.push_back(b3);
 	Shapes.push_back(c4);
-	//Shapes.push_back(c1);
-	/*Shapes.push_back(b3);
-	Shapes.push_back(c3);
-	
-	Shapes.push_back(c2);*/
-	//Shapes.push_back(l3);
-	/*
-	Shapes.push_back(c2);
-	Shapes.push_back(c3);*/
-	//Shapes.push_back(c41);
+	Shapes.push_back(c5);
+	Shapes.push_back(c6);
+	Shapes.push_back(l1);
+	Shapes.push_back(l2);
+	Shapes.push_back(l3);
 	Shapes.push_back(s1);
 	Shapes.push_back(s2);
 	Shapes.push_back(s3);
 	Shapes.push_back(s4);
 	Shapes.push_back(s5);
-	Shapes.push_back(s6);
-	Shapes.push_back(table);	
+	Shapes.push_back(s6);	
 }
 
 void drawRobots() {
@@ -422,19 +400,50 @@ void key(unsigned char k, int x, int y)
 		Robots[2]->not_catch();
 		break;
 	}
+	case 'r':
+	{
+		Conveyors[0]->count = (Conveyors[0]->count + 1) % 5;
+		Conveyors[1]->count = (Conveyors[1]->count + 1) % 5;
+		AddMotionToShapes(Conveyors[0]);
+		AddMotionToShapes(Conveyors[1]);
+		break;
+	}
 	case 't':
 	{
-		vector<conveyor*>::iterator Citer;
-		for (Citer = Conveyors.begin(); Citer != Conveyors.end(); Citer++) {
-			//(*Citer)->move = (*Citer)->move - 0.03;
-			(*Citer)->count = ((*Citer)->count + 1) % 5;
-		}
-		AddMotionToShapes();
+		Conveyors[2]->count = (Conveyors[2]->count + 1) % 5;
+		AddMotionToShapes(Conveyors[2]);
+		break;
+	}
+	case 'h':
+	{
+		Conveyors[3]->count = (Conveyors[3]->count + 1) % 5;
+		AddMotionToShapes(Conveyors[3]);
+		break;
+	}
+	case 'j':
+	{
+		Conveyors[4]->count = (Conveyors[4]->count + 1) % 5;
+		AddMotionToShapes(Conveyors[4]);
 		break;
 	}
 	case 'f':
 	{
-		Change_Door_1();
+		bool flag=Change_Door_1();
+		//如果传送带5的末端有礼盒，则消失，表示礼盒被送出工厂
+		if (flag) {
+			vector<Shape*>::iterator Siter;		
+			for (Siter = Shapes.begin(); Siter != Shapes.end(); ) {
+				if (((*Siter)->getGlobalX() <= 0.94)
+					&& (abs((*Siter)->getGlobalY() - 0.2) < 0.05)
+					&& (abs((*Siter)->getGlobalZ() - 6) <= 0.2)
+					&& ((*Siter)->RetType() == 23 || (*Siter)->RetType() == 24))
+				{
+					cout << "siterX:"<<(*Siter)->getGlobalX() << endl;
+					Siter = Shapes.erase(Siter);
+				}
+				else Siter++;
+			}
+		}
 		break;
 	}
 	case 'g':

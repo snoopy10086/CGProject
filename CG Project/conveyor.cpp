@@ -34,7 +34,7 @@ bool conveyor::ifOntheConveyor(Shape* shape)
 	float shapeX = shape->getGlobalX();
 	float shapeY = shape->getGlobalY();
 	
-	if (shapeY > 0.16 && shapeY<0.3 && shapeX >= this->PositionX - 0.75 && shapeX<= this->PositionX + 0.91 && shapeZ>this->PositionZ - 0.2 && shapeZ < this->PositionZ + 0.2)
+	if (shapeY > 0.16 && shapeY<0.3 && shapeX >= this->PositionX - 0.72 && shapeX<= this->PositionX + 0.91 && shapeZ>this->PositionZ - 0.2 && shapeZ < this->PositionZ + 0.2)
 	{ 		
 		return true;
 	}
