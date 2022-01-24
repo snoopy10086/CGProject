@@ -186,7 +186,6 @@ void InitialThings() {
 	Conveyors.push_back(conv4);
 	//月饼皮、馅料、礼物盒
 	Sphere* b1 = new Sphere(cx2+0.8, 0.2, cz2,0);//馅料0，放到传送带1上
-	printf("B1 HAS A TYPE %d\n", b1->RetType());
 	//YueBing* c1 = new YueBing(cx2 + 0.8, 0.2, cz1, b1->RetType() + 10);//月饼10，放到传送带上4.70.25.2
 	//printf("C1 HAS A TYPE %d\n", c1->RetType());
 	//Sphere* b2 = new Sphere(cx2 + 0.6, 0.2, cz2,1);//馅料1，放到传送带上4.70.25.2
@@ -727,7 +726,6 @@ void init()
 
 void reshape(int w, int h)
 {
-	cout << "12312312" << endl;
 	glViewport(0, 0, w, h);    //截图;1、2为视口的左下角;3、4为视口的宽度和高度
 	glMatrixMode(GL_PROJECTION);    //将当前矩阵指定为投影矩阵
 	glLoadIdentity();
@@ -773,10 +771,11 @@ void mooncakeCollision() {
 	for (Siter = Shapes2.begin(); Siter + 1 != Shapes2.end();) {
 		collisionFlag = false;
 		for (subSiter = Siter + 1; subSiter != Shapes2.end(); subSiter++) {
-			if (((*subSiter)->RetType() == 0 && (*Siter)->RetType() == -2) || ((*subSiter)->RetType() == -2 && (*Siter)->RetType() == 0)) {
-				// cout << "#bx:" << (*Siter)->getGlobalX() << "#by:" << (*Siter)->getGlobalY() << "#bz:" << (*Siter)->getGlobalZ() << endl;
-				// cout << "#cx:" << (*subSiter)->getGlobalX() << "#cy:" << (*subSiter)->getGlobalY() << "#cz:" << (*subSiter)->getGlobalZ() << endl;
-			}
+			//if (((*Siter)->RetType() >= 10 && (*Siter)->RetType() <= 12 && ((*subSiter)->RetType() == 3 || (*subSiter)->RetType() == 4))
+			//	|| ((*subSiter)->RetType() >= 10 && (*subSiter)->RetType() <= 12 && ((*Siter)->RetType() == 3 || (*Siter)->RetType() == 4))) {
+			//	cout << "#bx:" << (*Siter)->getGlobalX() << "#by:" << (*Siter)->getGlobalY() << "#bz:" << (*Siter)->getGlobalZ() << endl;
+			//	cout << "#cx:" << (*subSiter)->getGlobalX() << "#cy:" << (*subSiter)->getGlobalY() << "#cz:" << (*subSiter)->getGlobalZ() << endl;
+			//}
 			if (abs((*Siter)->getGlobalX() - (*subSiter)->getGlobalX()) > 0.019) {
 				break;
 			}
@@ -795,8 +794,8 @@ void mooncakeCollision() {
 					collisionFlag = true;
 					break;
 				}
-				else if (((*Siter)->RetType() >= 10 && (*Siter)->RetType() <= 12 && (*subSiter)->RetType() == 3 && (*subSiter)->RetType() == 4)
-					|| ((*subSiter)->RetType() >= 10 && (*subSiter)->RetType() <= 12 && (*Siter)->RetType() == 3 && (*Siter)->RetType() == 4)) {
+				else if (((*Siter)->RetType() >= 10 && (*Siter)->RetType() <= 12 && ((*subSiter)->RetType() == 3 || (*subSiter)->RetType() == 4))
+					|| ((*subSiter)->RetType() >= 10 && (*subSiter)->RetType() <= 12 && ((*Siter)->RetType() == 3 || (*Siter)->RetType() == 4))) {
 					// 月饼与礼品盒皮相撞得礼盒
 					LiWuHe* gift = new LiWuHe((*Siter)->getGlobalX(), (*Siter)->getGlobalY(), (*Siter)->getGlobalZ(),
 						(*Siter)->RetType() >= 10 ? (*subSiter)->RetType() + 20 : (*Siter)->RetType() + 20);					
@@ -812,7 +811,6 @@ void mooncakeCollision() {
 				if ((*tempIter) == (*Siter) || (*tempIter) == (*subSiter)) {
 					// cout << "*Siter:" << *Siter << ", * subSiter:" << *subSiter << ", tempIter:" << *tempIter << endl;
 					tempIter = Shapes.erase(tempIter);
-					cout << "Successfully erase" << endl;
 				}
 				else {
 					tempIter++;
