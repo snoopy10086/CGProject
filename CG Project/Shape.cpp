@@ -312,7 +312,7 @@ void Cube::Draw()//立方体
 	glEnable(GL_NORMALIZE);	
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
 	glTranslatef(0, 0.2 * this->scaleY, 0);//为了默认时能画在地板上
-	glScalef(0.2, 0.2, 0.2);
+	glScalef(0.05, 0.05, 0.05);
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glRotatef(this->rotateX, 1, 0, 0);
 	glRotatef(this->rotateY, 0, 1, 0);
@@ -350,7 +350,7 @@ void Cone::Draw()//圆锥
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
 
-	glScalef(0.2, 0.2, 0.2);
+	glScalef(0.15, 0.15, 0.15);
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glRotatef(this->rotateX, 1, 0, 0);
 	glRotatef(this->rotateY, 0, 1, 0);
@@ -415,7 +415,7 @@ void ConeCylinder::Draw()//圆台
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
 
-	glScalef(0.2, 0.2, 0.2);
+	glScalef(0.1, 0.1, 0.1);
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glRotatef(this->rotateX, 1, 0, 0);
 	glRotatef(this->rotateY, 0, 1, 0);
@@ -567,12 +567,14 @@ void Cylinder::Texture_Cylinder(int i)
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 }
+
 YueBingPi::YueBingPi(float globalX, float globalY, float globalZ) :Cylinder(globalX, globalY, globalZ) {
 	this->Texture = 41;
 	this->Texture2 = 41;
 	this->scaling(0.8, 0.03, 0.8);
 	this->Type = -2;// 月饼皮
 }
+
 
 YueBing::YueBing(float globalX, float globalY, float globalZ) :Cylinder(globalX, globalY, globalZ) {
 	this->Texture = 35 + 3;
@@ -613,9 +615,9 @@ void Sphere::Draw()//球
 	glPushMatrix();
 	glEnable(GL_NORMALIZE);
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
+	glTranslatef(0, 0.2* this->scaleY, 0);
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glScalef(0.2, 0.2, 0.2);
-	glTranslatef(0, 0.5, 0);
 	glRotatef(this->rotateX, 1, 0, 0);
 	glRotatef(this->rotateY, 0, 1, 0);
 	glRotatef(this->rotateZ, 0, 0, 1);

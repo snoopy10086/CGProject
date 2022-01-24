@@ -79,7 +79,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\Folder\Secrets\Computer Graphics\CGProject\CG Project\include;$(IncludePath)</IncludePath>
+    <IncludePath>./include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\computer graphic\my_CGProject\CGProject\CG Project\include\glm</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./include/glm</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,6 +148,7 @@
     <ClInclude Include="model_view.h" />
     <ClInclude Include="Robot.h" />
     <ClInclude Include="Shape.h" />
+    <ClInclude Include="textfile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="conveyor.cpp" />
@@ -156,8 +157,12 @@
     <ClCompile Include="model_view.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="textfile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ivory.frag" />
+    <None Include="ivory_pass0.vert" />
+    <None Include="ivory_pass1.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -168,7 +173,7 @@
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>这台计算机上缺少此项�?引用�? NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信�?，�?�参�? http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件�? {0}�?</ErrorText>
+      <ErrorText>这台计算机上缺少此项�?引用�? NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信�?，�?�参�? http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件�? {0}�?</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets'))" />
     <Error Condition="!Exists('packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets'))" />

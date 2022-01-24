@@ -50,7 +50,7 @@ void drawWall();
 void Texture_cube(int n, int i, int j, int k);
 void texload(int i, char* filename);
 unsigned char* LoadBitmapFile(char* filename, BITMAPINFOHEADER* bitmapInfoHeader);
-void Change_Door_1();
+bool Change_Door_1();
 void Change_Door_2();
 void Change_Rust();
 #endif

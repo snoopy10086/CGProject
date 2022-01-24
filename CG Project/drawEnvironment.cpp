@@ -134,8 +134,9 @@ bool forward2 = true;
 bool forward3 = true;
 
 
-void Change_Door_1() {
+bool Change_Door_1() {
 	r_door_on[0] = !r_door_on[0];
+	return r_door_on[0];
 }
 void Change_Door_2() {
 	r_door_on[1] = !r_door_on[1];
@@ -986,7 +987,7 @@ bool getRDoor_2() {
 //ªÊ÷∆√≈
 void drawDoor() {
 	glPushMatrix();
-	glTranslatef(0.0, 0.7, 5.3);
+	glTranslatef(0.0, 0.7, 6);//5.3
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	drawOutsideDoor_1();
 	glPopMatrix();
@@ -997,7 +998,7 @@ void drawDoor() {
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0.02, 0.7, 5.0);
+	glTranslatef(0.02, 0.7, 5.7);//5
 	glRotatef(r_door[0], 0, 1, 0);//-180~-90
 	if (r_door[0] < -45 && r_door_on[0]) r_door[0]++;
 	if (r_door[0] >= -180 && !r_door_on[0]) r_door[0]--;
