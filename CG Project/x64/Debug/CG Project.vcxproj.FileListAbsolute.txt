@@ -1,3 +1,4 @@
 C:\Users\76365\Desktop\CGProject\CG Project\x64\Debug\CG Project_1.2.5.exe
 E:\computer graphic\my_CGProject\CGProject\CG Project\x64\Debug\CG Project_1.2.5.exe
 E:\computer graphic\my_CGProject\CGProject\CG Project\x64\Debug\CG Project_1.2.5.pdb
+D:\课程\大三上\计算机图形学\大作业\CGProject\CG Project\x64\Debug\CG Project_1.2.5.exe

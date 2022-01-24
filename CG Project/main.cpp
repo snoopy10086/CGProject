@@ -162,10 +162,10 @@ void AddMotionToShapes() {
 float dis = 0.6,cx1 = 3, cx2 = cx1+dis+2, cz1 = 4, cz2 = cz1+dis+0.4;
 void InitialThings() {
 	//机械臂
-	Robot_2* robot21 = new Robot_2(cx1+1+dis/2+0.95, 0, (cz1+cz2)/2);    
+	Robot_2* robot21 = new Robot_2(cx1+1+dis/2+1, 0, (cz1+cz2)/2);    
 	Robot_2* robot22 = new Robot_2(cx1 + 1 + dis / 2, 0, cz1-0.5);
 	Robot_2* robot23 = new Robot_2(1.65, 0, (cz1 + cz2) / 2);
-	Robot_2* robot24 = new Robot_2(1.65, 0, cz2+0.8);
+	Robot_2* robot24 = new Robot_2(1.65, 0, cz2+0.4);
 	robot21->rotate1 += 180;
 	robot22->rotate1 += 270;
 	Robot_1* robot1 = new Robot_1(0,0,0);
@@ -389,26 +389,23 @@ void key(unsigned char k, int x, int y)
 	}
 	case '9':
 	{
-		((Robot_2*)Robots[0])->not_is_bind();
-		((Robot_2*)Robots[0])->TheShape = (Shape*)Shapes[0];
+		((Robot_2*)Robots[0])->Check = true;
 		break;
-	}
+
+	} 
 	case 'i':
 	{
-		((Robot_2*)Robots[1])->not_is_bind();
-		((Robot_2*)Robots[1])->TheShape = (Shape*)Shapes[9];//这是写死的方法，第一次碰撞后得到的月饼编号是8
+		((Robot_2*)Robots[1])->Check = true;
 		break;
 	}
 	case 'k':
 	{
-		((Robot_2*)Robots[2])->not_is_bind();
-		((Robot_2*)Robots[2])->TheShape = (Shape*)Shapes[9];
+		((Robot_2*)Robots[2])->Check = true;
 		break;
 	}
 	case 'm':
 	{
-		((Robot_2*)Robots[3])->not_is_bind();
-		((Robot_2*)Robots[3])->TheShape = (Shape*)Shapes[0];//第一次碰撞后得到的礼物盒
+		((Robot_2*)Robots[3])->Check = true;
 		break;
 	}
 	case 'y':

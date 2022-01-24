@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <gl/glut.h>
 #include <stdio.h>
+#include <math.h>
 #include <string.h>
 #include"Shape.h"
+#include <vector>
 #define CollisionThreshold (0.5f)
 //#define DEBUG
 /*
@@ -90,6 +92,7 @@ public:
 
 	bool Isrotate = false;
 	bool IsBind = false;
+	bool Check = false;
 	bool forward2 = true;
 	bool forward3 = true;
 	int timeflag = -1;

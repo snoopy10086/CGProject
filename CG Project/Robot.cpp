@@ -1,10 +1,10 @@
 #include "Robot.h"
-
 #include <iostream>
 #include<cmath>
 using namespace std;
-
+ 
 extern unsigned int texture[50];
+extern vector<Shape*> Shapes;						//collections of shapes
 #define PI 3.1415926535
 static float c = PI / 180.0;    //弧度和角度转换参数
 void Robot::Draw()
@@ -214,7 +214,6 @@ void Robot_2::HandleRotate()
 			if (this->timeflag >= 1 * T && this->timeflag < 2 * T) {
 				this->fCatch -= 0.35;
 			}
-
 			if (this->timeflag >= 2 * T && this->timeflag < 3 * T) {
 				this->rotate1 += (r1_2 - r1_1) / float(T);
 				this->rotate2 += (r2_2 - r2_1) / float(T);
@@ -234,12 +233,25 @@ void Robot_2::HandleRotate()
 				this->rotate3 += (r3_0 - r3_2) / float(T);
 				this->rotate4 += (r4_0 - r4_2) / float(T);
 			}
-
-			
 		}
-
+	}
+	else if(this->Check){
+		GLfloat dis = sqrt(0.5 * 0.5 + 0.5 * 0.5);
+		GLfloat angle = PI / 2 - atan(0.5 / 0.5);
+		GLfloat TargetX = this->PositionX + dis * cos(angle - (this->rotate1) * c);
+		GLfloat TargetZ = this->PositionZ + dis * sin(angle - (this->rotate1) * c);
+		vector<Shape*>::iterator Siter;
+		for (Siter = Shapes.begin(); Siter != Shapes.end(); Siter++) {
+			if (((*Siter)->globalX >= TargetX-1e-1 && (*Siter)->globalX <= TargetX + 1e-1) && ((*Siter)->globalZ >= TargetZ - 1e-1 && (*Siter)->globalZ <= TargetZ + 1e-1)) {
+				this->IsBind = true;
+				this->TheShape = (*Siter);
+				break;
+			}
+		}
+		this->Check = false;
 	}
 }
+
 //绘制杆
 void Robot_2::DrawRod(GLdouble baseR, GLdouble topR, GLdouble h)
 {
@@ -394,8 +406,8 @@ void Robot_2::SetBindPosition(void)
 	BindPositionY = 0.099 -l1 - l2 * cos(rotate2 * c) - l3 * cos((rotate2 + rotate3) * c) - l4 * cos((rotate2 + rotate3 + rotate4) * c);;
 
 	float temp = BindPositionX;
-	BindPositionX = 0.04 * ZoomIndex +temp * cos(-(rotate1 + 90) * c);
-	BindPositionZ = 0.025 * ZoomIndex +temp * sin(-(rotate1 + 90) * c);
+	BindPositionX = temp * cos(-(rotate1 + 90) * c);
+	BindPositionZ = temp * sin(-(rotate1 + 90) * c);
 	if (TheShape != NULL)
 	{
 		this->TheShape->globalX = this->BindPositionX + this->PositionX;
