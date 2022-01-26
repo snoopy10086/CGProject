@@ -93,7 +93,6 @@ void Robot::update()
 	if (bCatch && fCatch > 0)
 	{
 		fCatch -= 0.05;
-
 	}
 	else if (!bCatch && fCatch < 45)
 	{
@@ -176,9 +175,7 @@ Robot_2::Robot_2(float PositionX, float PositionY, float PositionZ)
 }
 void Robot_2::HandleRotate()
 {
-	//this->TheShape->globalX = this->BindPositionX;
-	//this->TheShape->globalY = this->BindPositionY;
-	//this->TheShape->globalZ = this->BindPositionZ;
+	//set three status of DoF
 	GLfloat r1_0 = 90;
 	GLfloat r2_0 = 0;
 	GLfloat r3_0 = 45;
@@ -262,17 +259,21 @@ void Robot_2::DrawRod(GLdouble baseR, GLdouble topR, GLdouble h)
 	glBindTexture(GL_TEXTURE_2D, texture[14]);  //选择纹理texture[1]
 	glPushMatrix();
 	glTranslatef(0, 0, h);
+	
+	//draw the upper face of cylinder
 	GLUquadricObj* upface = gluNewQuadric();
 	gluQuadricTexture(upface, true);
 	gluQuadricDrawStyle(upface, GLU_FILL);
 	gluDisk(upface, 0, topR, 100, 2);
 	glPopMatrix();
 	glPushMatrix();
+	//draw the lower face of cylinder
 	GLUquadricObj* diface = gluNewQuadric();
 	gluQuadricTexture(diface, true);
 	gluQuadricDrawStyle(diface, GLU_FILL);
 	gluDisk(diface, 0, baseR, 100, 2);
 
+	//draw the side of cylinder
 	GLUquadricObj* ceface = gluNewQuadric();
 	gluQuadricTexture(ceface, true);
 	gluQuadricDrawStyle(ceface, GLU_FILL);
@@ -311,93 +312,98 @@ void Robot_2::Draw()
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
+	
+	//grab shape animation
 	this->HandleRotate();
 	this->update();
+
+	//draw
 	glPushMatrix();
 	glTranslatef(PositionX, PositionY - 0.099, PositionZ);
 	glEnable(GL_NORMALIZE); glScalef(1.0/6.0 * ZoomIndex, 1.0 / 6.0 * ZoomIndex, 1.0 / 6.0 * ZoomIndex);
-	glPushMatrix();
-	glRotatef(rotate1, 0, 1, 0);
-	glPushMatrix();
-	glTranslatef(0, 1.2, 0);
-	glRotatef(rotate2, 1, 0, 0);
-	glTranslatef(0, -1.2, 0);
-	glPushMatrix();
-	glTranslatef(0, 4.2, 0);
-	glRotatef(rotate3, 1, 0, 0);
-	glTranslatef(0, -4.2, 0);
-	glPushMatrix();
-	glTranslatef(0, 8, 0);
-	glRotatef(rotate4, 1, 0, 0);
-	glTranslatef(0, -8, 0);
+		glPushMatrix();
+		glRotatef(rotate1, 0, 1, 0);
+			glPushMatrix();
+			glTranslatef(0, 1.2, 0);
+			glRotatef(rotate2, 1, 0, 0);
+			glTranslatef(0, -1.2, 0);
+				glPushMatrix();
+				glTranslatef(0, 4.2, 0);
+				glRotatef(rotate3, 1, 0, 0);
+				glTranslatef(0, -4.2, 0);
+					glPushMatrix();
+					glTranslatef(0, 8, 0);
+					glRotatef(rotate4, 1, 0, 0);
+					glTranslatef(0, -8, 0);
 
-	//机械臂3
-	glPushMatrix();
-	glTranslatef(0, 8, 0);
-	glRotatef(90, 0, 0, 1);
-	glRotatef(90, 0, 1, 0);
-	DrawRod(0.2, 0.1, 2);
-	glPopMatrix();
+					//机械臂3
+					glPushMatrix();
+					glTranslatef(0, 8, 0);
+					glRotatef(90, 0, 0, 1);
+					glRotatef(90, 0, 1, 0);
+					DrawRod(0.2, 0.1, 2);
+					glPopMatrix();
 
-	glPushMatrix();
-	glTranslatef(0, 10, 0);
-	glRotatef(180, 1, 0, 0);
-	glScalef(0.25, 0.25, 0.25);
-	Draw_Robot();
-	glPopMatrix();
+					glPushMatrix();
+					glTranslatef(0, 10, 0);
+					glRotatef(180, 1, 0, 0);
+					glScalef(0.25, 0.25, 0.25);
+					Draw_Robot();
+					glPopMatrix();
 
-	glPopMatrix();
+					glPopMatrix();
 
-	//关节3
-	glPushMatrix();
-	//glRotatef(-90, 1, 0, 0);
-	glTranslatef(0, 7.4, 0);
-	DrawJoint();
-	glPopMatrix();
+				//关节3
+				glPushMatrix();
+				//glRotatef(-90, 1, 0, 0);
+				glTranslatef(0, 7.4, 0);
+				DrawJoint();
+				glPopMatrix();
 
-	//机械臂2
-	glPushMatrix();
-	glTranslatef(0, 4.6, 0);
-	glRotatef(90, 0, 0, 1);
-	glRotatef(90, 0, 1, 0);
-	DrawRod(0.2, 0.2, 2.8);
-	glPopMatrix();
+				//机械臂2
+				glPushMatrix();
+				glTranslatef(0, 4.6, 0);
+				glRotatef(90, 0, 0, 1);
+				glRotatef(90, 0, 1, 0);
+				DrawRod(0.2, 0.2, 2.8);
+				glPopMatrix();
 
-	glPopMatrix();
+				glPopMatrix();
 
-	//关节2
-	glPushMatrix();
-	glTranslatef(0, 3.6, 0);
-	DrawJoint();
-	glPopMatrix();
+			//关节2
+			glPushMatrix();
+			glTranslatef(0, 3.6, 0);
+			DrawJoint();
+			glPopMatrix();
 
-	//机械臂1
-	glPushMatrix();
-	glTranslatef(0, 1.6, 0);
-	glRotatef(90, 0, 0, 1);
-	glRotatef(90, 0, 1, 0);
-	DrawRod(0.2, 0.2, 2);
-	glPopMatrix();
-	glPopMatrix();
+			//机械臂1
+			glPushMatrix();
+			glTranslatef(0, 1.6, 0);
+			glRotatef(90, 0, 0, 1);
+			glRotatef(90, 0, 1, 0);
+			DrawRod(0.2, 0.2, 2);
+			glPopMatrix();
+			glPopMatrix();
 
-	//关节1
-	glPushMatrix();
-	glTranslatef(0, 0.6, 0);
-	DrawJoint();
-	glPopMatrix();
-	glPopMatrix();
+		//关节1
+		glPushMatrix();
+		glTranslatef(0, 0.6, 0);
+		DrawJoint();
+		glPopMatrix();
+		glPopMatrix();
 
-	//底座
-	glPushMatrix();
-	glRotatef(90, 0, 0, 1);
-	glRotatef(90, 0, 1, 0);
-	DrawRod(0.7, 0.5, 0.6);
-	glPopMatrix();
+		//底座
+		glPushMatrix();
+		glRotatef(90, 0, 0, 1);
+		glRotatef(90, 0, 1, 0);
+		DrawRod(0.7, 0.5, 0.6);
+		glPopMatrix();
 	glPopMatrix();
 }
 
 void Robot_2::SetBindPosition(void)
 {
+	// find length of each robot DoF
 	float l2 = 0.5/1.2 * ZoomIndex;
 	float l1 = 0.28 / 1.2 * ZoomIndex;
 	float l3 = 0.8 / 1.2 * ZoomIndex;

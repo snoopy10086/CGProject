@@ -14,20 +14,18 @@
 class Robot
 {
 public:
-	/* the position of the grip hand */
+	/* the position of the robot */
 	float GripperX;
 	float GripperY;
 	float GripperZ;
- 
 	float BindPositionX = 0;
 	float BindPositionY = 0.8;
 	float BindPositionZ = 0;
-	/* 
-	 * bCatch : the state of the claw, if bCatch is set, the robot is catch a shape 
+	/*
+	 * bCatch : the state of the claw, if bCatch is set, the robot is catch a shape
 	 */
 	float fCatch = 45;
-	bool bCatch = false; 
-
+	bool bCatch = false;
 	double getGripperX() {
 		return this->GripperX;
 	}
@@ -40,7 +38,7 @@ public:
 	bool enable;
 	Shape* TheShape;
 protected:
-	/* 
+	/*
 	 * the methods used to draw the robot
 	 */
 	void Draw_Robot();
@@ -53,13 +51,10 @@ public:
 	virtual void Draw();
 	virtual void update();
 	void not_catch();
-	/* 
-	 * detect whether this robot gripper collid on some shape
-	 */
-	//bool CollisionDetec(Shape* S);
 };
+
 /*
- * the first class of , two types of robot will inherit from class Robot
+ * the claw of robot will inherit from class Robot
  */
 class Robot_1 : public Robot
 {
@@ -81,27 +76,27 @@ public:
 class Robot_2 : public Robot
 {
 public:
-	/*
-	 * length : the length of the arm
-	 * quad_obj : use to draw the arm
-	 */
+	/* four DoFs of the robot  */
 	GLfloat rotate1 = 90;
 	GLfloat rotate2 = 0;
 	GLfloat rotate3 = 45;
 	GLfloat rotate4 = 90;
 
-	bool Isrotate = false;
+	/* whether the robot binds to a shape */
 	bool IsBind = false;
+	/* whether to check if bind */
 	bool Check = false;
-	bool forward2 = true;
-	bool forward3 = true;
+	/* the time flag of capture process animation */
 	int timeflag = -1;
+
 	float PositionX = 4;
 	float PositionY = 0.1;
 	float PositionZ = 4;
+
+	/* overall size */
 	float ZoomIndex = 1.0;
 	Robot_2(float PositionX, float PositionY, float PositionZ);
-
+	
 	GLUquadricObj* quad_obj = NULL;
 protected:
 	/*
@@ -109,10 +104,12 @@ protected:
 	 */
 	void DrawJoint();
 	void DrawRod(GLdouble baseR, GLdouble topR, GLdouble h);
+	/* find the position of bound shape */
 	void SetBindPosition();
 public:
 	void Draw();
 	void update();
+	/* the grab animation */
 	void HandleRotate();
 	void setPositionX(float position);
 	void setPositionY(float position);
