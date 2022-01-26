@@ -148,6 +148,7 @@
     <ClInclude Include="model_view.h" />
     <ClInclude Include="Robot.h" />
     <ClInclude Include="Shape.h" />
+    <ClInclude Include="textfile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="conveyor.cpp" />
@@ -156,8 +157,12 @@
     <ClCompile Include="model_view.cpp" />
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="textfile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ivory.frag" />
+    <None Include="ivory_pass0.vert" />
+    <None Include="ivory_pass1.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -33,6 +33,9 @@
     <ClInclude Include="model_view.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="textfile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="drawEnvironment.cpp">
@@ -53,8 +56,20 @@
     <ClCompile Include="model_view.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="textfile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="ivory.frag">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="ivory_pass0.vert">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="ivory_pass1.vert">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

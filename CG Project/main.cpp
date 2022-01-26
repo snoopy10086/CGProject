@@ -5,6 +5,7 @@
 #include "Robot.h"
 #include "Shape.h"
 #include "conveyor.h"
+#include "textfile.h"
 #include "model_view.h"
 #include <math.h>
 #include <time.h>
@@ -64,7 +65,7 @@ void init();
 void reshape(int w, int h);
 void mooncakeCollision();
 bool shapeCompare(const Shape* a, const Shape* b);
-
+static void CompileShaders();
 float move = 0;
 int count = 0;
 
@@ -81,6 +82,53 @@ typedef enum {
 GLuint selectBuf[BUFSIZE]; // 设置一个选择缓冲区
 TYPE s_type;
 int s_id;
+GLuint v0, v1, f, p0, p1;
+static void CompileShaders()
+{
+
+	char* vs_0 = NULL, * vs_1 = NULL, * fs = NULL;
+
+	v0 = glCreateShader(GL_VERTEX_SHADER);
+	v1 = glCreateShader(GL_VERTEX_SHADER);
+	f = glCreateShader(GL_FRAGMENT_SHADER);
+	vs_0 = textFileRead((char*)"./ivory_pass0.vert");
+	vs_1 = textFileRead((char*)"./ivory_pass1.vert");
+	fs = textFileRead((char*)"./ivory.frag");
+	const char* vv0 = vs_0;
+	const char* vv1 = vs_1;
+	const char* ff = fs;
+	glShaderSource(v0, 1, &vv0, NULL);
+	glShaderSource(v1, 1, &vv1, NULL);
+	glShaderSource(f, 1, &ff, NULL);
+	free(vs_0);
+	free(vs_1);
+	free(fs);
+	glCompileShader(v0);
+	glCompileShader(v1);
+	glCompileShader(f);
+	p0 = glCreateProgram();
+	p1 = glCreateProgram();
+	GLint Success = 0;
+	GLchar ErrorLog[1024] = { 0 };
+	glAttachShader(p0, v0);
+	glAttachShader(p0, f);
+	glLinkProgram(p0);
+	glGetProgramiv(p0, GL_LINK_STATUS, &Success);
+	if (Success == 0) {
+		glGetProgramInfoLog(p0, sizeof(ErrorLog), NULL, ErrorLog);
+		fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
+		exit(1);
+	}
+	glAttachShader(p1, v1);
+	glAttachShader(p1, f);
+	glLinkProgram(p1);
+	glGetProgramiv(p1, GL_LINK_STATUS, &Success);
+	if (Success == 0) {
+		glGetProgramInfoLog(p1, sizeof(ErrorLog), NULL, ErrorLog);
+		fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
+		exit(1);
+	}
+}
 
 void set_eye() {
 	origin_eye[0] = eye[0];
@@ -234,15 +282,62 @@ void drawRobots() {
 void drawShapes() {
 	vector<Shape*>::iterator Siter;
 	int i = 0;
+	if (CurrentChooseShape != NULL)
+	{
+		glPushMatrix();
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glTranslatef(CurrentChooseShape->globalX, CurrentChooseShape->globalY + 0.3 + 0.1*CurrentChooseShape->scaleX, CurrentChooseShape->globalZ);
+		glScalef(0.03, 0.03, 0.03);
+		glRotatef(180, 1, 0, 0);
+		glBegin(GL_QUADS);
+		glVertex3f(-1, 0, -1);
+		glVertex3f(-1, 0, 1);
+		glVertex3f(1, 0, 1);
+		glVertex3f(1, 0, -1);
+		glEnd();
+
+		// Draw four side triangles
+		glBegin(GL_TRIANGLES);
+
+		// Base points of each triangle
+		glVertex3f(0, 3, 0);
+		glVertex3f(-1, 0, -1);
+		glVertex3f(-1, 0, 1);
+
+		glVertex3f(0, 3, 0);
+		glVertex3f(-1, 0, 1);
+		glVertex3f(1, 0, 1);
+
+		glVertex3f(0, 3, 0);
+		glVertex3f(1, 0, 1);
+		glVertex3f(1, 0, -1);
+
+		glVertex3f(0, 3, 0);
+		glVertex3f(1, 0, -1);
+		glVertex3f(-1, 0, -1);
+
+		glEnd();
+		glPopMatrix();
+	}
 	glPushName(__shape);
 	glPushName(0);
 	for (Siter = Shapes.begin(); Siter != Shapes.end(); Siter++) {
 		glLoadName(i);
 		i++;
+		/*if((*Siter))*/
+		if (CurrentChooseShape == *Siter)
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		}
+		else
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
 		(*Siter)->Draw();
 	}
 	glPopName();
 	glPopName();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void drawConveyors() {
@@ -728,6 +823,7 @@ void mouse_move(int mx, int my)
 void init()
 {
 	//initEnvironment();
+	GLenum res = glewInit();
 	InitList();
 	glEnable(GL_DEPTH_TEST);    //启用深度，根据坐标的远近自动隐藏被遮住的图形（材料）
 	InitialThings();
@@ -764,6 +860,7 @@ int main(int argc, char* argv[])
 	glutPassiveMotionFunc(mouse_move);
 	glutKeyboardFunc(key);
 	glutSetCursor(GLUT_CURSOR_DESTROY);
+	CompileShaders();
 	glutMainLoop();//enters the GLUT event processing loop.
 	return 0;
 }

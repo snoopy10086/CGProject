@@ -311,7 +311,7 @@ void Cube::Draw()//立方体
 	glEnable(GL_NORMALIZE);	
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
 	glTranslatef(0, 0.2 * this->scaleY, 0);//为了默认时能画在地板上
-	glScalef(0.2, 0.2, 0.2);
+	glScalef(0.05, 0.05, 0.05);
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glRotatef(this->rotateX, 1, 0, 0);
 	glRotatef(this->rotateY, 0, 1, 0);
@@ -349,7 +349,7 @@ void Cone::Draw()//圆锥
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
 
-	glScalef(0.2, 0.2, 0.2);
+	glScalef(0.15, 0.15, 0.15);
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glRotatef(this->rotateX, 1, 0, 0);
 	glRotatef(this->rotateY, 0, 1, 0);
@@ -414,7 +414,7 @@ void ConeCylinder::Draw()//圆台
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
 
-	glScalef(0.2, 0.2, 0.2);
+	glScalef(0.1, 0.1, 0.1);
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glRotatef(this->rotateX, 1, 0, 0);
 	glRotatef(this->rotateY, 0, 1, 0);
