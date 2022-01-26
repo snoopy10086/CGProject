@@ -243,8 +243,8 @@ void InitialThings() {
 	YueBingPi* c5 = new YueBingPi(cx2 + 0.6, 0.2, cz1);//月饼皮-2，放到传送带2上
 	YueBingPi* c6 = new YueBingPi(cx2 + 0.4, 0.2, cz1);//月饼皮-2，放到传送带2上
 	LiWuHePingMian* l1 = new LiWuHePingMian(cx1 + 0.8, 0.2, cz2, 3);	//礼物盒皮3,传送带3：2.98, 0, 4.6
-	LiWuHePingMian* l2 = new LiWuHePingMian(cx1 + 0.5, 0.2, cz2, 4);	//礼物盒皮4
-	LiWuHePingMian* l3 = new LiWuHePingMian(cx1 + 0.2, 0.2, cz2, 4);
+	LiWuHePingMian* l2 = new LiWuHePingMian(cx1 + 0.4, 0.2, cz2, 4);	//礼物盒皮4
+	LiWuHePingMian* l3 = new LiWuHePingMian(cx1, 0.2, cz2, 4);
 
 	//闲置的shape，展示我们实现了这些立方体=.=
 	Cylinder* s1 = new Cylinder(3, 0, 4);
@@ -496,6 +496,10 @@ void key(unsigned char k, int x, int y)
 		{
 			CurrentChooseShape->scaling(2, 2, 2);
 		}
+		break;
+	}
+	case 'x': {
+		is_visitor = !is_visitor;
 		break;
 	}
 	case 'e':

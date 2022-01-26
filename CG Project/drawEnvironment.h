@@ -40,7 +40,6 @@ GLint initWindowList();
 void drawoneWindow(int i);
 void Change_Window(int i);
 void drawWindow();
-GLint initGlassList();
 void setWall();
 void drawGlass();
 void drawoneboard();

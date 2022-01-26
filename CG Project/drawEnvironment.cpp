@@ -6,95 +6,68 @@ GLubyte image[imageheight][imageweight][3];
 unsigned int texture[50];
 extern float move;
 extern int count;
-bool boardmode = false;
-int boardnum = 0;
-int boardcounter = 0;
+bool boardmode = true;
+int boardnum;
+int boardcounter;
 
 extern GLfloat global_diffuse[];
 extern bool global_light_enable[];
-
+//修改公告板的纹理
 void  Change_Rust() {
 	boardmode = !boardmode;
 }
-// 纹理标示符数组，保存两个纹理的标示符
-// 描述: 通过指针，返回filename 指定的bitmap文件中数据。
-// 同时也返回bitmap信息头.（不支持-bit位图）
+//从数据文件中装载纹理数据
 unsigned char* LoadBitmapFile(char* filename, BITMAPINFOHEADER* bitmapInfoHeader)
 {
-	FILE* filePtr;	// 文件指针
-	BITMAPFILEHEADER bitmapFileHeader;	// bitmap文件头
-	unsigned char* bitmapImage;		// bitmap图像数据
-	int	imageIdx = 0;		// 图像位置索引
-	unsigned char	tempRGB;	// 交换变量
-
-								// 以“二进制+读”模式打开文件filename 
-	fopen_s(&filePtr, filename, "rb");
-	if (filePtr == NULL) return NULL;
-	// 读入bitmap文件图
-	fread(&bitmapFileHeader, sizeof(BITMAPFILEHEADER), 1, filePtr);
-	// 验证是否为bitmap文件
-	if (bitmapFileHeader.bfType != BITMAP_ID) {
-		fprintf(stderr, "Error in LoadBitmapFile: the file is not a bitmap file\n");
+	FILE* fp;
+	BITMAPFILEHEADER fh;	
+	unsigned char* img;	
+	int	imgidx = 0;	
+	unsigned char tempRGB;
+	fopen_s(&fp, filename, "rb");
+	if (fp == NULL) return NULL;
+	fread(&fh, sizeof(BITMAPFILEHEADER), 1, fp);
+	if (fh.bfType != BITMAP_ID) {
 		return NULL;
 	}
-
-	// 读入bitmap信息头
-	fread(bitmapInfoHeader, sizeof(BITMAPINFOHEADER), 1, filePtr);
-	// 将文件指针移至bitmap数据
-	fseek(filePtr, bitmapFileHeader.bfOffBits, SEEK_SET);
-	// 为装载图像数据创建足够的内存
-	bitmapImage = new unsigned char[bitmapInfoHeader->biSizeImage];
-	// 验证内存是否创建成功
-	if (!bitmapImage) {
-		fprintf(stderr, "Error in LoadBitmapFile: memory error\n");
+	fread(bitmapInfoHeader, sizeof(BITMAPINFOHEADER), 1, fp);
+	fseek(fp, fh.bfOffBits, SEEK_SET);
+	img = new unsigned char[bitmapInfoHeader->biSizeImage];
+	if (!img) {
 		return NULL;
 	}
-
-	// 读入bitmap图像数据
-	fread(bitmapImage, 1, bitmapInfoHeader->biSizeImage, filePtr);
-	// 确认读入成功
-	if (bitmapImage == NULL) {
-		fprintf(stderr, "Error in LoadBitmapFile: memory error\n");
+	fread(img, 1, bitmapInfoHeader->biSizeImage, fp);
+	if (img == NULL) {
 		return NULL;
 	}
-
-	//由于bitmap中保存的格式是BGR，下面交换R和B的值，得到RGB格式
-	for (imageIdx = 0;
-		imageIdx < bitmapInfoHeader->biSizeImage; imageIdx += 3) {
-		tempRGB = bitmapImage[imageIdx];
-		bitmapImage[imageIdx] = bitmapImage[imageIdx + 2];
-		bitmapImage[imageIdx + 2] = tempRGB;
+	for (imgidx = 0;imgidx < bitmapInfoHeader->biSizeImage; imgidx += 3) {
+		tempRGB = img[imgidx];
+		img[imgidx] = img[imgidx + 2];
+		img[imgidx + 2] = tempRGB;
 	}
-	// 关闭bitmap图像文件
-	fclose(filePtr);
-	return bitmapImage;
+	fclose(fp);
+	return img;
 }
-
+//装载纹理
 void texload(int i, char* filename)
 {
-
-	BITMAPINFOHEADER bitmapInfoHeader;                                 // bitmap信息头
-	unsigned char* bitmapData;                                       // 纹理数据
-
+	BITMAPINFOHEADER bitmapInfoHeader;        
+	unsigned char* bitmapData;                   
 	bitmapData = LoadBitmapFile(filename, &bitmapInfoHeader);
 	glBindTexture(GL_TEXTURE_2D, texture[i]);
-	// 指定当前纹理的放大/缩小过滤方式
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	glTexImage2D(GL_TEXTURE_2D,
-		0, 	    //mipmap层次(通常为0，表示最上层) 
-		GL_RGB,	//我们希望该纹理有红、绿、蓝数据
-		bitmapInfoHeader.biWidth, //纹理宽带，必须是n，若有边框+2 
-		bitmapInfoHeader.biHeight, //纹理高度，必须是n，若有边框+2 
-		0, //边框(0=无边框, 1=有边框) 
-		GL_RGB,	//bitmap数据的格式
-		GL_UNSIGNED_BYTE, //每个颜色数据的类型
-		bitmapData);	//bitmap数据指针  
+		0,
+		GL_RGB,	
+		bitmapInfoHeader.biWidth, 
+		bitmapInfoHeader.biHeight, 
+		0,
+		GL_RGB,
+		GL_UNSIGNED_BYTE, 
+		bitmapData);
 }
-enum {
-	snowManHeadDL = 1, snowManBodyDL = 2, snowManHeadDL2 = 3, snowManBodyDL2 = 4,
-};
 GLint wall[10] = { 5,6,7 };
 GLint door[2] = { 27,9 };
 GLint window[4] = { 10,23,24,25 };
@@ -110,41 +83,20 @@ GLfloat r_door[2] = { -180,0 };
 bool r_door_on[2] = { false,true };
 float window_pos[3] = { -0.35,-0.35,-0.35 };
 bool window_pos_on[3] = { false,false,false };
-typedef enum {
-	HEAD = 100, BODY,
-} PickInfo;
-extern bool r1;
-extern bool r2;
-extern bool r3;
-extern Cylinder s1;
-extern ConeCylinder s2;
-extern Cone s3;
-extern Cube s4;
-extern conveyor conv1;
-extern Robot_2 robot21;
-extern Robot_2 robot22;
-extern Robot_1 robot1;
-
-
-GLfloat rotate1 = 45;
-GLfloat rotate2 = 0;
-GLfloat rotate3 = 0;
-
-bool forward2 = true;
-bool forward3 = true;
-
-
+//修改1号门开闭状态
 bool Change_Door_1() {
 	r_door_on[0] = !r_door_on[0];
 	return r_door_on[0];
 }
+//修改2号门开闭状态
 void Change_Door_2() {
 	r_door_on[1] = !r_door_on[1];
 }
+//修改窗开闭状态
 void Change_Window(int i) {
 	window_pos_on[i] = !window_pos_on[i];
 }
-
+//初始化列表
 void InitList() {
 	initTexture();
 	initNurbs();
@@ -155,9 +107,10 @@ void InitList() {
 	initWindowList();
 	initWallList();
 	initClosetList();
-	initGlassList();
+	boardnum = 0;
+	boardcounter = 0;
 }
-
+//初始化纹理
 void initTexture() {
 	glGenTextures(100, texture);
 	texload(0, (char*)"./texture/1.bmp");
@@ -216,7 +169,7 @@ void initTexture() {
 
 	GLint maxTextureUnits = 0;
 	glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &maxTextureUnits);
-
+	//允许多重纹理映射
 	glMultiTexCoord1fARB = (PFNGLMULTITEXCOORD1FARBPROC)wglGetProcAddress("glMultiTexCoord1fARB");
 	glMultiTexCoord2fARB = (PFNGLMULTITEXCOORD2FARBPROC)wglGetProcAddress("glMultiTexCoord2fARB");
 	glMultiTexCoord3fARB = (PFNGLMULTITEXCOORD3FARBPROC)wglGetProcAddress("glMultiTexCoord3fARB");
@@ -224,23 +177,15 @@ void initTexture() {
 	glActiveTextureARB = (PFNGLACTIVETEXTUREARBPROC)wglGetProcAddress("glActiveTextureARB");
 	glClientActiveTextureARB = (PFNGLCLIENTACTIVETEXTUREARBPROC)wglGetProcAddress("glClientActiveTextureARB");
 }
-
-GLint initGlassList() {
-	return 0;
-}
-//调用这个来绘制带纹理的长方体,n表示采用纹理的数量,后面是纹理的序号
-
-void Texture_cube(int n, int i, int j, int k)
-{
+//绘制带纹理的立方体
+void Texture_cube(int n, int i, int j, int k){
 	if (n == 1) {
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, texture[i]);  //选择纹理texture[1]
+		glBindTexture(GL_TEXTURE_2D, texture[i]); 
 		glPushMatrix();
-
-		//。。。
-		//如果是某四边形，还必须设定纹理坐标，如下所示：茶壶不需要此步
 		glBegin(GL_QUADS);
 		glNormal3f(0.0, 0.0, 1.0);
+		//将纹理绑定到各坐标上
 		glTexCoord2i(1, 1); glVertex3i(-1, 1, 1);
 		glTexCoord2i(1, 0); glVertex3i(-1, -1, 1);
 		glTexCoord2i(0, 0); glVertex3i(1, -1, 1);
@@ -279,26 +224,24 @@ void Texture_cube(int n, int i, int j, int k)
 		glEnd();
 		glPopMatrix();
 
-		glDisable(GL_TEXTURE_2D);	//关闭纹理texture[1]
+		glDisable(GL_TEXTURE_2D);	
 	}
 	else {
 		if (n == 3) {
 			glActiveTextureARB(GL_TEXTURE0_ARB);
 			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, texture[i]);  //选择纹理texture[1]
+			glBindTexture(GL_TEXTURE_2D, texture[i]); 
 
 			glActiveTextureARB(GL_TEXTURE1_ARB);
 			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, texture[j]);  //选择纹理texture[2]
+			glBindTexture(GL_TEXTURE_2D, texture[j]); 
 
 			glActiveTextureARB(GL_TEXTURE1_ARB);
 			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, texture[k]);  //选择纹理texture[2]
+			glBindTexture(GL_TEXTURE_2D, texture[k]); 
 
 			glPushMatrix();
 
-			//。。。
-			//如果是某四边形，还必须设定纹理坐标，如下所示：茶壶不需要此步
 			glBegin(GL_QUADS);
 			glNormal3f(0.0, 0.0, 1.0);
 			glMultiTexCoord2fARB(GL_TEXTURE0_ARB, 1, 1);
@@ -372,16 +315,14 @@ void Texture_cube(int n, int i, int j, int k)
 		else {
 			glActiveTextureARB(GL_TEXTURE0_ARB);
 			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, texture[i]);  //选择纹理texture[1]
+			glBindTexture(GL_TEXTURE_2D, texture[i]); 
 
 			glActiveTextureARB(GL_TEXTURE1_ARB);
 			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, texture[j]);  //选择纹理texture[2]
+			glBindTexture(GL_TEXTURE_2D, texture[j]); 
 
 			glPushMatrix();
 
-			//。。。
-			//如果是某四边形，还必须设定纹理坐标，如下所示：茶壶不需要此步
 			glBegin(GL_QUADS);
 			glNormal3f(0.0, 0.0, 1.0);
 			glMultiTexCoord2fARB(GL_TEXTURE0_ARB, 1, 1);
@@ -452,14 +393,10 @@ void Texture_cube(int n, int i, int j, int k)
 			glActiveTextureARB(GL_TEXTURE0_ARB);
 			glDisable(GL_TEXTURE_2D);
 		}
-
-
-
 	}
 
 }
-
-
+//初始化灯泡列表
 void initLightbulbList() {
 	glNewList(bulb[0], GL_COMPILE);
 	GLUquadricObj* sphere = gluNewQuadric();
@@ -468,32 +405,39 @@ void initLightbulbList() {
 	gluQuadricTexture(sphere, GL_TRUE);
 	glPushMatrix();
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);  //选择纹理texture[1]
+	//绑定所需纹理
+	glBindTexture(GL_TEXTURE_2D, 0);  
 	gluSphere(sphere, 0.2, 50, 50);
 	glDisable(GL_TEXTURE_2D);
 	glPopMatrix();
 	glEndList();
 }
-
+//初始化窗户列表
 GLint initWindowList() {
+	//可移动窗玻璃
 	glNewList(window[0], GL_COMPILE);
 	glPushMatrix();
-	glEnable(GL_NORMALIZE); glScalef(0.0206f, 0.45f, 0.4f);
+	glEnable(GL_NORMALIZE); 
+	glScalef(0.0206f, 0.45f, 0.4f);
 	Texture_cube(1, 6 - 1, 0, 0);
 	glPopMatrix();
 	glEndList();
+	//编号1窗体
 	glNewList(window[1], GL_COMPILE);
 	glPushMatrix();
-	glEnable(GL_NORMALIZE); glScalef(0.0205f, 0.5f, 0.8f);
+	glEnable(GL_NORMALIZE); 
+	glScalef(0.0205f, 0.5f, 0.8f);
 	Texture_cube(1, 17, 0, 0);
 	glPopMatrix();
 	glEndList();
+	//编号2窗体
 	glNewList(window[2], GL_COMPILE);
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); glScalef(0.0205f, 0.5f, 0.8f);
 	Texture_cube(1, 18, 0, 0);
 	glPopMatrix();
 	glEndList();
+	//编号3窗体
 	glNewList(window[3], GL_COMPILE);
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); glScalef(0.0205f, 0.5f, 0.8f);
@@ -502,51 +446,58 @@ GLint initWindowList() {
 	glEndList();
 	return 0;
 }
-
-//把基本的门放入列表,有两个方向的门
+//初始化门列表
 GLint initDoorList() {
+	//1号门
 	glNewList(door[0], GL_COMPILE);
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); glScalef(0.0205f, 0.6f, 0.3f);
 	Texture_cube(1, 4 - 1, 0, 0);
 	glPopMatrix();
 	glEndList();
+	//2号门
 	glNewList(door[1], GL_COMPILE);
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); glScalef(0.3f, 0.6f, 0.0205f);
 	Texture_cube(1, 3 - 1, 0, 0);
 	glPopMatrix();
 	glEndList();
+	//1号门外走廊
 	glNewList(outside[0], GL_COMPILE);
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); glScalef(0.0202f, 0.6f, 0.3f);
 	Texture_cube(1, 15, 0, 0);
 	glPopMatrix();
 	glEndList();
+	//2号门外走廊
 	glNewList(outside[1], GL_COMPILE);
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); glScalef(0.3f, 0.6f, 0.0202f);
 	Texture_cube(1, 16, 0, 0);
 	glPopMatrix();
 	glEndList();
+	//1号两侧门框
 	glNewList(door_edge[0], GL_COMPILE);
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); glScalef(0.03f, 0.65f, 0.03f);
 	Texture_cube(1, 13 - 1, 0, 0);
 	glPopMatrix();
 	glEndList();
+	//1号上方门框
 	glNewList(door_edge[1], GL_COMPILE);
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); glScalef(0.03f, 0.03f, 0.31f);
 	Texture_cube(1, 10 - 1, 0, 0);
 	glPopMatrix();
 	glEndList();
+	//2号上方门框
 	glNewList(door_edge[2], GL_COMPILE);
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); glScalef(0.31f, 0.03f, 0.03f);
 	Texture_cube(1, 11 - 1, 0, 0);
 	glPopMatrix();
 	glEndList();
+	//2号两侧门框
 	glNewList(door_edge[3], GL_COMPILE);
 	glPushMatrix();
 	glEnable(GL_NORMALIZE); glScalef(0.03f, 0.65f, 0.03f);
@@ -555,9 +506,9 @@ GLint initDoorList() {
 	glEndList();
 	return 0;
 }
-
-//墙的列表
-GLint initWallList() {//把基本的墙面元放入列表
+//初始化墙列表
+GLint initWallList() {
+	//把基本的墙面元放入列表
 	static GLfloat wall_mat0[] =
 	{ 1.f, .5f, 0.f, 1.f };
 	static GLfloat wall_mat1[] =
@@ -613,16 +564,15 @@ GLint initWallList() {//把基本的墙面元放入列表
 	glEndList();
 	return wall[0];
 }
-
-//柜子的列表
+//初始化柜子列表
 GLint initClosetList() {
-	//这个是柜子的正面
+	//柜子的正面
 	glNewList(closet[0], GL_COMPILE);
+	//设置光照
 	GLfloat closet_mat_specular[] = { 0.90, 0.90, 0.90, 1.0 };	         // 镜面反射颜色
 	GLfloat closet_mat_shininess[] = { 50.0 };							// 镜面反射参数
 	GLfloat closet_lmodel_ambient[] = { 0.85, 0.85, 0.85, 1.0 };		// 散射颜色
 	GLfloat closet_lmodel_emmision[] = { 0.0, 0.0, 0.0, 1.0 };
-
 	glMaterialfv(GL_FRONT, GL_SPECULAR, closet_mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, closet_mat_shininess);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, closet_lmodel_ambient);
@@ -630,7 +580,7 @@ GLint initClosetList() {
 	glEnable(GL_NORMALIZE); glScalef(0.02f, 0.8f, 0.6f);
 	Texture_cube(1, 8 - 1, 0, 0);
 	glEndList();
-	//这个是柜子的侧面
+	//柜子的侧面
 	glNewList(closet[1], GL_COMPILE);
 
 	glMaterialfv(GL_FRONT, GL_SPECULAR, closet_mat_specular);
@@ -651,9 +601,20 @@ GLint initClosetList() {
 	glEndList();
 	return 0;
 }
-
-
-
+//初始化桌面列表
+void initDesk() {
+	GLfloat desk_mat_specular[] = { 0.92, 0.65, 0.35, 1.0 };	         // 镜面反射颜色
+	GLfloat desk_mat_shininess[] = { 50.0 };							// 镜面反射参数
+	GLfloat desk_lmodel_ambient[] = { 0.84, 0.55, 0.25, 1.0 };		// 散射颜色
+	GLfloat desk_lmodel_emmision[] = { 0.0, 0.0, 0.0, 1.0 };
+	glNewList(desk[0], GL_COMPILE);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, desk_mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, desk_mat_shininess);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, desk_lmodel_ambient);
+	glMaterialfv(GL_FRONT, GL_EMISSION, desk_lmodel_emmision);
+	Texture_cube(1, 2 - 1, 0, 0);
+	glEndList();
+}
 
 void draw() {
 	drawfans();
@@ -669,19 +630,6 @@ void draw() {
 	glTranslatef(0, 0.099, 0);
 }
 
-void initDesk() {
-	GLfloat desk_mat_specular[] = { 0.92, 0.65, 0.35, 1.0 };	         // 镜面反射颜色
-	GLfloat desk_mat_shininess[] = { 50.0 };							// 镜面反射参数
-	GLfloat desk_lmodel_ambient[] = { 0.84, 0.55, 0.25, 1.0 };		// 散射颜色
-	GLfloat desk_lmodel_emmision[] = { 0.0, 0.0, 0.0, 1.0 };
-	glNewList(desk[0], GL_COMPILE);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, desk_mat_specular);
-	glMaterialfv(GL_FRONT, GL_SHININESS, desk_mat_shininess);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, desk_lmodel_ambient);
-	glMaterialfv(GL_FRONT, GL_EMISSION, desk_lmodel_emmision);
-	Texture_cube(1, 2 - 1, 0, 0);
-	glEndList();
-}
 
 void drawoneDesk() {
 	glPushMatrix();
@@ -757,17 +705,17 @@ void drawoneboard() {
 	glTranslatef(0, 0.55, -0.06);
 	glEnable(GL_NORMALIZE); 
 	glScalef(0.48f, 0.24f, 0.001f);
-	if(!boardmode)Texture_cube(1, 13, 0, 0);
+	if(boardmode)Texture_cube(1, 13, 0, 0);
 	else {
 		Texture_cube(1, 28 + boardnum, 0, 0);
 		boardcounter += 1;
-		if (boardcounter == 100) {
+		if (boardcounter == 50) {
 			boardnum += 1;
 			boardcounter = 0;
 		}
 		if (boardnum == 4) {
 			boardnum = 0;
-			boardmode = false;
+			boardmode = true;
 		}
 	}
 	glPopMatrix();
