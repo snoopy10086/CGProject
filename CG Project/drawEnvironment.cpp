@@ -132,7 +132,7 @@ void initTexture() {
 	texload(16, (char*)"./texture/16.bmp");
 	texload(17, (char*)"./texture/17.bmp");
 	texload(18, (char*)"./texture/18.bmp");
-	texload(19, (char*)"./texture/19.bmp");
+	texload(19, (char*)"./texture/box11.bmp");
 	texload(20, (char*)"./texture/c1.bmp");
 	texload(21, (char*)"./texture/m1.bmp");
 	texload(22, (char*)"./texture/m2.bmp");
@@ -163,7 +163,6 @@ void initTexture() {
 	texload(47, (char*)"./texture/box00.bmp");
 	texload(48, (char*)"./texture/box10.bmp");
 	texload(49, (char*)"./texture/box01.bmp");
-	texload(50, (char*)"./texture/box11.bmp");
 	const GLubyte* extensions = glGetString(GL_EXTENSIONS);
 	bool multiTexturingSupported = strstr((const char*)extensions, "GL_ARB_multitexture ") != NULL;
 

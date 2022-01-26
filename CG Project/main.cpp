@@ -247,8 +247,7 @@ void InitialThings() {
 	LiWuHePingMian* l3 = new LiWuHePingMian(cx1, 0.2, cz2, 4);
 
 	//闲置的shape，展示我们实现了这些立方体=.=
-	Cylinder* s1 = new Cylinder(3, 0, 4);
-	s1->scaling(0.5, 0.125, 0.5);
+	Cylinder* s1 = new Cylinder(1.5, 0, 2.5);
 	ConeCylinder* s2 = new ConeCylinder(3, 0, 2.5);
 	Cone* s3 = new Cone(2, 0, 1);
 	Cube* s4 = new Cube(3, 0, 1);
@@ -583,6 +582,7 @@ void key(unsigned char k, int x, int y)
 	case 'p':
 	{
 		TakePicture();
+		break;
 	}
 	case '0':	case '1':	case '2':	case '3':	case '4':	case '5':	case '6':	case '7':
 	{

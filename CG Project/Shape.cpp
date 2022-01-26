@@ -711,12 +711,15 @@ LiWuHe::LiWuHe(float globalX, float globalY, float globalZ) :Cube(globalX, globa
 {
 	this->Type = 23;//23 or 24
 	this->Texture = 44 + this->Type - 20;
+	this->Texture2 = 44 + this->Type - 20 + 2;
 	this->scaling(0.3, 0.3, 0.3);
 }
 LiWuHe::LiWuHe(float globalX, float globalY, float globalZ, int Type) : Cube(globalX, globalY, globalZ)
 {
 	this->Type = Type;
 	this->Texture = 44 + this->Type - 20;
+	if(Type == 23)this->Texture2 = 49;
+	else this->Texture2 = 19;
 	this->scaling(0.3, 0.3, 0.3);
 }
 
@@ -746,7 +749,7 @@ void LiWuHe::Draw()//礼物盒
 	texture_LiWuHe(this->Texture);//该函数画出来的是一个原点在中心，长宽高为2的立方体
 	glTranslatef(0, 1.02, 0);
 	glScalef(1, 0.02, 1);
-	texture_LiWuHe(this->Texture + 2);//该函数画出来的是一个原点在中心，长宽高为2的立方体
+	Texture_cube(1,this->Texture2,0,0);//该函数画出来的是一个原点在中心，长宽高为2的立方体
 	glPopMatrix();
 }
 
