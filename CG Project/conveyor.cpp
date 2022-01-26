@@ -11,7 +11,7 @@ void Texture_cube(int n, int i, int j, int k);
 //K=3.1415926/180,用于角度制和弧度制的转换，c++的sin cos函数用的是弧度制
 #define K 0.0174532925
 
-conveyor::conveyor(float PositionX, float PositionY, float PositionZ, float MotionX, float MotionY)
+conveyor::conveyor(float PositionX, float PositionY, float PositionZ, float MotionX, float MotionZ)
 {
 	this->PositionX = PositionX;
 	this->PositionY = PositionY;

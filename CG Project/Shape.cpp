@@ -60,28 +60,28 @@ Prism::Prism(float globalX, float globalY, float globalZ)
 }
 void Prism::Draw()
 {	
+	//光照和纹理处理
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texture[this->Texture]);
 	GLfloat mat_specular[] = { 1., 1., 1., 1.0 };	         // 镜面反射颜色
 	GLfloat mat_shininess[] = { 50.0 };							// 镜面反射参数
 	GLfloat lmodel_ambient[] = { 1., 1., 1., 1.0 };		// 散射颜色
 	GLfloat lmodel_emmision[] = { 0.0, 0.0, 0.0, 1.0 };
-
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, lmodel_ambient);
 	glMaterialfv(GL_FRONT, GL_EMISSION, lmodel_emmision);
-	glPushMatrix();
-	
+	//平移旋转缩放
+	glPushMatrix();	
 	glEnable(GL_NORMALIZE); 
 	glTranslatef(this->globalX, this->globalY, this->globalZ);
-
 	glScalef(0.2, 0.2, 0.2);//这是为了默认画出来的shape大小不要太夸张
 	glScalef(this->scaleX, this->scaleY, this->scaleZ);
 	glRotatef(this->rotateX, 1, 0, 0);
 	glRotatef(this->rotateY, 0, 1, 0);
 	glRotatef(this->rotateZ, 0, 0, 1);
-	static GLfloat vtx[12][3] =  //棱柱顶点坐标
+	//定义棱柱顶点坐标
+	static GLfloat vtx[12][3] =  
 	{
 		//0-5下层，
 		{-0.5f,0.0f,0.0f},//0
@@ -157,8 +157,7 @@ void Prism::Draw()
 	glTexCoord2i(0, 0.5); glVertex3fv(vtx[11]);
 	glTexCoord2i(0.25, 1); glVertex3fv(vtx[10]);
 	glEnd();
-	
-	//Texture_cube(1, this->Texture, 0, 0);
+
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 }

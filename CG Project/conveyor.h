@@ -14,8 +14,7 @@ public:
 	float MotionX=0;
 	float MotionZ = 0;
 	int count = 0;
-	float move = 0;///不需要
-	conveyor(float PositionX, float PositionY, float PositionZ, float MotionX, float MotionY);
+	conveyor(float PositionX, float PositionY, float PositionZ, float MotionX, float MotionZ);
 	void rotate(double dx, double dy, double dz);  // 旋转
 	
 protected:

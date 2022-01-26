@@ -101,6 +101,7 @@ public:
 	LiWuHePingMian(float globalX, float globalY, float globalZ);
 	LiWuHePingMian(float globalX, float globalY, float globalZ, int Type);
 };
+
 class LiWuHe : public Cube
 {
 public:

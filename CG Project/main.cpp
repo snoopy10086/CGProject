@@ -193,7 +193,7 @@ void InitialThings() {
 	LiWuHePingMian* l2 = new LiWuHePingMian(cx1 + 0.5, 0.2, cz2, 4);	//礼物盒皮4
 	LiWuHePingMian* l3 = new LiWuHePingMian(cx1 + 0.2, 0.2, cz2, 4);
 	//闲置的shape，展示我们实现了这些立方体=.=
-	Cylinder* s1 = new Cylinder(3, 0, 4);
+	Cylinder* s1 = new Cylinder(2, 0, 2.5);
 	s1->scaling(0.5, 0.125, 0.5);
 	ConeCylinder* s2 = new ConeCylinder(3, 0, 2.5);
 	Cone* s3 = new Cone(2, 0, 1);
@@ -438,7 +438,7 @@ void key(unsigned char k, int x, int y)
 					&& (abs((*Siter)->getGlobalZ() - 6) <= 0.2)
 					&& ((*Siter)->RetType() == 23 || (*Siter)->RetType() == 24))
 				{
-					cout << "siterX:"<<(*Siter)->getGlobalX() << endl;
+					//cout << "siterX:"<<(*Siter)->getGlobalX() << endl;
 					Siter = Shapes.erase(Siter);
 				}
 				else Siter++;
