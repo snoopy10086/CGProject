@@ -1,6 +1,6 @@
 /* 
- *@author: Zhang Shenke
- *@date: 2022/1/27 
+ *@author: Zhang Shenke，Bao Dezheng
+ *@date: 2022/1/27  
  *@description: 绘制环境的相应函数
  */
 #include "drawEnvironment.h"
