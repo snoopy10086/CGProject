@@ -16,24 +16,24 @@ using namespace std;
 #define PI 3.1415926535
 #define BMP_Header_Length 54
 #define BUFSIZE 512
-static int du = 90, OriX = -1, OriY = -1, Px = -1, Py = -1;   //duÊÇÊÓµãºÍxÖáµÄ¼Ğ½Ç
-static float r = 8, h = 0.0;   //rÊÇÊÓµãÈÆyÖáµÄ°ë¾¶£¬hÊÇÊÓµã¸ß¶È¼´ÔÚyÖáÉÏµÄ×ø±ê
-static float c = PI / 180.0;    //»¡¶ÈºÍ½Ç¶È×ª»»²ÎÊı
-bool is_visitor = false;//¿ªÆôÅö×²¼ì²â
+static int du = 90, OriX = -1, OriY = -1, Px = -1, Py = -1;   //duæ˜¯è§†ç‚¹å’Œxè½´çš„å¤¹è§’
+static float r = 8, h = 0.0;   //ræ˜¯è§†ç‚¹ç»•yè½´çš„åŠå¾„ï¼Œhæ˜¯è§†ç‚¹é«˜åº¦å³åœ¨yè½´ä¸Šçš„åæ ‡
+static float c = PI / 180.0;    //å¼§åº¦å’Œè§’åº¦è½¬æ¢å‚æ•°
+bool is_visitor = false;//å¼€å¯ç¢°æ’æ£€æµ‹
 float eye[] = { 4,1,4 };//{ 6, 1, 6 }
 float origin_eye[3];
 
 float d[] = { 0,0,0 };
 
-float screenrate_x = -PI / 2, screenrate_y = 0;//Êó±êÆÁÄ»×ø±êÏà¶ÔÓÚÖĞĞÄµãÒÆ¶¯µÄ±ÈÀı
+float screenrate_x = -PI / 2, screenrate_y = 0;//é¼ æ ‡å±å¹•åæ ‡ç›¸å¯¹äºä¸­å¿ƒç‚¹ç§»åŠ¨çš„æ¯”ä¾‹
 float step = 0.05;
 int wWidth = 1536, wHeight = 846;
 //int wWidth = 846, wHeight = 846;
-int wPosW = 0;// Ô­Îª£¨100£¬100£©£¬ÕâÑù·½±ãµ÷ÊÔµÄÊ±ºòÄÜ¿´µ½¿ØÖÆÌ¨Êä³ö:)
+int wPosW = 0;// åŸä¸ºï¼ˆ100ï¼Œ100ï¼‰ï¼Œè¿™æ ·æ–¹ä¾¿è°ƒè¯•çš„æ—¶å€™èƒ½çœ‹åˆ°æ§åˆ¶å°è¾“å‡º:)
 int wPosH = 0;
 int centerpoint_x = wWidth / 2, centerpoint_y = wHeight / 2;
 static float cons = 89 * c;
-// ¹âÕÕÈ«¾Ö±äÁ¿
+// å…‰ç…§å…¨å±€å˜é‡
 GLfloat global_light_color[][4] = { { 1., 0.46, 0.14, 1.0 }, { 1., 0.78, 0.62, 1.0 }, { 1., 1., 1., 1.0 }, { 0.76, 0.81, 1., 1.0 }, { 0.51, 0.65, 1., 1.0 } };
 int light_switch = 2;
 GLfloat global_ambient[] = { 0., 0., 0., 1.0 };
@@ -41,7 +41,7 @@ GLfloat global_diffuse[] = { 1., 1., 1., 1.0 };
 GLfloat global_specular[] = { 1., 1., 1., 1.0 };
 bool global_light_enable[] = { true, false, false, true, false, false, false, false };
 
-// ¶¨Òå¸÷ÖÖÎïÌå
+// å®šä¹‰å„ç§ç‰©ä½“
 void renderScene(void);
 void reshape(int w, int h);
 void set_eye();
@@ -79,7 +79,7 @@ vector<Prism> Prisms;
 typedef enum {
 	__robot = 100, __shape, __conveyor, NONE
 }TYPE;
-GLuint selectBuf[BUFSIZE]; // ÉèÖÃÒ»¸öÑ¡Ôñ»º³åÇø
+GLuint selectBuf[BUFSIZE]; // è®¾ç½®ä¸€ä¸ªé€‰æ‹©ç¼“å†²åŒº
 TYPE s_type;
 int s_id;
 GLuint v0, v1, f, p0, p1;
@@ -203,10 +203,10 @@ void AddMotionToShapes(conveyor* Conv) {
 	}
 }
 
-//´«ËÍ´øºÍÔÂ±ıÔ­ÁÏÎ»ÖÃ²ÎÊı
+//ä¼ é€å¸¦å’Œæœˆé¥¼åŸæ–™ä½ç½®å‚æ•°
 float dis = 0.6,cx1 = 3, cx2 = cx1+dis+2, cz1 = 4, cz2 = cz1+dis+0.4;
 void InitialThings() {
-	//»úĞµ±Û
+	//æœºæ¢°è‡‚
 	Robot_2* robot21 = new Robot_2(cx1+1+dis/2+1, 0, (cz1+cz2)/2);    
 	Robot_2* robot22 = new Robot_2(cx1 + 1 + dis / 2, 0, cz1-0.5);
 
@@ -221,7 +221,7 @@ void InitialThings() {
 	Robots.push_back(robot23);
 	Robots.push_back(robot24);
 	Robots.push_back(robot1);
-	//´«ËÍ´ø
+	//ä¼ é€å¸¦
 	conveyor* conv1 = new conveyor(cx2, 0, cz2, 1, 0);
 	conveyor* conv2 = new conveyor(cx2, 0, cz1, 1, 0);
 	conveyor* conv3 = new conveyor(cx1, 0, cz2, 1, 0);
@@ -235,19 +235,19 @@ void InitialThings() {
 	Conveyors.push_back(conv4);
 
 	Conveyors.push_back(conv5);
-	//ÔÂ±ıÆ¤¡¢ÏÚÁÏ¡¢ÀñÎïºĞ
-	Sphere* b1 = new Sphere(cx2+0.8, 0.2, cz2,0);//ÏÚÁÏ0£¬·Åµ½´«ËÍ´ø1ÉÏ
-	Sphere* b2 = new Sphere(cx2 + 0.6, 0.2, cz2,1);//ÏÚÁÏ1£¬·Åµ½´«ËÍ´øÉÏ4.70.25.2
-	Sphere* b3 = new Sphere(cx2 + 0.4, 0.2, cz2, 2);//ÏÚÁÏ2£¬·Åµ½´«ËÍ´øÉÏ4.70.25.2
-	YueBingPi* c4 = new YueBingPi(cx2 + 0.8, 0.2, cz1);//ÔÂ±ıÆ¤-2£¬·Åµ½´«ËÍ´ø2ÉÏ
-	YueBingPi* c5 = new YueBingPi(cx2 + 0.6, 0.2, cz1);//ÔÂ±ıÆ¤-2£¬·Åµ½´«ËÍ´ø2ÉÏ
-	YueBingPi* c6 = new YueBingPi(cx2 + 0.4, 0.2, cz1);//ÔÂ±ıÆ¤-2£¬·Åµ½´«ËÍ´ø2ÉÏ
-	LiWuHePingMian* l1 = new LiWuHePingMian(cx1 + 0.8, 0.2, cz2, 3);	//ÀñÎïºĞÆ¤3,´«ËÍ´ø3£º2.98, 0, 4.6
-	LiWuHePingMian* l2 = new LiWuHePingMian(cx1 + 0.4, 0.2, cz2, 4);	//ÀñÎïºĞÆ¤4
+	//æœˆé¥¼çš®ã€é¦…æ–™ã€ç¤¼ç‰©ç›’
+	Sphere* b1 = new Sphere(cx2+0.8, 0.2, cz2,0);//é¦…æ–™0ï¼Œæ”¾åˆ°ä¼ é€å¸¦1ä¸Š
+	Sphere* b2 = new Sphere(cx2 + 0.6, 0.2, cz2,1);//é¦…æ–™1ï¼Œæ”¾åˆ°ä¼ é€å¸¦ä¸Š4.70.25.2
+	Sphere* b3 = new Sphere(cx2 + 0.4, 0.2, cz2, 2);//é¦…æ–™2ï¼Œæ”¾åˆ°ä¼ é€å¸¦ä¸Š4.70.25.2
+	YueBingPi* c4 = new YueBingPi(cx2 + 0.8, 0.2, cz1);//æœˆé¥¼çš®-2ï¼Œæ”¾åˆ°ä¼ é€å¸¦2ä¸Š
+	YueBingPi* c5 = new YueBingPi(cx2 + 0.6, 0.2, cz1);//æœˆé¥¼çš®-2ï¼Œæ”¾åˆ°ä¼ é€å¸¦2ä¸Š
+	YueBingPi* c6 = new YueBingPi(cx2 + 0.4, 0.2, cz1);//æœˆé¥¼çš®-2ï¼Œæ”¾åˆ°ä¼ é€å¸¦2ä¸Š
+	LiWuHePingMian* l1 = new LiWuHePingMian(cx1 + 0.8, 0.2, cz2, 3);	//ç¤¼ç‰©ç›’çš®3,ä¼ é€å¸¦3ï¼š2.98, 0, 4.6
+	LiWuHePingMian* l2 = new LiWuHePingMian(cx1 + 0.4, 0.2, cz2, 4);	//ç¤¼ç‰©ç›’çš®4
 	LiWuHePingMian* l3 = new LiWuHePingMian(cx1, 0.2, cz2, 4);
 
-	//ÏĞÖÃµÄshape£¬Õ¹Ê¾ÎÒÃÇÊµÏÖÁËÕâĞ©Á¢·½Ìå=.=
-	Cylinder* s1 = new Cylinder(1.5, 0, 2.5);
+	//é—²ç½®çš„shapeï¼Œå±•ç¤ºæˆ‘ä»¬å®ç°äº†è¿™äº›ç«‹æ–¹ä½“=.=
+	Cylinder* s1 = new Cylinder(2, 0, 2.5);
 	ConeCylinder* s2 = new ConeCylinder(3, 0, 2.5);
 	Cone* s3 = new Cone(2, 0, 1);
 	Cube* s4 = new Cube(3, 0, 1);
@@ -392,7 +392,7 @@ void TakePicture(void)
 
 	char FileName[50] = "picture//CGProject_";
 	strcat(strcat(FileName, NowTime), ".bmp");
-	SaveFile = fopen(FileName, "wb"); //Ö»Ğ´
+	SaveFile = fopen(FileName, "wb"); //åªå†™
 	if (SaveFile == 0)
 		exit(0);
 
@@ -409,21 +409,91 @@ void TakePicture(void)
 	glReadPixels(0, 0, wWidth, wHeight,
 		GL_BGR_EXT, GL_UNSIGNED_BYTE, PixelData);
 
-	// Ğ´ÈëÏñËØÊı¾İ
+	// å†™å…¥åƒç´ æ•°æ®
 	fseek(SaveFile, 0, SEEK_END);
 	fwrite(PixelData, DataLength, 1, SaveFile);
 
-	// ÊÍ·ÅÄÚ´æºÍ¹Ø±ÕÎÄ¼ş
+	// é‡Šæ”¾å†…å­˜å’Œå…³é—­æ–‡ä»¶
 	fclose(DummyFile);
 	fclose(SaveFile);
 	free(PixelData);
 
 }
-
+bool IsYueBing = false;
+int Shape_Type = 0;
+int YueBing_Type = 0;
 void key(unsigned char k, int x, int y)
 {
+	printf("%d %c\n", (int)k,k);
 	switch (k)
 	{
+		// åˆ é™¤åˆ›å»ºçš„ç‰©ä½“
+	case 127:case 8:
+		if (CurrentChooseShape != NULL)
+		{
+			CurrentChooseShape->transfer(0, 0, 20);
+			CurrentChooseShape = NULL;
+		}
+		break;
+		// åˆ‡æ¢åˆ›å»ºçš„ç‰©ä½“å½¢çŠ¶
+	case 'h':
+		IsYueBing = !IsYueBing;
+		break;
+	case 'j':
+		if(IsYueBing) (YueBing_Type < 5) ? YueBing_Type += 1 : YueBing_Type = 0;
+		else (Shape_Type < 5) ? Shape_Type += 1 : Shape_Type = 0;
+		break;
+		// ç¼©å°é€‰ä¸­ç‰©ä½“ -
+	case 45:
+		if (CurrentChooseShape != NULL)
+		{
+			CurrentChooseShape->scaling(.5, .5, .5);
+		}
+		break;
+		// æ”¾å¤§é€‰ä¸­ç‰©ä½“ =
+	case 61:
+		if (CurrentChooseShape != NULL)
+		{
+			CurrentChooseShape->scaling(2, 2, 2);
+		}
+		break;
+		// ç§»åŠ¨é€‰ä¸­ç‰©ä½“çš„ä½ç½®AWSDZC
+	case 'A':
+		if (CurrentChooseShape != NULL)
+		{
+			CurrentChooseShape->transfer(-0.02, 0, 0);
+		}
+		break;
+	case 'D':
+		if (CurrentChooseShape != NULL)
+		{
+			CurrentChooseShape->transfer(0.02, 0, 0);
+		}
+		break;
+	case 'Z':
+		if (CurrentChooseShape != NULL)
+		{
+			CurrentChooseShape->transfer(0, 0.02, 0);
+		}
+		break;
+	case 'C':
+		if (CurrentChooseShape != NULL)
+		{
+			CurrentChooseShape->transfer(0, -0.02, 0);
+		}
+		break;
+	case 'S':
+		if (CurrentChooseShape != NULL)
+		{
+			CurrentChooseShape->transfer(0, 0, 0.02);
+		}
+		break;
+	case 'W':
+		if (CurrentChooseShape != NULL)
+		{
+			CurrentChooseShape->transfer(0, 0, -0.02);
+		}
+		break;
 	case 27:
 	case 'q': {exit(0); break; }
 	case 'a': {
@@ -468,13 +538,13 @@ void key(unsigned char k, int x, int y)
 		modify_eye();
 		break;
 	}
-	case '9':
+	case 'i':
 	{
 		((Robot_2*)Robots[0])->Check = true;
 		break;
 
 	} 
-	case 'i':
+	case 'o':
 	{
 		((Robot_2*)Robots[1])->Check = true;
 		break;
@@ -484,17 +554,9 @@ void key(unsigned char k, int x, int y)
 		((Robot_2*)Robots[2])->Check = true;
 		break;
 	}
-	case 'm':
+	case 'l':
 	{
 		((Robot_2*)Robots[3])->Check = true;
-		break;
-	}
-	case 'y':
-	{
-		if (CurrentChooseShape != NULL)
-		{
-			CurrentChooseShape->scaling(2, 2, 2);
-		}
 		break;
 	}
 	case 'x': {
@@ -522,13 +584,13 @@ void key(unsigned char k, int x, int y)
 		AddMotionToShapes(Conveyors[2]);
 		break;
 	}
-	case 'h':
+	case 'y':
 	{
 		Conveyors[3]->count = (Conveyors[3]->count + 1) % 5;
 		AddMotionToShapes(Conveyors[3]);
 		break;
 	}
-	case 'j':
+	case 'u':
 	{
 		Conveyors[4]->count = (Conveyors[4]->count + 1) % 5;
 		AddMotionToShapes(Conveyors[4]);
@@ -537,7 +599,7 @@ void key(unsigned char k, int x, int y)
 	case 'f':
 	{
 		bool flag=Change_Door_1();
-		//Èç¹û´«ËÍ´ø5µÄÄ©¶ËÓĞÀñºĞ£¬ÔòÏûÊ§£¬±íÊ¾ÀñºĞ±»ËÍ³ö¹¤³§
+		//å¦‚æœä¼ é€å¸¦5çš„æœ«ç«¯æœ‰ç¤¼ç›’ï¼Œåˆ™æ¶ˆå¤±ï¼Œè¡¨ç¤ºç¤¼ç›’è¢«é€å‡ºå·¥å‚
 		if (flag) {
 			vector<Shape*>::iterator Siter;		
 			for (Siter = Shapes.begin(); Siter != Shapes.end(); ) {
@@ -574,7 +636,7 @@ void key(unsigned char k, int x, int y)
 		Change_Window(2);
 		break;
 	}
-	case 'u': 
+	case '0': 
 	{
 		Change_Rust();
 		break;
@@ -584,12 +646,12 @@ void key(unsigned char k, int x, int y)
 		TakePicture();
 		break;
 	}
-	case '0':	case '1':	case '2':	case '3':	case '4':	case '5':	case '6':	case '7':
+	case '1':	case '2':	case '3':	case '4':	case '5':	case '6':	case '7':case '8':
 	{
-		global_light_enable[k - '0'] = !global_light_enable[k - '0'];
+		global_light_enable[k - 1 - '0'] = !global_light_enable[k - 1 - '0'];
 		break;
 	}
-	case '8':
+	case '9':
 	{
 		light_switch = (light_switch + 1) % 5;
 		for (int i = 0; i < 3; i++) {
@@ -601,7 +663,7 @@ void key(unsigned char k, int x, int y)
 }
 
 void setLight() {
-	//µã¹âÔ´ 0
+	//ç‚¹å…‰æº 0
 	GLfloat light_pos0[] = { 1.6, 1.0, 1.6, 1 };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_pos0);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, global_ambient);
@@ -611,7 +673,7 @@ void setLight() {
 	if (global_light_enable[0]) glEnable(GL_LIGHT0);
 	else glDisable(GL_LIGHT0);
 
-	//µã¹âÔ´ 1
+	//ç‚¹å…‰æº 1
 	GLfloat light_pos1[] = { 3.2, 1., 3.2, 1 };
 	glLightfv(GL_LIGHT1, GL_POSITION, light_pos1);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, global_ambient);
@@ -621,7 +683,7 @@ void setLight() {
 	if (global_light_enable[1]) glEnable(GL_LIGHT1);
 	else glDisable(GL_LIGHT1);
 
-	//µã¹âÔ´ 2
+	//ç‚¹å…‰æº 2
 	GLfloat light_pos2[] = { 4.8, 1., 4.8, 1 };
 	glLightfv(GL_LIGHT2, GL_POSITION, light_pos2);
 	glLightfv(GL_LIGHT2, GL_AMBIENT, global_ambient);
@@ -631,7 +693,7 @@ void setLight() {
 	if (global_light_enable[2]) glEnable(GL_LIGHT2);
 	else glDisable(GL_LIGHT2);
 
-	//µã¹âÔ´ 3
+	//ç‚¹å…‰æº 3
 	GLfloat light_pos3[] = { 6.4, 1., 6.4, 1 };
 	glLightfv(GL_LIGHT3, GL_POSITION, light_pos3);
 	glLightfv(GL_LIGHT3, GL_AMBIENT, global_ambient);
@@ -641,7 +703,7 @@ void setLight() {
 	if (global_light_enable[3]) glEnable(GL_LIGHT3);
 	else glDisable(GL_LIGHT3);
 
-	// µã¹âÔ´ 4
+	// ç‚¹å…‰æº 4
 	GLfloat light_pos4[] = { 1.6, 1., 6.4, 1 };
 	glLightfv(GL_LIGHT4, GL_POSITION, light_pos4);
 	glLightfv(GL_LIGHT4, GL_AMBIENT, global_ambient);
@@ -650,7 +712,7 @@ void setLight() {
 	if (global_light_enable[4]) glEnable(GL_LIGHT4);
 	else glDisable(GL_LIGHT4);
 
-	//µã¹âÔ´ 5
+	//ç‚¹å…‰æº 5
 	GLfloat light_pos5[] = { 3.2, 1., 4.8, 1 };
 	glLightfv(GL_LIGHT5, GL_POSITION, light_pos5);
 	glLightfv(GL_LIGHT5, GL_AMBIENT, global_ambient);
@@ -659,7 +721,7 @@ void setLight() {
 	if (global_light_enable[5]) glEnable(GL_LIGHT5);
 	else glDisable(GL_LIGHT5);
 
-	//µã¹âÔ´ 6
+	//ç‚¹å…‰æº 6
 	GLfloat light_pos6[] = { 4.8, 1., 3.2, 1 };
 	glLightfv(GL_LIGHT6, GL_POSITION, light_pos6);
 	glLightfv(GL_LIGHT6, GL_AMBIENT, global_ambient);
@@ -668,7 +730,7 @@ void setLight() {
 	if (global_light_enable[6]) glEnable(GL_LIGHT6);
 	else glDisable(GL_LIGHT6);
 
-	//µã¹âÔ´ 7
+	//ç‚¹å…‰æº 7
 	GLfloat light_pos7[] = { 6.4, 1., 1.6, 1 };
 	glLightfv(GL_LIGHT7, GL_POSITION, light_pos7);
 	glLightfv(GL_LIGHT7, GL_AMBIENT, global_ambient);
@@ -685,7 +747,7 @@ void renderScene(void)
 	glLoadIdentity();
 	gluLookAt(eye[0], eye[1], eye[2],
 		eye[0] + r * cos(screenrate_x) * cos(screenrate_y), eye[1] + r * sin(screenrate_y), eye[2] + r * cos(screenrate_y) * sin(screenrate_x),
-		0, 1, 0);				// ³¡¾°£¨0£¬0£¬0£©µÄÊÓµãÖĞĞÄ (0,5,50)£¬YÖáÏòÉÏ
+		0, 1, 0);				// åœºæ™¯ï¼ˆ0ï¼Œ0ï¼Œ0ï¼‰çš„è§†ç‚¹ä¸­å¿ƒ (0,5,50)ï¼ŒYè½´å‘ä¸Š
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	mooncakeCollision();
@@ -693,23 +755,23 @@ void renderScene(void)
 	drawConveyors();
 	drawShapes();
 	drawRobots();
-	glutSwapBuffers();                                      //½»»»Á½¸ö»º³åÇøÖ¸Õë
+	glutSwapBuffers();                                      //äº¤æ¢ä¸¤ä¸ªç¼“å†²åŒºæŒ‡é’ˆ
 }
 void startPicking(int cursorX, int cursorY)
 {
-	GLint viewport[4]; //ÊÓ¿Ú´óĞ¡£¬ËÄ¸öÖµ°´Ë³ĞòÎªx, y, width, height
+	GLint viewport[4]; //è§†å£å¤§å°ï¼Œå››ä¸ªå€¼æŒ‰é¡ºåºä¸ºx, y, width, height
 
-	glRenderMode(GL_SELECT); //Ê°È¡Ç°£¬ĞèÒª½øÈëÑ¡ÔñÄ£Ê½
+	glRenderMode(GL_SELECT); //æ‹¾å–å‰ï¼Œéœ€è¦è¿›å…¥é€‰æ‹©æ¨¡å¼
 
-	glMatrixMode(GL_PROJECTION); //Ñ¡ÔñÍ¶Ó°¾ØÕó¡£ÅĞ¶ÏÊÇÒÔÍ¶Ó°µÄ·½Ê½½øĞĞµÄ¡£
-	glPushMatrix(); //Ïò×´Ì¬»úÑ¹ÈëÍ¶Ó°¾ØÕó
-	glLoadIdentity(); //ÖØÖÃ¾ØÕó£¬ÎªÁË¹¹½¨Ê°È¡¾ØÕó
+	glMatrixMode(GL_PROJECTION); //é€‰æ‹©æŠ•å½±çŸ©é˜µã€‚åˆ¤æ–­æ˜¯ä»¥æŠ•å½±çš„æ–¹å¼è¿›è¡Œçš„ã€‚
+	glPushMatrix(); //å‘çŠ¶æ€æœºå‹å…¥æŠ•å½±çŸ©é˜µ
+	glLoadIdentity(); //é‡ç½®çŸ©é˜µï¼Œä¸ºäº†æ„å»ºæ‹¾å–çŸ©é˜µ
 
-	glGetIntegerv(GL_VIEWPORT, viewport);//·µ»Øµ±Ç°ÊÓ¿ÚµÄÊıÖµ£¬²¢´æÈëviewportÊı×éÖĞ
-	gluPickMatrix(cursorX, viewport[3] - cursorY, 0.5, 0.5, viewport); //½¨Á¢Ê°È¡¾ØÕó£¬Ç°Á½¸ö²ÎÊıÎª½«´°¿Ú×ø±êcursor×ª»¯ÎªOpenGL×ø±ê£¬µÚÈı¡¢ËÄ¸ö²ÎÊıÊÇÑ¡Ôñ¿òµÄ´óĞ¡£¬×îºóÒ»¸ö¾ÍÊÇÊÓ¿ÚµÄÎ»ÖÃºÍ´óĞ¡
+	glGetIntegerv(GL_VIEWPORT, viewport);//è¿”å›å½“å‰è§†å£çš„æ•°å€¼ï¼Œå¹¶å­˜å…¥viewportæ•°ç»„ä¸­
+	gluPickMatrix(cursorX, viewport[3] - cursorY, 0.5, 0.5, viewport); //å»ºç«‹æ‹¾å–çŸ©é˜µï¼Œå‰ä¸¤ä¸ªå‚æ•°ä¸ºå°†çª—å£åæ ‡cursorè½¬åŒ–ä¸ºOpenGLåæ ‡ï¼Œç¬¬ä¸‰ã€å››ä¸ªå‚æ•°æ˜¯é€‰æ‹©æ¡†çš„å¤§å°ï¼Œæœ€åä¸€ä¸ªå°±æ˜¯è§†å£çš„ä½ç½®å’Œå¤§å°
 	glOrtho(-10, 10, -10, 10, -10, 10);
-	glMatrixMode(GL_MODELVIEW);//½øÈëÊÓÍ¼±ä»»×´Ì¬
-	glInitNames(); //³õÊ¼»¯Ãû×ÖÕ»£¬ÓÃÀ´´æ·ÅÄ¿±êÎïÌåµÄÃû×Ö
+	glMatrixMode(GL_MODELVIEW);//è¿›å…¥è§†å›¾å˜æ¢çŠ¶æ€
+	glInitNames(); //åˆå§‹åŒ–åå­—æ ˆï¼Œç”¨æ¥å­˜æ”¾ç›®æ ‡ç‰©ä½“çš„åå­—
 }
 
 void processHits(GLint hits, GLuint buffer[])
@@ -766,7 +828,7 @@ void stopPicking() {
 
 void Mouse(int button, int state, int x, int y)
 {
-	if (state == GLUT_DOWN)  //¼ÇÂ¼Êó±ê°´ÏÂÎ»ÖÃ
+	if (state == GLUT_DOWN)  //è®°å½•é¼ æ ‡æŒ‰ä¸‹ä½ç½®
 	{
 		GLfloat view[16], pro[16];
 		glm::vec3 res;
@@ -776,14 +838,76 @@ void Mouse(int button, int state, int x, int y)
 		drawShapes();
 		drawRobots();
 		stopPicking();
-		if (s_type == NONE)/////¸Ä³É__conveyor¾ÍÊÇÔÚ´«ËÍ´ø·¶Î§·Å¶«Î÷;NONEÊÇ³ı´«ËÍ´ø·¶Î§·ÅÖÃ
+		if (s_type == NONE)/////æ”¹æˆ__conveyorå°±æ˜¯åœ¨ä¼ é€å¸¦èŒƒå›´æ”¾ä¸œè¥¿;NONEæ˜¯é™¤ä¼ é€å¸¦èŒƒå›´æ”¾ç½®
 		{
 			glGetFloatv(GL_MODELVIEW_MATRIX, view);
 			glGetFloatv(GL_PROJECTION_MATRIX, pro);
 			res = getViewPos(x, y, pro, view);
 			//printf("%f,%f,%f\n", eye[0], eye[1], eye[2]);
-			Prism* p = new Prism(res[0], res[1] , res[2]);
-			Shapes.push_back(p);
+			Shape *p;
+			if (IsYueBing) 
+				switch (YueBing_Type)
+				{
+				case 0:
+					p = new YueBingPi(res[0], res[1], res[2]);
+					Shapes.push_back(p);
+					break;
+				case 1:
+					p = new Sphere(res[0], res[1], res[2], 0);
+					Shapes.push_back(p);
+					break;
+				case 2:
+					p = new Sphere(res[0], res[1], res[2], 1);
+					Shapes.push_back(p);
+					break;
+				case 3:
+					p = new Sphere(res[0], res[1], res[2], 2);
+					Shapes.push_back(p);
+					break;
+				case 4:
+					p = new LiWuHePingMian(res[0], res[1], res[2],3);
+					Shapes.push_back(p);
+					break;
+				case 5:
+					p = new LiWuHePingMian(res[0], res[1], res[2],4);
+					Shapes.push_back(p);
+					break;
+				default:
+					p = new LiWuHe(res[0], res[1], res[2]);
+					Shapes.push_back(p);
+					break;
+				}
+			else switch (Shape_Type)
+			{
+			case 0:
+				p = new Prism(res[0], res[1], res[2]);
+				Shapes.push_back(p);
+				break;
+			case 1:
+				p = new Cylinder(res[0], res[1], res[2]);
+				Shapes.push_back(p);
+				break;
+			case 2:
+				p = new ConeCylinder(res[0], res[1], res[2]);
+				Shapes.push_back(p);
+				break;
+			case 3:
+				p = new Cone(res[0], res[1], res[2]);
+				Shapes.push_back(p);
+				break;
+			case 4:
+				p = new Cube(res[0], res[1], res[2]);
+				Shapes.push_back(p);
+				break;
+			case 5:
+				p = new Trustum(res[0], res[1], res[2]);
+				Shapes.push_back(p);
+				break;
+			default:
+				p = new LiWuHe(res[0], res[1], res[2]);
+				Shapes.push_back(p);
+				break;
+			}
 			cout << res[0] << " " << res[1] << " " << res[2] << " " << Shapes.size() << endl;
 		}
 		else
@@ -805,18 +929,18 @@ void Mouse(int button, int state, int x, int y)
 			}
 		}
 	}
-	if (state == GLUT_UP)  //¼ÇÂ¼Êó±ê°´ÏÂÎ»ÖÃ
+	if (state == GLUT_UP)  //è®°å½•é¼ æ ‡æŒ‰ä¸‹ä½ç½®
 		Px = x, Py = y;
 	renderScene();
 }
 
-void onMouseMove(int x, int y)   //´¦ÀíÊó±êÍÏ¶¯
+void onMouseMove(int x, int y)   //å¤„ç†é¼ æ ‡æ‹–åŠ¨
 {
-	du += (x - OriX) * 0.8; //Êó±êÔÚ´°¿ÚxÖá·½ÏòÉÏµÄÔöÁ¿¼Óµ½ÊÓµãÓëxÖáµÄ¼Ğ½ÇÉÏ£¬¾Í¿ÉÒÔ×óÓÒ×ª
-	h += 0.03 * (y - OriY) * 0.15;  //Êó±êÔÚ´°¿ÚyÖá·½ÏòÉÏµÄ¸Ä±ä¼Óµ½ÊÓµãyµÄ×ø±êÉÏ£¬¾Í¿ÉÒÔÉÏÏÂ×ª
-	if (h > 1.0)   h = 1.0;  //¶ÔÊÓµãy×ø±ê×÷Ò»Ğ©ÏŞÖÆ£¬²»»áÊ¹ÊÓµãÌ«Ææ¹Ö
+	du += (x - OriX) * 0.8; //é¼ æ ‡åœ¨çª—å£xè½´æ–¹å‘ä¸Šçš„å¢é‡åŠ åˆ°è§†ç‚¹ä¸xè½´çš„å¤¹è§’ä¸Šï¼Œå°±å¯ä»¥å·¦å³è½¬
+	h += 0.03 * (y - OriY) * 0.15;  //é¼ æ ‡åœ¨çª—å£yè½´æ–¹å‘ä¸Šçš„æ”¹å˜åŠ åˆ°è§†ç‚¹yçš„åæ ‡ä¸Šï¼Œå°±å¯ä»¥ä¸Šä¸‹è½¬
+	if (h > 1.0)   h = 1.0;  //å¯¹è§†ç‚¹yåæ ‡ä½œä¸€äº›é™åˆ¶ï¼Œä¸ä¼šä½¿è§†ç‚¹å¤ªå¥‡æ€ª
 	else if (h < -1.0) h = -1.0;
-	OriX = x, OriY = y;  //½«´ËÊ±µÄ×ø±ê×÷Îª¾ÉÖµ£¬ÎªÏÂÒ»´Î¼ÆËãÔöÁ¿×ö×¼±¸
+	OriX = x, OriY = y;  //å°†æ­¤æ—¶çš„åæ ‡ä½œä¸ºæ—§å€¼ï¼Œä¸ºä¸‹ä¸€æ¬¡è®¡ç®—å¢é‡åšå‡†å¤‡
 }
 
 void mouse_move(int mx, int my)
@@ -839,28 +963,28 @@ void init()
 	//initEnvironment();
 	GLenum res = glewInit();
 	InitList();
-	glEnable(GL_DEPTH_TEST);    //ÆôÓÃÉî¶È£¬¸ù¾İ×ø±êµÄÔ¶½ü×Ô¶¯Òş²Ø±»ÕÚ×¡µÄÍ¼ĞÎ£¨²ÄÁÏ£©
+	glEnable(GL_DEPTH_TEST);    //å¯ç”¨æ·±åº¦ï¼Œæ ¹æ®åæ ‡çš„è¿œè¿‘è‡ªåŠ¨éšè—è¢«é®ä½çš„å›¾å½¢ï¼ˆææ–™ï¼‰
 	InitialThings();
 }
 
 void reshape(int w, int h)
 {
-	glViewport(0, 0, w, h);    //½ØÍ¼;1¡¢2ÎªÊÓ¿ÚµÄ×óÏÂ½Ç;3¡¢4ÎªÊÓ¿ÚµÄ¿í¶ÈºÍ¸ß¶È
-	glMatrixMode(GL_PROJECTION);    //½«µ±Ç°¾ØÕóÖ¸¶¨ÎªÍ¶Ó°¾ØÕó
+	glViewport(0, 0, w, h);    //æˆªå›¾;1ã€2ä¸ºè§†å£çš„å·¦ä¸‹è§’;3ã€4ä¸ºè§†å£çš„å®½åº¦å’Œé«˜åº¦
+	glMatrixMode(GL_PROJECTION);    //å°†å½“å‰çŸ©é˜µæŒ‡å®šä¸ºæŠ•å½±çŸ©é˜µ
 	glLoadIdentity();
 	wWidth = w;
 	wHeight = h;
-	gluPerspective(45, (float)w / h, 0.1, 1000.0); //1¡¢ÊÓÒ°ÔÚY-ZÆ½ÃæµÄ½Ç¶È[0,180];2¡¢Í¶Ó°Æ½Ãæ¿í¶ÈÓë¸ß¶ÈµÄ±ÈÂÊ;3¡¢½ü½Ø¼ôÃæµ½ÊÓµãµÄ¾àÀë;4¡¢Ô¶½Ø¼ôÃæµ½ÊÓµãµÄ¾àÀë
-	glMatrixMode(GL_MODELVIEW);     //¶ÔÄ£ĞÍÊÓ¾°¾ØÕó¶ÑÕ»Ó¦ÓÃËæºóµÄ¾ØÕó²Ù×÷.
+	gluPerspective(45, (float)w / h, 0.1, 1000.0); //1ã€è§†é‡åœ¨Y-Zå¹³é¢çš„è§’åº¦[0,180];2ã€æŠ•å½±å¹³é¢å®½åº¦ä¸é«˜åº¦çš„æ¯”ç‡;3ã€è¿‘æˆªå‰ªé¢åˆ°è§†ç‚¹çš„è·ç¦»;4ã€è¿œæˆªå‰ªé¢åˆ°è§†ç‚¹çš„è·ç¦»
+	glMatrixMode(GL_MODELVIEW);     //å¯¹æ¨¡å‹è§†æ™¯çŸ©é˜µå †æ ˆåº”ç”¨éšåçš„çŸ©é˜µæ“ä½œ.
 }
 
 int main(int argc, char* argv[])
 {
-	glutInit(&argc, argv);                                          //³õÊ¼»¯glut¿â
+	glutInit(&argc, argv);                                          //åˆå§‹åŒ–glutåº“
 	//wWidth = glutGet(GLUT_SCREEN_WIDTH);
 	//wHeight = glutGet(GLUT_SCREEN_HEIGHT);
 	//cout << wWidth << wHeight;
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);      //ÉèÖÃ³õÊ¼ÏÔÊ¾Ä£Ê½
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);      //è®¾ç½®åˆå§‹æ˜¾ç¤ºæ¨¡å¼
 	glutInitWindowPosition(wPosW, wPosH);
 	glutInitWindowSize(wWidth, wHeight);
 	glutCreateWindow("CG Project");
@@ -868,7 +992,7 @@ int main(int argc, char* argv[])
 	init();
 	glutReshapeFunc(reshape);       //
 	glutDisplayFunc(renderScene);           //
-	glutIdleFunc(renderScene);          //ÉèÖÃ²»¶Ïµ÷ÓÃÏÔÊ¾º¯Êı
+	glutIdleFunc(renderScene);          //è®¾ç½®ä¸æ–­è°ƒç”¨æ˜¾ç¤ºå‡½æ•°
 	glutMouseFunc(Mouse);
 	glutMotionFunc(mouse_move);
 	glutPassiveMotionFunc(mouse_move);
@@ -879,9 +1003,9 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-// ¼ì²â²¢´¦ÀíÊÇ·ñÓĞÔÂ±ıÏÚÁÏÓëÔÂ±ıÆ¤¡¢ÔÂ±ıÓëÀñºĞ°ü×°µÄÅö×²
+// æ£€æµ‹å¹¶å¤„ç†æ˜¯å¦æœ‰æœˆé¥¼é¦…æ–™ä¸æœˆé¥¼çš®ã€æœˆé¥¼ä¸ç¤¼ç›’åŒ…è£…çš„ç¢°æ’
 void mooncakeCollision() {
-	vector<Shape*> Shapes2;//¸´ÖÆÒ»·İµ½Shapes2ÓÃÓÚsort£¬²»¶¯Ô­À´µÄShapes
+	vector<Shape*> Shapes2;//å¤åˆ¶ä¸€ä»½åˆ°Shapes2ç”¨äºsortï¼Œä¸åŠ¨åŸæ¥çš„Shapes
 	Shapes2.assign ( Shapes.begin(), Shapes.end());
 	vector<Shape*>::iterator Siter;
 	vector<Shape*>::iterator subSiter;
@@ -909,10 +1033,10 @@ void mooncakeCollision() {
 			else {
 				if (((*Siter)->RetType() == -2 && (*subSiter)->RetType() >= 0 && (*subSiter)->RetType() <= 2)
 					|| ((*subSiter)->RetType() == -2 && (*Siter)->RetType() >= 0 && (*Siter)->RetType() <= 2)) {
-					// ÏÚÁÏÓë±ıÆ¤Ïà×²µÃÔÂ±ı
+					// é¦…æ–™ä¸é¥¼çš®ç›¸æ’å¾—æœˆé¥¼
 					YueBing* mooncake = new YueBing((*Siter)->getGlobalX(), (*Siter)->getGlobalY(), (*Siter)->getGlobalZ(), 
 						(*Siter)->RetType() == -2 ? (*subSiter)->RetType() + 10  : (*Siter)->RetType() + 10);
-					Shapes.push_back(mooncake);//ÔÚÔ­ShapesÉÏ½øĞĞ¸Ä¶¯
+					Shapes.push_back(mooncake);//åœ¨åŸShapesä¸Šè¿›è¡Œæ”¹åŠ¨
 					collisionFlag = true;
 					break;
 				}
@@ -920,7 +1044,7 @@ void mooncakeCollision() {
 				else if (((*Siter)->RetType() >= 10 && (*Siter)->RetType() <= 12 && ((*subSiter)->RetType() == 3 || (*subSiter)->RetType() == 4))
 					|| ((*subSiter)->RetType() >= 10 && (*subSiter)->RetType() <= 12 && ((*Siter)->RetType() == 3 || (*Siter)->RetType() == 4))) {
 
-					// ÔÂ±ıÓëÀñÆ·ºĞÆ¤Ïà×²µÃÀñºĞ
+					// æœˆé¥¼ä¸ç¤¼å“ç›’çš®ç›¸æ’å¾—ç¤¼ç›’
 					LiWuHe* gift = new LiWuHe((*Siter)->getGlobalX(), (*Siter)->getGlobalY(), (*Siter)->getGlobalZ(),
 						(*Siter)->RetType() >= 10 ? (*subSiter)->RetType() + 20 : (*Siter)->RetType() + 20);					
 					Shapes.push_back(gift);
@@ -929,7 +1053,8 @@ void mooncakeCollision() {
 				}
 			}
 		}
-		if (collisionFlag) {	// ÓĞÏà×²·¢Éú
+		if (collisionFlag) {	// æœ‰ç›¸æ’å‘ç”Ÿ
+			CurrentChooseShape = NULL;
 			vector<Shape*>::iterator tempIter;
 			for (tempIter = Shapes.begin(); tempIter != Shapes.end();) {
 				if ((*tempIter) == (*Siter) || (*tempIter) == (*subSiter)) {
