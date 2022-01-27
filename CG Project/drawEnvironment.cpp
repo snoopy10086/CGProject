@@ -137,7 +137,7 @@ void initTexture() {
 	texload(16, (char*)"./texture/16.bmp");
 	texload(17, (char*)"./texture/17.bmp");
 	texload(18, (char*)"./texture/18.bmp");
-	texload(19, (char*)"./texture/19.bmp");
+	texload(19, (char*)"./texture/box11.bmp");
 	texload(20, (char*)"./texture/c1.bmp");
 	texload(21, (char*)"./texture/m1.bmp");
 	texload(22, (char*)"./texture/m2.bmp");
