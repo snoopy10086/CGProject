@@ -9,6 +9,8 @@ This is a project of 2021 CG course in ZJU.
 ## Keboard Operation
 
 ![image-20211224025840151](README.assets/image-20211224025840151.png)
+![image](https://user-images.githubusercontent.com/86822735/151365568-92bda6b4-0326-4d04-8c79-85f248e0f9cd.png)
+
 
 #### 视角变换
 
