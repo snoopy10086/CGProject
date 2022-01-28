@@ -573,6 +573,7 @@ YueBingPi::YueBingPi(float globalX, float globalY, float globalZ) :Cylinder(glob
 	this->Texture2 = 41;
 	this->scaling(0.8, 0.03, 0.8);
 	this->Type = -2;// 月饼皮
+	this->Stype = 2;
 }
 
 
@@ -580,12 +581,14 @@ YueBing::YueBing(float globalX, float globalY, float globalZ) :Cylinder(globalX,
 	this->Texture = 35 + 3;
 	this->Texture2 = 35;
 	this->scaling(0.6, 0.125, 0.6);
+	this->Stype = 1;
 	SetType(0);
 }
 YueBing::YueBing(float globalX, float globalY, float globalZ,int Type) :Cylinder(globalX, globalY, globalZ){
 	this->Texture = 35 + Type - 10 + 3;
 	this->Texture2 = 35 + Type - 10;
 	this->scaling(0.6, 0.125, 0.6);
+	this->Stype = 1;
 	SetType(Type);
 }
 void YueBing::SetType(int t) {
@@ -600,6 +603,7 @@ Sphere::Sphere(float globalX, float globalY, float globalZ)
 	this->Type = 0;
 	this->scaling(0.1, 0.1, 0.15);
 	this->rotate(0, 15, 15);
+	this->Stype = 3;
 }
 Sphere::Sphere(float globalX, float globalY, float globalZ,int Type)
 {
@@ -609,6 +613,7 @@ Sphere::Sphere(float globalX, float globalY, float globalZ,int Type)
 	this->Type = Type;
 	this->scaling(0.1, 0.1, 0.15);
 	this->rotate(0, 15, 15);
+	this->Stype = 3;
 }
 void Sphere::Draw()//球
 {
@@ -661,12 +666,14 @@ LiWuHePingMian::LiWuHePingMian(float globalX, float globalY, float globalZ):Cube
 	this->Type = 3;//3 or 4
 	this->Texture = 42 + this->Type;
 	this->scaling(0.3, 0.02, 0.3);
+	this->Stype = 4;
 }
 LiWuHePingMian::LiWuHePingMian(float globalX, float globalY, float globalZ, int Type) : Cube(globalX, globalY, globalZ)
 {
 	this->Type = Type;
 	this->Texture = 42 + this->Type;
 	this->scaling(0.3, 0.02, 0.3);
+	this->Stype = 4;
 }
 
 void LiWuHePingMian::Draw()//礼物盒平面
@@ -713,6 +720,7 @@ LiWuHe::LiWuHe(float globalX, float globalY, float globalZ) :Cube(globalX, globa
 	this->Texture = 44 + this->Type - 20;
 	this->Texture2 = 44 + this->Type - 20 + 2;
 	this->scaling(0.3, 0.3, 0.3);
+	this->Stype = 5;
 }
 LiWuHe::LiWuHe(float globalX, float globalY, float globalZ, int Type) : Cube(globalX, globalY, globalZ)
 {
@@ -721,6 +729,7 @@ LiWuHe::LiWuHe(float globalX, float globalY, float globalZ, int Type) : Cube(glo
 	if(Type == 23)this->Texture2 = 49;
 	else this->Texture2 = 19;
 	this->scaling(0.3, 0.3, 0.3);
+	this->Stype = 5;
 }
 
 void LiWuHe::Draw()//礼物盒

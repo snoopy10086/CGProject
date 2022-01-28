@@ -9,6 +9,7 @@ public:
 	float scaleX=1, scaleY = 1, scaleZ = 1;
 	int Texture=0;
 	int Texture2=0;
+	int Stype = 0;
 	int Type = -1;//标识这个shape的类型
 	double getGlobalX() {
 		return this->globalX;

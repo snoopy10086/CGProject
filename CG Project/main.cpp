@@ -12,6 +12,8 @@
 #include <string.h>
 #include <vector>
 #include<algorithm>
+#include <iostream>
+#include <fstream>
 using namespace std;
 #define PI 3.1415926535
 #define BMP_Header_Length 54
@@ -659,6 +661,116 @@ void key(unsigned char k, int x, int y)
 		}
 		break;
 	}
+	case 'K':
+	{
+		ofstream outfile("Shape.ZJUCG", ios::trunc);
+		vector<Shape*>::iterator Siter;
+		Cylinder* s1 = new Cylinder(3, 0, 4);
+		for (Siter = Shapes.begin(); Siter != Shapes.end(); Siter++) {
+			if ((*Siter)->Stype == 1) {
+				//outfile << " YueBing " << endl;
+				outfile << "YueBing " << 
+					(*Siter)->globalX << " " << (*Siter)->globalY << " " << (*Siter)->globalZ 
+					<< " " << (*Siter)->rotateX << " " << (*Siter)->rotateY << " " << (*Siter)->rotateZ
+					<< " " << (*Siter)->scaleX << " " << (*Siter)->scaleY << " " << (*Siter)->scaleZ
+					<< " " << (*Siter)->Type << endl;
+			}
+			else if((*Siter)->Stype == 2){
+				outfile << "YueBingPi " <<
+					(*Siter)->globalX << " " << (*Siter)->globalY << " " << (*Siter)->globalZ
+					<< " " << (*Siter)->rotateX << " " << (*Siter)->rotateY << " " << (*Siter)->rotateZ
+					<< " " << (*Siter)->scaleX << " " << (*Siter)->scaleY << " " << (*Siter)->scaleZ
+					<< endl;
+			}
+			else if ((*Siter)->Stype == 3) {
+				outfile << "Sphere " << 
+					(*Siter)->globalX << " " << (*Siter)->globalY << " " << (*Siter)->globalZ
+					<< " " << (*Siter)->rotateX << " " << (*Siter)->rotateY << " " << (*Siter)->rotateZ
+					<< " " << (*Siter)->scaleX << " " << (*Siter)->scaleY << " " << (*Siter)->scaleZ
+					<< " " << (*Siter)->Type << endl;
+			}
+			else if ((*Siter)->Stype == 4) {
+				outfile << "LiWuHePingMian " << 
+					(*Siter)->globalX << " " << (*Siter)->globalY << " " << (*Siter)->globalZ
+					<< " " << (*Siter)->rotateX << " " << (*Siter)->rotateY << " " << (*Siter)->rotateZ
+					<< " " << (*Siter)->scaleX << " " << (*Siter)->scaleY << " " << (*Siter)->scaleZ
+					<< " " << (*Siter)->Type << endl;
+			}
+			else if ((*Siter)->Stype == 5) {
+				outfile << "LiWuHe " << 
+					(*Siter)->globalX << " " << (*Siter)->globalY << " " << (*Siter)->globalZ
+					<< " " << (*Siter)->rotateX << " " << (*Siter)->rotateY << " " << (*Siter)->rotateZ
+					<< " " << (*Siter)->scaleX << " " << (*Siter)->scaleY << " " << (*Siter)->scaleZ
+					<< " " << (*Siter)->Type << endl;
+			}
+			else {
+				//outfile << " shapes " << endl;
+			}
+			
+		}
+		outfile << "#";
+		outfile.close();
+		break;
+	}
+	case 'L':
+	{
+		//erase all the shapes
+		/*vector<Shape*>::iterator Siter;
+		for (Siter = Shapes.begin(); Siter != Shapes.end(); Siter++) {
+			if ((*Siter)->Stype != 0)
+				Siter = Shapes.erase(Siter);
+		}*/
+		Shapes.clear();
+		//read in data stored
+		ifstream myfile("Shape.ZJUCG");
+		string str;
+		float Gx, Gy, Gz;
+		float Rx, Ry, Rz;
+		float Sx, Sy, Sz;
+		int type;
+		myfile >> str;
+		while (str.compare("#") != 0) {
+			if (str.compare("YueBing") == 0) {
+				myfile >> Gx >> Gy >> Gz >> Rx >> Ry >> Rz >> Sx >> Sy >> Sz >> type;
+				YueBing* s = new YueBing(Gx, Gy, Gz, type);
+				s->scaleX = Sx; s->scaleY = Sy; s->scaleZ = Sz;
+				s->rotateX = Rx; s->rotateY = Ry; s->rotateZ = Rz;
+				Shapes.push_back(s);
+			}
+			else if (str.compare("YueBingPi") == 0) {
+				myfile >> Gx >> Gy >> Gz >> Rx >> Ry >> Rz >> Sx >> Sy >> Sz;
+				YueBingPi* s = new YueBingPi(Gx, Gy, Gz);
+				s->scaleX = Sx; s->scaleY = Sy; s->scaleZ = Sz;
+				s->rotateX = Rx; s->rotateY = Ry; s->rotateZ = Rz;
+				Shapes.push_back(s);
+			}
+			else if (str.compare("Sphere") == 0){
+				myfile >> Gx >> Gy >> Gz >> Rx >> Ry >> Rz >> Sx >> Sy >> Sz >> type;
+				Sphere* s = new Sphere(Gx, Gy, Gz, type);
+				s->scaleX = Sx; s->scaleY = Sy; s->scaleZ = Sz;
+				s->rotateX = Rx; s->rotateY = Ry; s->rotateZ = Rz;
+				Shapes.push_back(s);
+			}
+			else if (str.compare("LiWuHePingMian") == 0){
+				myfile >> Gx >> Gy >> Gz >> Rx >> Ry >> Rz >> Sx >> Sy >> Sz >> type;
+				LiWuHePingMian* s = new LiWuHePingMian(Gx, Gy, Gz, type);
+				s->scaleX = Sx; s->scaleY = Sy; s->scaleZ = Sz;
+				s->rotateX = Rx; s->rotateY = Ry; s->rotateZ = Rz;
+				Shapes.push_back(s);
+			}
+			else if (str.compare("LiWuHe") == 0){
+				myfile >> Gx >> Gy >> Gz >> Rx >> Ry >> Rz >> Sx >> Sy >> Sz >> type;
+				LiWuHe* s = new LiWuHe(Gx, Gy, Gz, type);
+				s->scaleX = Sx; s->scaleY = Sy; s->scaleZ = Sz;
+				s->rotateX = Rx; s->rotateY = Ry; s->rotateZ = Rz;
+				Shapes.push_back(s);
+			}
+			myfile >> str;
+		}
+		myfile.close();
+		break;
+	}
+
 	}
 }
 
